@@ -1,6 +1,8 @@
+'''
 layout: page
 title: "js-this"
-permalink: /js-this
+permalink: /js-this/
+'''
 
 ```js
 
