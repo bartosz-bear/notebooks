@@ -1,7 +1,7 @@
----
 layout: page
 title: "js-this_keyword"
-permalink: /js-this_keyword
+permalink: /js-this_keyword/
+---
 
 ```js
 
