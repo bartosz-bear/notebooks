@@ -1,8 +1,6 @@
----
 layout: page
 title: "js-this-keyword"
 permalink: /js-this-keyword/
----
 
 # JavaScript - 'this' keyword
 
