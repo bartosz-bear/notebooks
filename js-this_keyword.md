@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "js_this_keyword"
-permalink: /js_this_keyword/
+title: "js-this-keyword"
+permalink: /js-this-keyword/
 ---
 
 # JavaScript - 'this' keyword
