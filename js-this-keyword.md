@@ -196,9 +196,24 @@ button.addEventListener('click', function(event) {
 ```
 ---
 
-# `this` explicit context
+# `globalThis`
 
-Using `call`, `apply` and `bind` you can explicitly determine what `this` should refer to.
+`globalThis` variable refers to a global object.
 
-The important part is to know how to determine what object `this` refers to, which you can do implicitly by knowing the context of when `this` was used, or explicitly with `call`, `apply` and `bind`.
+```js
+globalThis.globProp = 'Wisen'
 
+function display() {
+  console.log(`globProp value is ${this.globProp}`)
+}
+
+display.call() // Logs 'globProp value is Wisen' in the browser. [Non-strict mode]
+// Logs 'globProp value is undefined' in Node.Js [strict mode]
+
+```
+
+```js
+console.log('In node.js, "globalThis" is ', globalThis) // Object [global] {}
+
+console.log('In the browser, "globalThis" is ', globalThis) // window object
+```
