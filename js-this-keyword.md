@@ -181,4 +181,24 @@ america2.describe()
 
 ---
 
-## `this` in DOM event handler
+# `this` in the browser for DOM event handlers
+
+`this` in a callback (event handler), called by `addEventListener` refers to `event.currentTarget`
+
+```js
+const button = document.createElement('button')
+button.textContent = 'Click me'
+document.body.append(button)
+
+button.addEventListener('click', function(event) {
+  console.log(this) // Output: <button>Click me</button>
+})
+```
+---
+
+# `this` explicit context
+
+Using `call`, `apply` and `bind` you can explicitly determine what `this` should refer to.
+
+The important part is to know how to determine what object `this` refers to, which you can do implicitly by knowing the context of when `this` was used, or explicitly with `call`, `apply` and `bind`.
+
