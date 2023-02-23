@@ -63,7 +63,7 @@ Tags are used to tag a specific point in repository's history. Eg. it's a common
 
 ## COMPARE A LOCAL AND REMOTE REPOSITORY TO SEE DIFFERENCE IN COMMITS BETWEEN THE TWO
 
-`git log --oneline main..origin/main`
+`git log main..origin/main`
 
 Or if you only want to see the summary:
 
@@ -72,3 +72,20 @@ Or if you only want to see the summary:
 ## WHAT IS `git fetch` COMMAND?
 
 `git fetch` is similar to `git pull` however `git fetch` is only downloading the latest version of the repository, while `git pull` does two things sequentially: first it runs `git fetch` and immediately after it runs `git merge`.
+
+<https://www.atlassian.com/git/tutorials/syncing/git-fetch>
+
+## FULL MERGING PROCESS
+
+Download the latest version of the remote repo:
+
+`git fetch origin/main`
+
+See the changes between the repos
+
+`git log main..origin/main`
+
+Merge the repo (assuming you are checkout to the local repo)
+
+`git merge origin/main`
+
