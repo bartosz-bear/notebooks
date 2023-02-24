@@ -1,10 +1,10 @@
-## psycopg
+## `psycopg`
 
 psycopg is the most popular PostgreSQL adapter (database driver) for Python. It's core is a complete implementation of the Python DB API 2.0 specifications
 
 <https://www.psycopg.org/>
 
-## decouple module
+## `decouple` module
 
 Decouple helps you to organize your settings so that you can change parameters without having to redeploy your app.
 
