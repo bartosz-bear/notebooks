@@ -5,20 +5,6 @@
 ```git
 git push -f origin HEAD^:master
 ```
-
-
-## GIT COURSES
-
-COMPREHENSIVE
-
-The Git & Github Bootcamp (Udemy)
-
-FOCUS ON TEAM WORK
-
-Collaborative Coding with Git (FutureLearn)
-
-<https://www.futurelearn.com/courses/collaborative-coding-with-git>
-
 ## WHAT IS `origin`?
 
 Origin is a shorthand name for the remote repository that a project was originally cloned from.
@@ -89,3 +75,59 @@ Merge the repo (assuming you are checkout to the local repo)
 
 `git merge origin/main`
 
+## GIT COURSES
+
+COMPREHENSIVE
+
+The Git & Github Bootcamp (Udemy)
+
+FOCUS ON TEAM WORK
+
+Collaborative Coding with Git (FutureLearn)
+
+<https://www.futurelearn.com/courses/collaborative-coding-with-git>
+
+## HOW TO SHOW A USER NAME AND EMAIL?
+
+`git config user.name`
+
+`git config user.email`
+
+## HOW TO VIEW THE GIT CONFIG FILE?
+
+`sudo nano ~/.gitconfig`
+
+## HOW TO CHANGE USER NAME AND EMAIL FOR A PARTICULAR REPO?
+
+Go to the repo directory
+
+`git config user.name = 'new_name'`
+`git config user.email = 'new_email@email.com`
+
+## HOW TO CHANGE USER NAME AND EMAIL GLOBALLY (ON THE OPERATING SYSTEM LEVEL)?
+
+`git config --global user.name = 'new_name'`
+`git config --global user.email = 'new_email@email.com`
+
+## WHAT IS UPSTREAM AND DOWNSTREAM?
+
+`upstream` is usually a remote repository from which you clone
+
+`downstream` is usually a local repository which you develop and push upstream
+
+## HOW TO PUSH A LOCAL REPO TO A SPECIFIC BRANCH?
+
+`git push -u origin branch_name`
+
+`-u` means upstream
+
+## HOW TO CREATE A BRANCH ON THE REMOTE REPO?
+
+- branches for upstream repos are actually created locally and upon push up they will be created in the remote repo
+
+`git branch new_branch`
+`git checkout new_branch`
+
+- add code
+
+`git push -set-upstream origin new_branch`

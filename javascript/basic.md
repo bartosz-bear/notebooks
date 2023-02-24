@@ -1,12 +1,13 @@
-// let SCOPING
+## `let` SCOPING
 
-// var creates a variable in a global scope regardless of when it's declared
-// for that reason it should not be used
+- `var` creates a variable in a global scope regardless of when it's declared
+- for that reason it should not be used
 
-// scope of let variable depends when a variable was defined
-// possible: block scope, statement scope, expression scope
-// scope can be a limited to for loop scope, or if/else scope
+-  scope of `let` variable depends when a variable was defined
+- possible: block scope, statement scope, expression scope
+- scope can be a limited to for loop scope, or if/else scope
 
+```js
 function checkScope() {
   let i = 'function scope'; // FUNCTION SCOPE
   if (true) {
@@ -16,65 +17,70 @@ function checkScope() {
   console.log('Function scope i is: ', i);
   return i;
 }
+```
 
-// const MUTABILITY
+## `const` MUTABILITY
 
-// objects (including arrays and functions) assigned to a variable using const
-// are still mutable
-// using const declaration only prevents reassignement of variable identifier
+- objects (including arrays and functions) assigned to a variable using `const` are still mutable
+- using `const` declaration only prevents reassignement of variable identifier
 
+```js
 const s = [5,6,7];
 s[2] = 45
 console.log(s); // will print out [5,6,45]
 // s = [1,2,3]; // this is illegal
+```
 
-// OPERATORS
+## OPERATORS
 
-// LOOSE (COERCIVE) EQUALITY OPERATORS
+## LOOSE (COERCIVE) EQUALITY OPERATORS
 
-// ==
-// !=
-// >
-// <
-// >=
-// <=
+- ==
+- !=
+- >
+- <
+- >=
+- <=
 
-// STRICT EQUALITY OPERATOR
+## STRICT EQUALITY OPERATOR
 
-// strict equality operator ( === ) doesn't do type coercion
-// !==
+- strict equality operators ( `===`, `!==` ) doesn't do type coercion
 
-// LOGICAL OPERATORS
+## LOGICAL OPERATORS
 
-// && - AND
+- `&&` - `AND`
 
+```js
 if (10 > 9 && 15 < 16) {
   console.log('AND OPERATOR');
 }
+```
 
-// || - OR
+## `||` - `OR`
 
+```js
 if (10 > 9 || 16 < 15) {
   console.log('OR OPERATOR')
 }
+```
 
-// NULLISH COALESCING OPERATOR (??)
+## NULLISH COALESCING OPERATOR (??)
 
-// - a logical operator that returns its right-hand side operand when it's left
-// hand side operand is null or undefined
-// - otherwise, it returns its left-hand side operand
+- a logical operator that returns its right-hand side operand when it's left hand side operand is null or undefined. Otherwise, it returns its left-hand side operand
 
+```js
 const foo = null ?? 'default string';
 console.log(foo);
 
 const baz = 1 ?? 42;
 console.log(baz);
+```
 
+## ELSE IF
 
+- order is important (goes from top to bottom)
 
-// ELSE IF
-// order is important (goes from top to bottom)
-
+```js
 const a = 2;
 
 if (a === 1) {
@@ -84,11 +90,14 @@ if (a === 1) {
 } else {
   console.log('Else');
 }
+```
 
-// SWITCH STATEMENT
-// cases are excuted from the first matches case value until a break is encountered
-// case values are tested with strict equality (===)
+## SWITCH STATEMENT
 
+- cases are excuted from the first matches case value until a break is encountered
+-  case values are tested with strict equality (`===`)
+
+```js
 function caseInSwitch(val) {
   let answer = "";
 
@@ -110,11 +119,13 @@ function caseInSwitch(val) {
 }
 
 caseInSwitch(1);
+```
 
-// DEFAULT STATEMENT IN SWITCH CLAUSE
-// if none of the case options was executed, default case will be executed
-// think of it like the final else statement in an if/else chain
+## DEFAULT STATEMENT IN SWITCH CLAUSE
+- if none of the case options was executed, default case will be executed
+- think of it like the final else statement in an if/else chain
 
+```js
 function switchOfStuff(val) {
   let answer = "";
 
@@ -135,12 +146,13 @@ function switchOfStuff(val) {
 }
 
 switchOfStuff(1);
+```
 
-// EMPTY SWITCH CASES
+## EMPTY SWITCH CASES
 
-// if the break statement is omitted from a switch case, the following case
-// statements are executed until break is encountered
+-  if the break statement is omitted from a switch case, the following case statements are executed until break is encountered
 
+```js
 function sequentialSizes(val) {
   let answer = "";
   // Only change code below this line
@@ -162,16 +174,18 @@ function sequentialSizes(val) {
       break;
   }
 
-
   // Only change code above this line
   return answer;
 }
 
 sequentialSizes(1);
+```
 
-// SWITCH WITH CONDITIONAL CASES - switch(true)
-// in order to activate this switch, pass true in the switch conditional
+## SWITCH WITH CONDITIONAL CASES - switch(true)
 
+- in order to activate this switch, pass true in the switch conditional
+
+```js
 let count = 0;
 
 switch (true) {
@@ -182,28 +196,31 @@ switch (true) {
     console.log(count + " " + "Hold");
     break;
 };
+```
 
+## BOOLEAN COMPARISON
 
-// BOOLEAN COMPARISON
-
+```js
 console.log(1 === 1);
 console.log(1 > 1);
+```
 
-// ARRAYS
+## ARRAYS
 
-// CHECK IF AN ITEM IS IN AN ARRAY
+## CHECK IF AN ITEM IS IN AN ARRAY
 
+```js
 console.log([2,3,4,5,6].includes(2));
+```
 
-// OBJECTS
+## OBJECTS
 
-// objects are similar to arrays, but they don't use indexes, they use properties
-// objects are are useful for storing data in a structured way, to represent
-// real life objects, like a cat
-// strings, numbers and quotes are not necessary for single word properties
-// no quotes properties will be coerced into strings
-// different types are eligible as object properties
+-  objects are similar to arrays, but they don't use indexes, they use properties
+-  objects are are useful for storing data in a structured way, to represent real life objects, like a cat strings, numbers and quotes are not necessary for single word properties
+- no quotes properties will be coerced into strings
+- different types are eligible as object properties
 
+```js
 const myDog = {
   "dog name": 'Kate',
   'legs': 4,
@@ -212,12 +229,15 @@ const myDog = {
 };
 
 console.log(myDog);
+```
 
-// OBJECTS DOT NOTATION AND BRACKET NOTATION
-// these two notations can be used to get and set properties on an object
+## OBJECTS DOT NOTATION AND BRACKET NOTATION
 
-// DOT NOTATION
+- these two notations can be used to get and set properties on an object
 
+## DOT NOTATION
+
+```js
 const legs = myDog.legs; //GETTER
 const friends = myDog.friends;
 
@@ -230,12 +250,13 @@ myDog.color = 'Brown'; //ADDING A NEW PROPERTY
 console.log('dog color', myDog.color);
 
 delete myDog.color; // DELETING A PROPERTY
+```
 
-// BRACKET NOTATION
+## BRACKET NOTATION
 
-// if a property of an object has a space in the name, you need to use bracket
-// notation
+- if a property of an object has a space in the name, you need to use bracket notation
 
+```js
 console.log(myDog["dog name"]); //GETTER
 
 myDog['dog name'] = 'Happy Kate'; //SETTER
@@ -246,9 +267,11 @@ myDog['place of birth'] = 'Kyoto'; //ADDING A NEW PROPERTY
 console.log(myDog['place of birth']);
 
 delete myDog['place of birth']; //ADDING A PROPERTY
+```
 
-// ACCESS OBJECT PROPERTIES USING VARIABLES
+## ACCESS OBJECT PROPERTIES USING VARIABLES
 
+```js
 const testObj = {
   12: "Namath",
   16: "Montana",
@@ -257,10 +280,12 @@ const testObj = {
 
 const playerNumber = 16;
 const player = testObj[playerNumber];
+```
 
-// DOES OBJECT HAVE A PROPERTY?
+## DOES OBJECT HAVE A PROPERTY?
 
-// obj.hasOwnProperty('property');
+```js
+obj.hasOwnProperty('property');
 
 function checkObj(obj, checkProp) {
   if (obj.hasOwnProperty(checkProp)) {
@@ -268,12 +293,15 @@ function checkObj(obj, checkProp) {
   }
   return 'Not Found';
 }
+```
 
-// COMPLEX OBJECTS
-// object can have different data types as properties
+## COMPLEX OBJECTS
 
-// An array of two comlex objects
+- object can have different data types as properties
 
+ An array of two complex objects
+
+```js
 const myMusic = [
   {
     "artist": "Billy Joel",
@@ -293,9 +321,11 @@ const myMusic = [
     'formats': ['CD', 'LP']
   }
 ];
+```
 
-// ACCESSING NESTED OBJECTS
+## ACCESSING NESTED OBJECTS
 
+```js
 const myStorage = {
   "car": {
     "inside": {
@@ -310,9 +340,11 @@ const myStorage = {
 
 const gloveBoxContents = myStorage.car.inside['glove box'];
 console.log(gloveBoxContents);
+```
 
-// ACCESSING COMPLEX ARRAYS AND OBJECTS STRUCTURE
+## ACCESSING COMPLEX ARRAYS AND OBJECTS STRUCTURE
 
+```js
 const myPlants = [
   {
     type: "flowers",
@@ -333,9 +365,11 @@ const myPlants = [
 ];
 
 const secondTree = myPlants[1].list[1];
+```
 
-// FOR IN STATEMENT
+## `FOR IN` STATEMENT
 
+```js
 const users = {
     Alan: {
       online: false
@@ -351,17 +385,20 @@ const users = {
 for (let user in users) { // it iterates over the object and return keys
   console.log(user);
 }
+```
 
-// OBJECT KEYS
+## OBJECT KEYS
 
-// Object.keys(myObject) - creates an array of myObject keys
+- `Object.keys(myObject)` - creates an array of myObject keys
 
+```js
 const users_keys = Object.keys(users);
 console.log('keys ', users_keys);
+```
 
+## `while` LOOP
 
-// WHILE LOOP
-
+```js
 const ourArray = [];
 let i = 0;
 
@@ -369,10 +406,13 @@ while (i < 5) {
   ourArray.push(i);
   i++;
 }
+```
 
-// FOR LOOP
-// for (initialization_value, condition, change_expression)
+## `for` LOOP
 
+- `for (initialization_value, condition, change_expression)`
+
+```js
 const myArray2 = [];
 
 for (let i = 1; i < 6; i++) {
@@ -384,18 +424,22 @@ const myArray5 = [];
 for (let i = 1; i < 10; i+=2) { // Iterate every second number
   myArray5.push(i);
 }
+```
 
-// ITERATE THROUGH AN ARRAY
+## ITERATE THROUGH AN ARRAY
 
+```js
 const myArr4 = [2, 3, 4, 5, 6];
 let total = 0
 
 for (let i = 0; i < myArr4.length; i += 1) {
   total += myArr4[i];
 }
+```
 
-// NESTING FOR LOOPS OR LOOPING THROUGH NESTED ARRAYS
+## NESTING FOR LOOPS OR LOOPING THROUGH NESTED ARRAYS
 
+```js
 const arr = [
   [1, 2], [3, 4], [5, 6]
 ];
@@ -405,12 +449,13 @@ for (let i = 0; i < arr.length; i++) {
     console.log(arr[i][j]);
   }
 }
+```
 
+## `do while` LOOP
 
-// DO-WHILE LOOP
-// it will do one iteration of code no matter what, and then will continue
-// to run the loop while the condition is true
+- it will do one iteration of code no matter what, and then will continue to run the loop while the condition is true
 
+```js
 const myArray3 = [];
 let j = 10;
 
@@ -420,58 +465,54 @@ do { // execute code inside the bracket one and then start checking the conditio
 } while (j < 10)
 
 console.log(myArray3);
+```
 
-// RECURSION
+## RECURSION
 
-// they are used as an alternative to a for loop or while
-// there are two necessary component of a recursive function: base case and
-// update of a count
-// base case is a constant value which acts as a stop bound so the recursion doesn't run forever
-// a function should call itself in the body and update the the count, if the
-// the count doesn't update, the function will also run forever
+-  they are used as an alternative to a for loop or while
+- there are two necessary component of a recursive function: base case and update of a count
+-  base case is a constant value which acts as a stop bound so the recursion doesn't run forever
+- a function should call itself in the body and update the the count, if the the count doesn't update, the function will also run forever
 
-// IMPORTANT COMPONENTS
-// - recursion is not a separate feature of a programming language, it's a pattern
-// which emerges organically
-// - operator precedence
-// - stack data structure
-// - call stack as the underlying data structure of functions
-// - iteration over a call stack
-// - base case (recursion bound)
-// - inflation and deflation of the call stack
+## IMPORTANT COMPONENTS
+- recursion is not a separate feature of a programming language, it's a pattern which emerges organically
+- operator precedence
+- stack data structure
+- call stack as the underlying data structure of functions
+- iteration over a call stack
+- base case (recursion bound)
+- inflation and deflation of the call stack
 
-// OPERATOR PRECEDENCE
-// - recursion is based on the highest precedence of a function call
+## OPERATOR PRECEDENCE IN RECURSION
+- recursion is based on the highest precedence of a function call
 
-// STACK DATA STRUCTURE
-// - stack implementation has a maximum and minimum capacity
-// - when we try to add one more items to the full stack, we get the
-// stackoverflow error
-// - when we try to remove an element from an empty stack we the underflow error
-// - stack has two methods: push() and pop()
-// - push() adds an element on top of the stack
-// - pop() removes and element from the top of the stack
-// - stack resembles a stack of clean plates after washing, when we wash one
-// more plate, we add it on the top of the stack, when we want to use a clean
-// place we grab it from the top of the stack
+## STACK DATA STRUCTURE
+- stack implementation has a maximum and minimum capacity
+- when we try to add one more items to the full stack, we get the stackoverflow error
+- when we try to remove an element from an empty stack we the underflow error
+- stack has two methods: push() and pop()
+- push() adds an element on top of the stack
+- pop() removes and element from the top of the stack
+- stack resembles a stack of clean plates after washing, when we wash one more plate, we add it on the top of the stack, when we want to use a clean place, we grab it from the top of the stack
 
-// CALL STACK
-// whenever JavaScript engine executes a function, it pushes it to the Call Stack
-// 
+## CALL STACK
+- whenever JavaScript engine executes a function, it pushes it to the Call Stack 
 
-// DIFFERENT APPROACH TO TEACHING RECURSION
+## DIFFERENT APPROACH TO TEACHING RECURSION
 
-// https://www.quora.com/Which-programming-concept-do-people-usually-find-harder-loops-or-recursion/answer/Shriram-Krishnamurthi
+<https://www.quora.com/Which-programming-concept-do-people-usually-find-harder-loops-or-recursion/answer/Shriram-Krishnamurthi>
 
-// https://www.quora.com/How-does-professor-Shriram-Krishnamurthi-teach-the-concept-of-recursion/answer/Shriram-Krishnamurthi
+<https://www.quora.com/How-does-professor-Shriram-Krishnamurthi-teach-the-concept-of-recursion/answer/Shriram-Krishnamurthi>
 
-// VERY DEEP EXPLANATION OF RECURSION
-// https://forum.freecodecamp.org/t/freecodecamp-challenge-guide-use-recursion-to-create-a-countdown/305925/2
+## VERY DEEP EXPLANATION OF RECURSION
 
-// BOOK WHERE RECURSION IS TAUGHT PROPERLY
+<https://forum.freecodecamp.org/t/freecodecamp-challenge-guide-use-recursion-to-create-a-countdown/305925/2>
 
-// https://htdp.org/2022-8-7/Book/index.html
+## BOOK WHERE RECURSION IS TAUGHT PROPERLY
 
+<https://htdp.org/2022-8-7/Book/index.html>
+
+```js
 function sum(arr, n) {
 
   if (n === 0) { // base case
@@ -490,10 +531,11 @@ function multiply(arr, n) {
     return multiply(arr, n - 1) * arr[n - 1]; // n-1 is the update of the count
   }
 }
+```
 
-// ANOTHER RECURSION EXAMPLE (COUNT-UP AND COUNT-DOWN)
+## ANOTHER RECURSION EXAMPLE (COUNT-UP AND COUNT-DOWN)
 
-
+```js
 function countup(n) {
   if (n < 1) {
     return [];
@@ -526,22 +568,27 @@ function rangeOfNumbers(startNum, endNum) {
 }
 
 rangeOfNumbers(1,5);
+```
 
-// RANDOM
+## RANDOM NUMBER GENERATOR `Math.random()`
 
-// Math.random()
-// returns a number between 0 (inclusive) and 1 (exclusive)
+- `Math.random()` returns a number between 0 (inclusive) and 1 (exclusive)
 
+```js
 const r = Math.random();
 console.log(r);
+```
 
-// Returning random integers between 0 and 9
+Returning random integers between 0 and 9
 
+```js
 const ri = Math.floor(Math.random() * 10);
 console.log(ri);
+```
 
-// Returning a random integer between lower bound and upper bound
+Returning a random integer between lower bound and upper bound
 
+```js
 const myMin = 5;
 const myMax = 15;
 
@@ -551,33 +598,41 @@ function randomRange(myMin, myMax) {
 }
 
 console.log(randomRange(myMin, myMax));
+```
 
-// CONVERT A STRING INTO INTEGER
-// parseInt()
-// if the function can't parse a string and covert to int, it returns NaN
+## CONVERT A STRING INTO INTEGER `parseInt()`
 
+- if the function can't parse a string and covert to int, it returns NaN
+
+```js
 const sti = parseInt("007");
 
 console.log(typeof sti);
+```
 
-// PARSE STRING WITH RADIX (NUMERIC BASE SYSTEM)
+## PARSE STRING WITH RADIX (NUMERIC BASE SYSTEM)
 
+```js
 const bin = parseInt("10011", 2); // binary
 console.log(bin);
 
 const hex = parseInt("0x45ff"); // hexadecimal
 console.log(hex);
+```
 
-// TERNARY OPERATOR (CONDITIONAL)
+## TERNARY OPERATOR (CONDITIONAL)
 
+```js
 function checkEqual(a, b) {
   return a == b ? 'Equal' : 'Not Equal';
 }
 
 console.log(checkEqual(1, 2));
+```
 
-// NESTED TERNARY OPERATOR
+## NESTED TERNARY OPERATOR
 
+```js
 function checkSign(num) {
   return (num > 0) ? "positive"
     : (num == 0) ? "zero"
@@ -585,10 +640,12 @@ function checkSign(num) {
 }
 
 console.log(checkSign(10));
+```
 
-// STRICT OBJECT IMMUTABILITY
+## STRICT OBJECT IMMUTABILITY
 
-// Object.freeze(myObject);
+```js
+Object.freeze(myObject);
 // if JS is running in strict mode, it won't be possible to change
 
 function freezeObj() {
@@ -607,3 +664,4 @@ function freezeObj() {
   return MATH_CONSTANTS.PI;
 }
 //const PI = freezeObj(); // uncomment this to demostrate immutability
+```

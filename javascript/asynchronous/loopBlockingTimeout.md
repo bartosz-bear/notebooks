@@ -1,9 +1,10 @@
-// SINGLE-THREADED ASYNCHRONOUS MODEL
+## SINGLE-THREADED ASYNCHRONOUS MODEL
 
-// QUEUE = EVENTS LOOP (execution queue for asynchronous calls)
+## QUEUE = EVENTS LOOP (execution queue for asynchronous calls)
 
-// EXAMPLE 1
+## EXAMPLE 1
 
+```js
 let start = new Date;
 
 setTimeout(function() { // goes to the Queue
@@ -20,8 +21,6 @@ while (new Date - start < 1000) {};
 // Therefore, the while has to run for the full 1000ms before callback function
 // of the setTimeout even starts to be executed.
 
-/*
-
 let start = new Date;
 
 while (new Date - start < 1000) {};
@@ -30,23 +29,26 @@ setTimeout(function() {
   let end = new Date;
   console.log('Time elapsed:', end - start, 'ms');
 }, 500);
+```
 
-*/
+## EXAMPLE 2
 
-// EXAMPLE 2
+```js
 for (var i = 1; i <= 3; i++) {
   setTimeout(function() {console.log(i);}, 0); // goes to the Queue
 };
 
 console.log('loop1')
-
 // OUTPUT: 4 4 4
+```
 
-// EXAMPLE 3
+## EXAMPLE 3
+
+```js
 for (let i = 1; i <= 3; i++) {
   setTimeout(function() {console.log(i);}, 0); // goes to the Queue
 };
 
 console.log('loop2')
-
 // OUTPUT: 1 2 3
+```

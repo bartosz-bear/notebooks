@@ -1,5 +1,6 @@
-// DESTRUCTURING ASSIGNEMENT FROM OBJECTS
+## DESTRUCTURING ASSIGNEMENT FROM OBJECTS
 
+```js
 const user = {name: 'John Doe', age: 34};
 
 const name2 = user.name; // OLD WAY OF ASSIGNING OBJECT PROPERTIES TO VALUES
@@ -9,17 +10,21 @@ const {name, age} = user; // DESTRUCTURING ASSIGNEMENT, values names (name, age)
 // have to correspond to properties names
 
 console.log(name, age);
+```
 
-// DESTRUCTURING ASSIGNEMENT AND ADDING NEW VARIABLE NAMES
+## DESTRUCTURING ASSIGNEMENT AND ADDING NEW VARIABLE NAMES
 
+```js
 const player = {name: 'Fredrick Blat', age: 33};
 
 const {name: playerName, age: playerAge} = player;
 
 console.log(playerName, playerAge);
+```
 
-// DESTRUCTURING ASSIGNEMENT FROM NESTED OBJECTS
+## DESTRUCTURING ASSIGNEMENT FROM NESTED OBJECTS
 
+```js
 const worker = {
   johnDoe: {
     height: 180,
@@ -31,15 +36,19 @@ const {johnDoe: {height, email}} = worker; // only height and email variables
 // are instantiated here, johnDoe is not a variable
 
 console.log(height, email);
+```
 
-// DESTRUCTURING ASSIGNEMENT FROM NESTED OBJECTS AND ADDING NEW VARIABLE NAMES
+## DESTRUCTURING ASSIGNEMENT FROM NESTED OBJECTS AND ADDING NEW VARIABLE NAMES
 
+```js
 const {johnDoe: {height: worker_height, email: worker_email}} = worker;
 
 console.log(worker_height, worker_email);
+```
 
-// DESTRUCTURING ASSIGNEMENT FROM ARRAYS
+## DESTRUCTURING ASSIGNEMENT FROM ARRAYS
 
+```js
 const [a, b] = [1,2,3,4,5];
 
 console.log(a, b);
@@ -48,19 +57,22 @@ const [x, y,, z,,, u] = [1,2,3,4,5,6,7]; //three comas (two additional) indicate
 // the index of the expected item
 
 console.log(x,y,z,u);
+```
 
-// SWAPPING VALUES USING DESTRUCTURING ASSIGNEMENT
+## SWAPPING VALUES USING DESTRUCTURING ASSIGNEMENT
 
+```js
 let aa = 8, bb = 6;
 
 [aa, bb] = [bb, aa];
 
 console.log(aa, bb);
+```
 
-// DESTRUCTURING ASSIGNEMENT AND REST PARAMETERS TOGETHER
-// rest parameters are combined together into a seperate array
-// rest element only works correctly as the last element
+## DESTRUCTURING ASSIGNEMENT AND REST PARAMETERS TOGETHER
+-  rest parameters are combined together into a seperate array rest element only works correctly as the last element
 
+```js
 const [aaa, bbb, ...arr] = [1,2,3,4,5,6];
 
 console.log(aaa, bbb, arr);
@@ -72,9 +84,11 @@ function removeFirstTwo(list) {
 
 const source = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const sourceWithoutFirstTwo = removeFirstTwo(source);
+```
 
-// DESTRUCTURING ASSIGNEMENT TO PASS FUNCTION PARAMETERS
+## DESTRUCTURING ASSIGNEMENT TO PASS FUNCTION PARAMETERS
 
+```js
 const stats = {
   max: 56.78,
   standard_deviation: 4.34,
@@ -90,14 +104,13 @@ const half = ({max, min}) => (max + min) / 2.0; // FUNCTION DECLARATION
 
 console.log(half(stats)); // object is only passed during function call,
 // stats has to have max and min parameters
+```
 
+## TEMPLATE LITERALS
 
-// TEMPLATE LITERALS
+- template literals use (backticks) instead of single or double quotes string is multiline, therefore `'/n'` is not necessary variable placeholder `${variable}` or expression placeholder `${a + b}`
 
-// template literals use ` (backticks) instead of single or double quotes
-// string is multiline, therefore '/n' is not necessary
-// variable placeholder ${variable} or expression placeholder ${a + b}
-
+```js
 const person = {
   name: 'Zodiac Hasbro',
   age: 44
@@ -107,12 +120,15 @@ const greeting = `Hello my name is ${person.name}!
 I am ${person.age} years old.`;
 
 console.log(greeting);
+```
 
-// OBJECT PROPERTY SHORT-HAND
-// syntactic sugar which allows you to create objects easier
+## OBJECT PROPERTY SHORT-HAND
 
-// PRE-ES6
+- syntactic sugar which allows you to create objects easier
 
+## PRE-ES6
+
+```js
 function createWardrobe() {
   var hat = 1;
   var shorts = 5;
@@ -127,9 +143,11 @@ function createWardrobe() {
   
   return myWardrobe;
 };
+```
 
-// POST-ES6
+## POST-ES6
 
+```js
 function createWardrobe2() {
   var hat = 1;
   var shorts = 5;
@@ -145,33 +163,41 @@ function createWardrobe2() {
 
   return myWardrobe;
 }
+```
 
-// CONCISE DECLARATIVE FUNCTIONS
+## CONCISE DECLARATIVE FUNCTIONS
 
-// PRE-ES6
+## PRE-ES6
 
+```js
 const person2 = {
   name: 'Taylor',
   sayHello: function() {
     return `Hello! My name is ${this.name}.`;
   }
 };
+```
 
-// POST-ES6
+## POST-ES6
 
+```js
 const person3 = {
   name: 'Taylor',
   sayHello() {
     return `Hello! My name is ${this.name}.`;
   }
 };
+```
 
-// CLASS KEYWORD
-// UpperCamelCase should be used for classes
+## CLASS KEYWORD
 
-// CLASS WITH EXPLICIT CONSTRUCTOR
-// constructor is called if New command is used 
+UpperCamelCase should be used for classes
 
+## CLASS WITH EXPLICIT CONSTRUCTOR
+
+- constructor is called if `New` command is used 
+
+```js
 class SpaceShuttle {
   constructor(targetPlanet) {
     this.targetPlanet = targetPlanet;
@@ -184,9 +210,11 @@ class SpaceShuttle {
 const zeus = new SpaceShuttle('Jupiter');
 
 console.log(zeus.takeOff());
+```
 
-// CLASS WITH IMPLICIT CONSTRUCTOR
+## CLASS WITH IMPLICIT CONSTRUCTOR
 
+```js
 class Rocket {
   launch() {
     console.log('To the moon!');
@@ -197,9 +225,11 @@ const atlas = new Rocket(); // even thought constructor is not explicitly added
 // the Rocket object, constructor is inherited from class
 
 atlas.launch();
+```
 
-// USE GETTERS AND SETTERS TO CONTROL ACCESS TO AN OBJECT
+## USE GETTERS AND SETTERS TO CONTROL ACCESS TO AN OBJECT
 
+```js
 class Thermostat {
   constructor(f) {
     this._f = f;
@@ -219,37 +249,44 @@ const thermos = new Thermostat(76); // Setting in Fahrenheit scale
 let temp = thermos.temperature; // 24.44 in Celsius
 thermos.temperature = 26;
 temp = thermos.temperature; // 26 in Celsius
+```
 
-// MODULES
+## MODULES
 
-// Importing a script in HTML code
-// <script type='module' src='index.js'></script>
+- Importing a script in HTML code `<script type='module' src='index.js'></script>`
 
-// EXPORTING FUNCTIONS FROM A MODULE
+## EXPORTING FUNCTIONS FROM A MODULE
 
+```js
 const add = (x, y) => {
   return x + y;
 };
+```
 
-// ANOTHER EXPORT WAY
+## ANOTHER EXPORT WAY
 
+```js
 const deduct = (x, y) => {
   return x - y;
 };
 
 export { deduct };
+```
 
-// IMPORTING
+## IMPORTING
 
+```js
 import {testing} from './functions.js'
 
 console.log(testing());
 
 import * as myFunctions from './functions.js'
 import { createBuilderStatusReporter, reduceEachTrailingCommentRange } from 'typescript';
+```
 
-// SPREAD SYNTAX
+## SPREAD SYNTAX
 
+```js
 const myArr = [3,5,1];
 
 const myMax1 = Math.max(3,5,1);
@@ -262,23 +299,29 @@ let arr1 = [1, -2, 3 ,5];
 let arr2 = [8, 3, -8, 1];
 
 console.log('Two spread syntax examples, ', Math.max(...arr1, ...arr2, 25, 1));
+```
 
-// MERGING ARRAYS USING SPREAD SYNTAX
+## MERGING ARRAYS USING SPREAD SYNTAX
 
+```js
 console.log([1,3].concat([1,4]));
 
 const merged_arr = [77, ...arr1, 99, 24, 4, ...arr2];
 
 console.log('merged arr ', merged_arr);
+```
 
-// SPREAD SYNTAX ON STRING ARRAY
+## SPREAD SYNTAX ON STRING ARRAY
 
+```js
 let str = 'Hello';
 
 console.log([...str]);
+```
 
-// CREATING AN OBJECT WITH SPREAD SYNTAX
+## CREATING AN OBJECT WITH SPREAD SYNTAX
 
+```js
 const iniitialObject = {1: 'one',
 2: 'two',
 3: 'three'};
@@ -286,22 +329,16 @@ const iniitialObject = {1: 'one',
 const biggerObject = {4: 'pi', 6: 'phil', ...iniitialObject, 5: 'tom'};
 
 console.log(biggerObject);
+```
 
-// PROTOTYPE
+## PROTOTYPE
 
-// - prototypes is the mechanism by which JavaScript objects inherit features
-// from one another
-// - prototype chain endes when an object has null as its prototype
+- prototypes is the mechanism by which JavaScript objects inherit features from one another
+- prototype chain endes when an object has null as its prototype
+ - prototype is stored in `__proto__` property, but it shouldn't be accessed or modified directly, use Object.getPrototypeOf(myObject) instead
+- if you try to access a property of an object, if property can't be found in the object itself, the prototype is searched for the property. If the property still can't be found, the prototype's prototype is searched, and so until either the property is found, or the end of chain is reached, in which case 'undefined' is returned
 
-// - prototype is stored in __proto__ property, but it shouldn't be accessed
-// or modified directly, use Object.getPrototypeOf(myObject) instead
-
-// - if you try to access a property of an object, if property can't be found
-// in the object itself, the prototype is searched for the property. If the
-// property still can't be found, the prototype's prototype is searched, and
-// so until either the property is found, or the end of chain is reached,
-// in which case 'undefined' is returned
-
+```js
 const myObject = {
   city: 'Madrid',
   greet() {
@@ -312,21 +349,25 @@ const myObject = {
 const p = Object.getPrototypeOf(myObject);
 
 console.log('Prototype', p);
+```
 
-// Object.prototype - THE MOST BASIC PROTYPE
+## `Object.prototype` - THE MOST BASIC PROTYPE
 
-// - all objects have Object.prototype as prototype
-// - the prototype of Object.prototype is null
+- all objects have Object.prototype as prototype
+- the prototype of Object.prototype is null
 
-// MIDDLEWARE PROTOTYPES
+## MIDDLEWARE PROTOTYPES
 
+```js
 const myDate = new Date();
 let object = myDate;
 
 console.log('!!!', Object.getPrototypeOf(object));
+```
 
-// OVERWRITING PROPERTIES AND METHODS
+## OVERWRITING PROPERTIES AND METHODS
 
+```js
 const myDate2 = new Date(1995, 11, 17);
 
 console.log(myDate2.getYear());
@@ -336,10 +377,13 @@ myDate2.getYear = function () {
 }
 
 myDate2.getYear(); // getYear() method from assigned specifically to myDate2
+```
 
-// CREATING AN OBJECT BASED ON A SPECIFIC PROTOTYPE USING CREATE()
-// Object.create(Prototype)
+## CREATING AN OBJECT BASED ON A SPECIFIC PROTOTYPE USING `create()`
 
+`Object.create(Prototype)`
+
+```js
 const personPrototype = {
   greet() {
     console.log('hello!');
@@ -349,10 +393,13 @@ const personPrototype = {
 const carl = Object.create(personPrototype);
 
 carl.greet();
+```
 
-// CREATING AN OBJECT BASED ON A SPECIFIC PROTOTYPE USING ASSIGN()
-// Object.assign(target, source)
+## CREATING AN OBJECT BASED ON A SPECIFIC PROTOTYPE USING `assign()`
 
+`Object.assign(target, source)`
+
+```js
 const personPrototype2 = {
   greet() {
     console.log(`hello, my name is ${this.name}!`);
@@ -372,35 +419,42 @@ reuben.greet()
 
 console.log(reuben);
 console.log(typeof reuben);
+```
 
-// bind() vs apply() vs call()
+## `bind()` vs `apply()` vs `call()`
 
-// call()
+## `call()`
 
-// call() is a function method that you use to change the value of 'this' inside
-// another function and execute it with arguments provided
+- `call()` is a function method that you use to change the value of `this` inside another function and execute it with arguments provided
 
-// syntax: func.call(thisObj, args1, args2, ...)
+syntax: `func.call(thisObj, args1, args2, ...)`
 
-// func is function that needs to be invoked with a different 'this' object
+- `func` is function that needs to be invoked with a different `this` object
 
-// 'thisObj' is an object or value that needs to be replaced with the 'this'
-// keyword present inside the function 'func'
+- `thisObj` is an object or value that needs to be replaced with the `this` keyword present inside the function `func`
 
-// CONSTRUCTOR FUNCTION
+## CONSTRUCTOR FUNCTION
+
+```js
 function Car(type, fuelType) {
   this.type = type;
   this.fuelType = fuelType;
 }
+```
 
-// CONSTRUCTUR FUNCTION
+## CONSTRUCTUR FUNCTION
+
+```js
 function setBrand(brand) {
   Car.call(this, 'convertible', 'petrol');
   this.brand = brand;
   console.log(`Car details =`, this);
 }
+```
 
-// CONSTRUCTOR FUNCTION
+## CONSTRUCTOR FUNCTION
+
+```js
 function definePrice(price) {
   Car.call(this, 'convertible', 'diesel');
   this.price = price;
@@ -409,11 +463,13 @@ function definePrice(price) {
 
 const newBrand = new setBrand('Brand1');
 const newCarPrice = new definePrice(10000);
+```
 
-// example 2: calling a function with no arguments in JS
+## Example 2: calling a function with no arguments in JS
 
-// this code gives syntax error even though it was pasted from the tutorial
-/*
+- this code gives syntax error even though it was pasted from the tutorial
+
+```js
 const newEntity = (obj) => console.log(obj);
 
 function mountEntity(){
@@ -422,16 +478,16 @@ function mountEntity(){
 }
 
 mountEntity.call();
-*/
+```
 
-// apply()
+## `apply()`
 
-// apply() method is very similar to the call() method. The only difference
-// is how arguments are passed. In apply(), you can pass an array with arguments
+- `apply()` method is very similar to the `call()` method. The only difference is how arguments are passed. In `apply()`, you can pass an array with arguments.
 
-// syntax: func.apply(thisObj, [arg1, arg2, ...])
-// syntax: func.apply(thisObj, new Array(args1, args2))
+syntax: `func.apply(thisObj, [arg1, arg2, ...])`
+syntax: `func.apply(thisObj, new Array(args1, args2))`
 
+```js
 function Car2(type, fuelType) {
   this.type = type;
   this.fuelType = fuelType;
@@ -451,9 +507,11 @@ function definePrice2(price) {
 
 const newBrand2 = new setBrand2('Brand2');
 const newCarPrice2 = new definePrice2(100);
+```
 
-// syntax: func.apply(thisObj, arguments)
+syntax: `func.apply(thisObj, arguments)`
 
+```js
 function addUp() {
   const args = Array.from(arguments);
   this.x = args.reduce((prev, curr) => prev + curr, 0);
@@ -468,14 +526,15 @@ function driverFunc() {
 }
 
 driverFunc();
+```
 
-// bind()
+## `bind()`
 
-// bind() method creates a copy of a function with a new value to the 'this'
-// present inside the calling function
+- `bind()` method creates a copy of a function with a new value to the `this` present inside the calling function
 
-// syntax: func.bind(thisObj, arg1, arg2, ... argN)
+syntax: `func.bind(thisObj, arg1, arg2, ... argN)`
 
+```js
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -490,3 +549,4 @@ class App extends React.Component {
     return <button onClick={this.handleCode}>Click Me</button>;
   }
 }
+```

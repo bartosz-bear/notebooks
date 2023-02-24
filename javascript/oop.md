@@ -1,12 +1,10 @@
-// CONSTRUCTOR FUNCTION
+## CONSTRUCTOR FUNCTION
 
-// constructors are functions that create new objects
-// they define properties and behaviors that will belong to the new object
-// blueprint for the creation of new objects
+- constructors are functions that create new objects
+they define properties and behaviors that will belong to the new object blueprint for the creation of new objects
+- constructors are defined with a capitalized name to distinguish them from other functions that are not constructors
 
-// constructors are defined with a capitalized name to distinguish them from
-// other functions that are not constructors
-
+```js
 function Dog() {
   this.name = 'Snoop',
   this.color = 'Pink',
@@ -14,10 +12,13 @@ function Dog() {
 }
 
 console.log(Dog.numLegs); // returns undefined (object wasn't instantiated yet)
+```
 
-// NEW KEYWORD
-// keyword new is used to create an instance of an object by calling a constructor
+## NEW KEYWORD
 
+- keyword new is used to create an instance of an object by calling a constructor
+
+```js
 const hound = new Dog();
 
 console.log(hound.numLegs); // returns 4
@@ -25,9 +26,11 @@ console.log(hound.numLegs); // returns 4
 hound.name = 'Stjepan';
 
 console.log(hound.name);
+```
 
-// CONSTRUCTOR FUNCTION WITH ARGUMENTS
+## CONSTRUCTOR FUNCTION WITH ARGUMENTS
 
+```js
 function Dog2(name, color) {
   this.name = name,
   this.color = color,
@@ -35,11 +38,13 @@ function Dog2(name, color) {
 }
 
 const terrier = new Dog2('Olo', 'Purple');
+```
 
-// VERIFY IF AN OBJECT IS AN INSTANCE OF A PARTICULAR CONSTRUCTOR
+## VERIFY IF AN OBJECT IS AN INSTANCE OF A PARTICULAR CONSTRUCTOR
 
-// 'instance' instanceof 'constructor'
+- 'myInstance' `instanceof` 'Constructor'
 
+```js
 function House(numBedrooms) {
   this.numBedrooms = numBedrooms;
 }
@@ -47,23 +52,29 @@ function House(numBedrooms) {
 const myHouse = new House(4);
 
 console.log(myHouse instanceof House);
+```
 
-// CHECK IF AN INSTANCE HAS A PROPERTY
+## CHECK IF AN INSTANCE HAS A PROPERTY
 
+```js
 console.log(terrier.hasOwnProperty('color'));
 console.log(terrier.hasOwnProperty('numLegs'));
+```
 
-// ADD PROPERTIES TO EXISTING OBJECT CONSTUCTURO WITH PROTOTYPE
+## ADD PROPERTIES TO EXISTING OBJECT CONSTUCTURO WITH PROTOTYPE
 
+```js
 Dog2.prototype.numHead = 1;
 
 console.log(terrier.numHead);
+```
 
-// ITERATING OVER OWN AND PROTOTYPE PROPERTIES
+## ITERATING OVER OWN AND PROTOTYPE PROPERTIES
 
-// Own properties - defined inside an object constructor
-// Prototype properties - defined using Object.prototype syntax
+- Own properties - defined inside an object constructor
+- Prototype properties - defined using Object.prototype syntax
 
+```js
 function Bird(name) {
   this.name = name;  //own property
 }
@@ -85,9 +96,11 @@ for (let property in duck) {
 
 console.log(ownProps);
 console.log(prototypeProps);
+```
 
-// CONSTRUCTOR PROPERTY
+## CONSTRUCTOR PROPERTY
 
+```js
 let duck2 = new Bird();
 
 console.log(duck2.constructor);
@@ -102,9 +115,11 @@ function joinDogFraternity(candidate) {
   }
   return false;
 }
+```
 
-// ADDING SEVERAL PROPERTIES AND METHODS TO A PROTOTYPE
+## ADDING SEVERAL PROPERTIES AND METHODS TO A PROTOTYPE
 
+```js
 Bird.prototype = {
   numLegs: 2, 
   eat: function() {
@@ -114,9 +129,11 @@ Bird.prototype = {
     console.log("My name is " + this.name);
   }
 };
+```
 
-// SET THE CONSTRUCTOR PROPERTY WHEN CHANGING THE PROTOTYPE
+## SET THE CONSTRUCTOR PROPERTY WHEN CHANGING THE PROTOTYPE
 
+```js
 Bird.prototype = {
   constructor: Bird, // HERE
   numLegs: 2,
@@ -127,9 +144,11 @@ Bird.prototype = {
     console.log("My name is " + this.name); 
   }
 };
+```
 
-// ISPROTOTYPEOF()
+## isPrototypeOf()
 
+```js
 function Bird0(name) {
   this.name = name;
 }
@@ -137,30 +156,34 @@ function Bird0(name) {
 let duck22 = new Bird0("Donald");
 
 console.log(Bird0.prototype.isPrototypeOf(duck22));
+```
 
-// DRY - Don't Repeat Yourself
+## DRY - Don't Repeat Yourself
 
-// we can create a superclass which shares a common method of different
-// classes. This way we won't repeat writing the same method for different
-// classes
+- we can create a superclass which shares a common method of different classes. This way we won't repeat writing the same method for different classes
 
-// INHERIT BEHAVIORS FROM A SUPERTYPE
+## INHERIT BEHAVIORS FROM A SUPERTYPE
 
+```js
 function Animal() { }
 Animal.prototype.eat = function() {
   console.log("nom nom nom");
 };
 
 let animal = Object.create(Animal.prototype);
+```
 
-// CREATE A PROTOTYPE FROM ANOTHER PROTOTYPE
+## CREATE A PROTOTYPE FROM ANOTHER PROTOTYPE
 
+```js
 function Horse() {}
 
 Horse.prototype = Object.create(Animal.prototype);
+```
 
-// RESETTING INHERITED CONSTRUCTOR PROPERTY
+## RESETTING INHERITED CONSTRUCTOR PROPERTY
 
+```js
 function Lion() {}
 Lion.prototype = Object.create(Animal.prototype);
 
@@ -170,15 +193,19 @@ console.log(lion.constructor);
 Lion.prototype.constructor = Lion;
 
 console.log(lion.constructor);
+```
 
-// ADDING METHODS TO A PROTOTYPE
+## ADDING METHODS TO A PROTOTYPE
 
+```js
 Dog.prototype.bark = () => console.log('Woof!');
+```
 
-// OVERRIDING INHERITED METHODS
+## OVERRIDING INHERITED METHODS
 
-// overriding inherited methods is done the same way as defining new methods
+- overriding inherited methods is done the same way as defining new methods
 
+```js
 function Animal23() {}
 
 Animal23.prototype.eat = () => 'nom nom nom'
@@ -188,11 +215,13 @@ function Bird23() {}
 Bird23.prototype = Object.create(Animal23.prototype);
 Bird23.prototype.constructor = Bird23;
 Bird23.prototype.eat = () => 'peck peck peck';
+```
 
-// MIXINS
+## MIXINS
 
-// mixins allow other unrelated objects to use a collection of functions
+- mixins allow other unrelated objects to use a collection of functions
 
+```js
 let bird = {
   name: 'Donald',
   numLegs: 2
@@ -212,18 +241,22 @@ flyMixin(plane);
 
 bird.fly();
 plane.fly();
+```
 
-// USING CLOSURE TO PROTECT PROPERTIES WITHIN AN OBJECT
+## USING CLOSURE TO PROTECT PROPERTIES WITHIN AN OBJECT
 
+```js
 function Bird333() {
 
   let weight = 15; // this is a private property, protected by closure
 
   this.getWeight = () => weight;
 }
+```
 
-// CLASSES
+## CLASSES
 
+```js
 class Hero {
   constructor(name, level) {
     this.name = name;
@@ -247,3 +280,4 @@ class Mage extends Hero {
 }
 
 const hero2 = new Mage ('Lejon', 2, 'Magic Missle');
+```

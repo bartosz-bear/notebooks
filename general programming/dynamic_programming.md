@@ -1,18 +1,16 @@
-// DYNAMIC PROGRAMMING
+## DYNAMIC PROGRAMMING
 
-// DYNAMIC PROGRAMMING = DIVIDE & CONQUER + MEMOIZATION
+## DYNAMIC PROGRAMMING = DIVIDE & CONQUER + MEMOIZATION
 
-// MEMOIZATION
+## MEMOIZATION
 
-// a way to remember a solution to a particular problem so you don't have to calculate 
-// it again
+- a way to remember a solution to a particular problem so you don't have to calculate it again
 
-// DIFFERENCE BETWEEN DYNAMIC PROGRAMMING AND MEMOIZATION
+## DIFFERENCE BETWEEN DYNAMIC PROGRAMMING AND MEMOIZATION
 
-// both are optimization techniques; dynamic programming is bottom-up, while memoization
-// is top-down; however both are meant to create a cache in order to 'save' on performing
-// the same operations more than once
+- both are optimization techniques; dynamic programming is bottom-up, while memoization is top-down; however both are meant to create a cache in order to 'save' on performing the same operations more than once
 
+```js
 function addto80 (n) {
   return n + 80
 }
@@ -38,18 +36,20 @@ const memoized = memoizedAddTo80();
 console.log('1', memoized(10))
 //console.log('2', memoized(6))
 //console.log('3', memoized(5))
+```
 
-// REDUCING TIME COMPLEXITY FROM EXPONENTIAL O(2^n) TO LINEAR O(n)
+## REDUCING TIME COMPLEXITY FROM EXPONENTIAL `O(2^n)` TO LINEAR `O(n)`
 
-// Recursive functions can reduce time complexity using memoisation or dynamic programming
+Recursive functions can reduce time complexity using memoisation or dynamic programming.
 
-// DYNAMIC PROGRAMMING - STEP TO SEE IF IT CAN BE USED
+## DYNAMIC PROGRAMMING - STEP TO SEE IF IT CAN BE USED
 
-// 1. Can the problem be divided into subproblems?
-// 2. Can recursive solution be applied?
-// 3. Are there repetitive subproblems?
-// 4. Can subproblems be memoized?
+1. Can the problem be divided into subproblems?
+2. Can recursive solution be applied?
+3. Are there repetitive subproblems?
+4. Can subproblems be memoized?
 
+```js
 let calculations = 0
 
 function fibonacciMaster() {
@@ -73,9 +73,11 @@ const fasterFib = fibonacciMaster()
 
 console.log('DP', fasterFib(10))
 console.log('memoized ' + calculations + ' calculations')
+```
 
-// HOUSE ROBBER PROBLEM
+## HOUSE ROBBER PROBLEM
 
+```js
 var rob = function(nums) {
   let odds = 0
   let evens = 0
@@ -90,11 +92,12 @@ var rob = function(nums) {
 };
 
 console.log('robbing', rob([1,2,3,1]))
+```
 
-// BEST TIME TO BUY AND SELL STOCK
+## BEST TIME TO BUY AND SELL STOCK
 
-
-/* NOT WORKING YET
+!!! NOT WORKING YET !!!
+```js
 var maxProfit = function(prices) {
   let bucket = []
   for (let i=prices.length-1; i=1; i--) {
@@ -111,3 +114,4 @@ var maxProfit = function(prices) {
 
 console.log('stocks', maxProfit([7,1,5,3,6,4]))
 */
+```

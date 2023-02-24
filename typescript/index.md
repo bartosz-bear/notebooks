@@ -1,5 +1,52 @@
-// [2.] PRIMITIVE TYPES
+## WHAT IS NEEDED?
 
+npm
+npx
+node
+typescript (npm i typescript)
+vscode (IDE)
+
+## CREATE A NEW NODE.JS PROJECT
+
+mkdir project_directory
+cd project_directory
+npm init -y
+
+## CREATE A NEW TYPESCRIPT PROJECT
+
+npx tsc --init --rootdir src --outdir lib
+
+## START TYPESCRIPT COMPLILATOR IN WATCH MODE (IT WILL RECOMPILE AFTER EACH FILE CHANGE)
+
+npx tsc --watch
+
+## RUN A JS SCRIPT AFTER IT WAS COMPLILED FROM TS
+
+node ./lib/myfile.js
+
+52114020040000300237649330
+
+## COMPILYING ON-THE-FLY AND RUNNING TS FILE
+
+INSTALL ts-node
+
+npm -i ts-node
+
+RUN ts-node
+
+npx ts-node ./my_file.ts
+
+## BUILD AND PUBLISH YOUR LIBRARY ON NPM
+
+npm run build
+
+npm publish
+
+npm i my_library // install a library previously published
+
+## [2.] PRIMITIVE TYPES
+
+```ts
 import { Type } from "typescript";
 
 let message: string = 'Hello world!';
@@ -14,16 +61,20 @@ let notPresent: null = null;
 
 let penta: symbol = Symbol('star');
 //let biggy: bigint = 24n;
+```
 
-// [3.] INSTANCE TYPES
+## [3.] INSTANCE TYPES
 
+```ts
 // Type for regular expressions
 let regexp: RegExp = new RegExp('ab+c');
 
 let array: Array<number> = [1,2,3];
 
 let set: Set<number> = new Set([1,2,3]); // no duplicates
+```
 
+```ts
 /**  A first in first out collection **/
 class Queue<T> {
     private data: Array<T> = [];
@@ -32,16 +83,21 @@ class Queue<T> {
 }
 
 let queue: Queue<number> = new Queue();
+```
 
-// [4.] ARRAYS AND TUPLES
+## [4.] ARRAYS AND TUPLES
 
-// array has variable length
 
+- array has variable length
+
+```ts
 let array2: Array<number> = [1,2,3];
 let array3: number[] = [1,2,3]; // syntactic sugar for array
+```
 
-// tuple has a fixed length
+- tuple has a fixed length
 
+```ts
 let tuple: [number, number] = [0,0];
 
 tuple = [1,2];
@@ -49,12 +105,14 @@ tuple = [2,5];
 //tuple = [5]; // Error: requires two arguments
 //tuple = [5,4,3]; // Source has 3 elements but target allows only 2.
 //tuple = ['elite', 1337]; // Error: Type string is not assignable to type number
+```
 
-// [5.] OBJECT TYPES AND TYPE ALIASES
+## [5.] OBJECT TYPES AND TYPE ALIASES
 
-// type alias
-// name of the type allows us to indicate our intent
-// aliases allows us to reduce code duplication (DRY)
+- name of the type allows us to indicate our intent
+- aliases allows us to reduce code duplication (DRY)
+
+```ts
 type Point = {x: number, y: number}; // point in space
 
 // object type
@@ -67,9 +125,11 @@ let unit: Point = {
     x: 1,
     y: 1,
 };
+```
 
-// [6.] CONST DECLARATIONS
+## [6.] CONST DECLARATIONS
 
+```ts
 type Point2 = {x: number, y: number};
 const point: Point2 = {x: 0, y: 0};
 
@@ -79,13 +139,14 @@ point.x = 123;
 point.y = 345;
 
 console.log(point);
+```
 
-// [21] ASYNC AWAIT
+## [21] ASYNC AWAIT
 
-// async await works on top of JS promises
-// async await functionality is built on top of Generators
+- `async await` works on top of JS promises
+- `async await` functionality is built on top of Generators
 
-/*
+```ts
 async function foo() {
     try {
         let val = await getMeAPromise();
@@ -113,17 +174,23 @@ const asyncFunc = async () => ':wave:';
 const myPromiseString = asyncFunc();
 
 console.log(myPromiseString);
+```
 
-// You can use await keyword to convert a promise into its value
+You can use await keyword to convert a promise into its value
 
+```ts
 const myWrapperFunction = async () => {
     const myResolvedPromiseString = await asyncFunc(); // Convert a promise to a string
     console.log(myResolvedPromiseString);
 };
 
 myWrapperFunction();
+```
 
-// Throwing an error. It will stop execution of the script
+
+Throwing an error. It will stop execution of the script
+
+```ts
 const myThrowingFunction = async () => {
     throw new Error('Do not call this'); // throw error in runtime
 };
@@ -162,23 +229,26 @@ const checkSquareRoot = async (value: number) => {
         response.value;
     }
 };
+```
 
-// INTERMEDIATE
+## INTERMEDIATE
 
-// [23] LEXICAL THIS
+## [23] LEXICAL THIS
 
-// 'this' keyword
-// there are two ways of thinking about 'this' keyword' in JS
-// 1) calling context and 2) lexically scoped 
+- `this` keyword
 
-// Arrow functions don't define their own 'this' so they go
-// to enclosing scope and look for 'this' as they would for
-// any other variable
+There are two ways of thinking about 'this' keyword' in JS
 
-// 'this' in a normal function defines their own 'this', therefore
-// 'this' from outer scope is not available
+1. calling context
+2. lexically scoped 
 
-// Example of 'calling context' use of 'this' keyword
+Arrow functions don't define their own 'this' so they go to enclosing scope and look for 'this' as they would for any other variable.
+
+`this` in a normal function defines their own `this`, therefore `this` from outer scope is not available
+
+Example of 'calling context' use of `this` keyword
+
+```ts
 class Person {
     private _age: number
     constructor(_age: number) {
@@ -195,9 +265,11 @@ class Person {
 const person = new Person(0);
 person.growOld(); // this=Person 'calling context'
 console.log('age:', person.age());
+```
 
-// Example of 'lexically scoped' this - Arrow function
+Example of 'lexically scoped' `this` - Arrow function
 
+```ts
 class LexicalPerson {
     private _age: number
     constructor(_age: number) {
@@ -214,12 +286,14 @@ class LexicalPerson {
 const lex = new LexicalPerson(0);
 const growLexOld = lex.growOld;
 setTimeout(lex.growOld, 1000);
+```
 
-// [42] ASSERTION FUNCTIONS
+## [42] ASSERTION FUNCTIONS
 
-// this is relevant for event driven paradigm
-// assertion function is a software pattern
+- this is relevant for event driven paradigm
+- assertion function is a software pattern
 
+```ts
 type Person = {
     name: string,
     dateOfBirth?: Date
@@ -242,25 +316,22 @@ console.log('Name', maybePerson.name);
 
 assertDate(maybePerson.dateOfBirth);
 //console.log('Date of Birth:', maybePerson.dateOfBirth.toISOString());
+```
 
-// USER DEFINED TYPE GUARDS VS ASSERTION FUNCTIONS
+## USER DEFINED TYPE GUARDS VS ASSERTION FUNCTIONS
 
-// in application code: use user defined type guards
-// in tests: use assertion functions
+In application code: use user defined type guards. In tests: use assertion functions.
 
-// [43] FUNCTION OVERLOADING
+## [43] FUNCTION OVERLOADING
 
-// function overloading = one implementation with multiple signatures
+function overloading = one implementation with multiple signatures
 
-// function overloads are considered possible signatures for a function
+- function overloads are considered possible signatures for a function
+- the implementation signature must be compatible with all the overloads
+- function overloading is compile time only
+- this is only for the author of the function, not intended for comments, library distribution or as part of API
 
-// the implementation signature must be compatible with all the overloads
-
-// function overloading is compile time only
-
-// this is only for the author of the function, not intended
-// for comments, library distribution or as part of API
-
+```ts
 function reverse(string: string): string; // won't be part of JS file
 function reverse(stringArray: string[]): string[]; // won't be part of JS file
 function reverse(stringOrStringArray: string | string[]) {
@@ -288,6 +359,4 @@ const doomsday = makeDate(2000, 12, 12);
 const epoch = makeDate(0);
 
 console.log(doomsday);
-
-// [44] CALL SIGNATURES
-
+```
