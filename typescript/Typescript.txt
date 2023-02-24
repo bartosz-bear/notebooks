@@ -1,0 +1,69 @@
+WHAT IS NEEDED?
+
+npm
+npx
+node
+typescript (npm i typescript)
+vscode (IDE)
+
+CREATE A NEW NODE.JS PROJECT
+
+mkdir project_directory
+cd project_directory
+npm init -y
+
+CREATE A NEW TYPESCRIPT PROJECT
+
+npx tsc --init --rootdir src --outdir lib
+
+START TYPESCRIPT COMPLILATOR IN WATCH MODE (IT WILL RECOMPILE AFTER EACH FILE CHANGE)
+
+npx tsc --watch
+
+RUN A JS SCRIPT AFTER IT WAS COMPLILED FROM TS
+
+node ./lib/myfile.js
+
+52114020040000300237649330
+
+CONSTANTS IN JAVASCRIPT
+
+constants 1) cannot change through re-assignement
+	  2) cannot be re-declared
+
+however, it's possible to change an object or array which constant is pointing to, eg.
+
+const x = {};
+x.foo = 'bar';
+
+const y = [];
+y.push('foo');
+y.unshift('foo2');
+y.pop();
+
+POLYFILL
+
+- its a JS code which simulates some action of the browser which is not supported natively by browser API
+
+SOURCE MAP
+
+- it's a translation instruction which provides instructions how to undo things like minify a js code, or how to undo js code which was compiled from typescript
+
+COMPILYING ON-THE-FLY AND RUNNING TS FILE
+
+- INSTALL ts-node
+
+npm -i ts-node
+
+- RUN ts-node
+
+npx ts-node ./my_file.ts
+
+BUILD AND PUBLISH YOUR LIBRARY ON NPM
+
+npm run build
+
+npm publish
+
+npm i my_library // install a library previously published
+
