@@ -1,3 +1,28 @@
+## CONSTANTS IN JAVASCRIPT
+
+constants 1) cannot change through re-assignement
+	  2) cannot be re-declared
+
+however, it's possible to change an object or array which constant is pointing to, eg.
+
+```js
+const x = {};
+x.foo = 'bar';
+
+const y = [];
+y.push('foo');
+y.unshift('foo2');
+y.pop();
+```
+
+## POLYFILL
+
+- its a JS code which simulates some action of the browser which is not supported natively by browser API
+
+## SOURCE MAP
+
+- it's a translation instruction which provides instructions how to undo things like minify a js code, or how to undo js code which was compiled from typescript
+
 ## `let` SCOPING
 
 - `var` creates a variable in a global scope regardless of when it's declared
