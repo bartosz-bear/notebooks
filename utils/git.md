@@ -520,3 +520,17 @@ Go to the repo directory
 - add code
 
 `git push -set-upstream origin new_branch`
+
+## HOW TO CHECK IF YOUR LOCAL REPO IS UP TO DATE WITH THE REMOTE REPO?
+
+`git remote update`
+`git status -uno`
+
+## HOW DO YOU RENAME A BRANCH?
+
+`git branch -m old_name new_name`
+
+## HOW DO YOU REMOVE A LOCAL TRACKING OF A REMOTE BRANCH?
+
+`git branch -d -r origin/create_and_populate`
+

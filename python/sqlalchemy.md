@@ -39,3 +39,7 @@ df.head()
 ```python
 
 ```
+
+## CONCURRENT PROGRAMMING (ASYNCIO) IN SQLALCHEMY
+
+<https://betterprogramming.pub/python-sqlalchemy-and-concurrency-c89ec9b5a628>

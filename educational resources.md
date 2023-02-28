@@ -23,3 +23,9 @@ The Complete Developer Guide to MongoDB (Udemy by Stephen Grider)
 <https://www.udemy.com/course/azure-databricks-spark-core-for-data-engineers/>
 
 <https://www.udemy.com/course/databricks-certified-developer-for-apache-spark-30-practice-exams/>
+
+## PROFESSIONAL TESTING WITH PYTHON
+
+- course from the author of pytest library
+
+<https://python-academy.com/courses/python_course_testing.html>

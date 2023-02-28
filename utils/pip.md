@@ -12,3 +12,9 @@ pip list --format=freeze > requirements.txt
 ## How do you remove indentation from multiple lines in VS Code?
 
 Shift + Tab
+
+## How to show version of a library?
+
+```
+pip show library_name
+```

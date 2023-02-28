@@ -36,3 +36,17 @@ user.say()
 var decorated = new DecoratedUser(myUser, 'Broadway', 'NYC')
 decorated.say()
 ```
+
+## UNIT OF WORK PATTERN
+
+Unit of work pattern is used to group one or more operations (usually database CRUD operations) into a single transaction or 'unit of work' os that all operations either pass or fail as one unit.
+
+## FACTORY PATTERN/FACTORY METHOD PATTERN
+
+A Factory Pattern or Factory Method Pattern says that just define an interface or abstract class for creating an object but let the subclasses decide which class to instantiate. In other words, subclasses are responsible to create an instance of a class.
+
+Subclasses share a common 'ancestor' (superclass) and its methods, however these methods can be overwridden. 
+
+- factory pattern is a creational pattern
+
+<https://refactoring.guru/design-patterns/factory-method>

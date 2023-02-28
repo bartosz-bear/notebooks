@@ -8,3 +8,6 @@
 
 <https://bartosz-bear.github.io/notebooks/>
 
+# Python Cheatsheet
+
+<https://www.pythoncheatsheet.org/cheatsheet/basics>
