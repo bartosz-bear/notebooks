@@ -641,8 +641,11 @@ Data types are SQL implementation based (eg. different in PostreSQL and MySQL).
 ## `NUMERIC`
 
 - use to store very precise numbers with decimal points like scientific calculations, grams of gold
+- databases storing information about money should use `NUMERIC`
 
 ## `DECIMAL`
+
+- it's just an alias for `NUMERIC` and is widely used for monetary data, being an 'arbitrary precision' type
 
 ## FLOATING POINT MATH NUMERIC TYPES
 
@@ -947,6 +950,26 @@ Indivindually, the `Employee` and `EmployeeSkill` have a one-to-many realtionshi
 ![](./images/postgresql/many-to-many2.png)
 
 <https://www.tutorialsteacher.com/sqlserver/tables-relations>
+
+## SELF-REFERENCING RELATIONSHIP
+
+- when a table is referencing itself
+- self-referencing relationship (also known as a recursive relationship) in a database occurs when a column in a table relates to another column in the same table
+- for example: `staff` table contains information about company employees and their managers, however managers themselves belong to staff too
+
+```sql
+CREATE TABLE category (
+  category_id SERIAL PRIMARY KEY,
+  category_name VARCHAR(45),
+  parent_category_id INTEGER,
+  CONSTRAINT fk_category FOREIGN KEY (parent_category_id)
+    REFERENCES category (category_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+)
+```
+
+![](../assets/images/postgresql/self_referencing.png)
 
 ## What is a DATABASE SCHEMA?
 
@@ -2872,13 +2895,47 @@ Normally cursors should be avoided due to performance penalty as compared to reg
 - executing stored procedures in certain situations
 - processing batches of records to reduce the impact of locks on tables
 
+## `PL/pgSQL`
+
+`PL/pgSQL` is a loadable procedural language for PostgreSQL.
+- can be used to create functions and trigger procedures
+- adds control structures to the SQL language
+- can perform complex computations
+- inherits all user-defined types, functions and operators
+- can be defined to be trusted by the server
+
+<https://www.postgresql.org/docs/current/plpgsql.html>
+
 ## FOUR STEPS OF USING A CURSOR
 
-1. `DECLARE`
-2. `OPEN`
-3. `FETCH`
-4. `CLOSE`
+1. `DECLARE` - specify the name of the cursor and SQL statement that is used to populate it
+2. `OPEN` - processes and runs the SQL statement that is mentioned in the `DECLARE` step
+3. `FETCH` - reads a single row from the set of rows stored in the cursor and stores this single row into another variable. When you fetch the cursor, you can perform actions and logic on the data in the row. You can modify other variables, run SQL commands, perform IF statements, and more. The `FETCH` is usually run on each row in the overall result.
+4. `CLOSE` - relases cursor from memory
 
+```sql
+CREATE OR REPLACE FUNCTION fn_test_cursor() RETURNS text
+language plpgsql AS $$
+DECLARE
+  test_cursor CURSOR FOR
+  SELECT id, product_name, price
+  FROM products;
+  currentID INT;
+  currentProductName VARCHAR(100)
+  currentPrice INT;
+BEGIN
+  OPEN test_cursor;
+  LOOP
+    FETCH test_cursor INTO currentID, currentProductName, currentPrice;
+    EXIT WHEN NOT FOUND;
+RAISE NOTICE '% % (ID: %)', currentProductName, currentPrice, currentID;
+  END LOOP;
+  CLOSE test_cursor;
+  RETURN 'done';
+END $$;
+
+SELECT * FROM fn_test_cursor();
+```
 
 ## ANSI (AMERICAN NATIONAL STANDARDS INSTITUTE)
 
