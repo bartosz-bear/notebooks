@@ -1,6 +1,180 @@
 # PostgreSQL
 
-<https://www.datacamp.com/tutorial/beginners-introduction-postgresql>
+## SQL LESSONS FROM SENIOR SQL DEVELOPER
+
+- by definition a table must have at least one key
+- a key is defined as a subset of columns in the table that is unique for every row
+- DEFAULT clause is underused. The default option can be a literal value of the relevant data type or something provided by the system, such as the current timestamp , current date
+- it's a good way to make the database do a lot of work for you that you would otherwise have to code into the applications program. The most common tricks are to use a zero in numeric columns, a string to encode a missing value `('{{unknown}}')` or a true default 'same address' in character columns, and the system timestamp to mark transactions
+
+## SUBSETS OF SQL
+
+`DDL` - data definition language, is a syntax for creating, modyfing and deleting database objects such as tables, indices, and users. `DDL` statements are similar to computer programming languages for defining data structures, especially database schemas. Common examples are: `CREATE`, `ALTER` and `DROP`
+
+`DML` - data manipulation language, is a syntax for inserting, modifying and deleting DATA in a database. Common examples: `INSERT INTO`, `UPDATE SET`, `DELETE`
+
+`DCL` - data control langugage, is a syntax for controlling access (authorizations) to data and schema of a database. Examples: `GRANT`, `REVOKE`. Operations for which privilages may be granted to or revoked from a user or role apply to both the `DDL` and `DML`, ex. `GRANT SELECT` or `REVOKE DELETE`
+
+```sql
+REVOKE INSERT ON 'role1', 'role2' FROM 'user1'@'localhost', 'user2'@'localhost'
+GRANT ALL ON db1.* TO 'jeffrey'@'localhost'
+```
+
+## `NULL` AND NULLABLE COLUMNS
+
+- `NULL` is a marker indicating a missing value
+- if you do not provide a `DEFAULT` clause and the column is NULL-able, the sytem will provide `NULL` value by default
+- if all that fails you get a an error message about missing data
+- the most important columns constraint is `NOT NULL`, which forbids to using `NULL`s in a column. Use this constraint automatically, then remove it only if you have a good reason. It will help you to avoid the complications of `NULL` when you make queries against the data
+- the `NULL` is a special value in SQL that belongs to all data types. SQL is the only language which has such a creature. If you understand how it works, you will have a good grasp of SQL. In Relational Theory, the `NULL` has no data type, but in SQL, we have to allocate storage for a column that a data type. This means we can write `CAST (NULL as <datatype>)` in our code.
+- `NULL` is the smallest value in the sorting order 
+
+## `NULL` IS NOT THE SAME AS ZERO
+
+- a `NULL` should not be confused with a value of 0. A `NULL` value indicates ABSENCE OF A VALUE, which is not the same as a value of zero. Eg. consider a question "How many books does Adam own?". The answer may be zero, which means he doesn't own any book. Or the answer may be `NULL`, which means we don't know how many books Adam owns.
+- `NULL` is a marker not a value
+
+## `NULL` CONTROVERSY
+
+- `NULL` has been a controversy due to it's associated three-value logic(3VL)
+- the controversy stems from the fact that even thought 3VL is implemented in SQL (eg. is used for `NULL` = `NULL` comparison), it is not consistently implemented (eg. `UNION` and `INTERSECT` don't implement it, within these operations `NULL` = `NULL`). This inconsistency makes SQL less intuitive
+- SQL standard defines an optional feature called F571, which adds unary operators, which is `IS UNKNOWN` which makes it 3VL complete
+
+## `NULL` = `NULL` RETURNS `FALSE`
+
+- it's a wrong implementation
+- `NULL`(1) represents absent value in the database. Value is not recorded in the database but it exists in the real world (eg. age of an employee). `NULL`(2) also represents absent value in the database. And similarly to `NULL`(1) this value exists in the real world. However, RDBMS doesn't know if these two values in the world are the equal or not. Therefore it returns `UNKNOWN`.
+
+## LOGICAL OPERANDS AND `NULL`
+
+- logical operands like '=' or '!=' can't used to check for `NULL`, instead `IS NULL`, `IS NOT NULL` and `EXISTS`
+- using these operands with `NULL` will result in an empty set
+
+## `IS NULL()` AND `IS NOT NULL()`
+
+- because `NULL` = `NULL` is equal to `FALSE` 
+- these two unary operators should be used to check if a value recorded in a database is or is not `NULL`
+
+```sql
+SELECT *
+FROM customers
+WHERE address IS NOT NULL;
+```
+
+## AGGREGATE FUNCTIONS AND `NULL`
+
+- aggregate functions like `SUM()` or `COUNT()` don't include `NULL` values in its calculations sets
+- the only exception is `COUNT(*)` !!! COUNT STAR !!! function, which also counts rows with `NULL` values
+
+## `NULL` AND `GROUPBY()`
+
+- if rows contain `NULL` values, those will be grouped into one group
+
+## `NULLIF()` FUNCTION
+
+- a function which returns `NULL` if both arguments are equal, otherwise it returns the first argument
+
+```sql
+SELECT NULLIF(2, 2); -- returns NULL because both arguments are equal
+```
+
+```sql
+SELECT NULLIF(NULL, NULL); -- returns NULL because both arguments are equal
+```
+
+```sql
+SELECT NULLIF(5, NULL); -- returns 5
+```
+
+```sql
+SELECT NULLIF(NULL, 5); -- return NULL because first argument is NULL
+```
+
+## USING `NULLIF` TO PREVENT DIVISION BY ZERO ERRORS
+
+var1 = 1
+var2 = 0
+
+```sql
+SELECT var1/(NULLIF(var2, 0)) -- doesn't trigger division by zero error
+```
+
+## THREE VALUE LOGIC (3VL)
+
+- logic systems where there are three possible value: 'True', 'False' and 'Value is unkown'
+- SQL implements ternary logic as a means of handling comparisons with `NULL` field content
+
+## SENTINEL VALUE
+
+- `NULL` was originally intended to be used as a sentinel value representing missing value (with the assumption that an actual value exists but the value is currently not recorded in the database)
+
+## `NULL` VALUE RESEARCH
+
+<https://betterprogramming.pub/how-to-deal-with-null-values-in-sql-the-right-way-69861f2debbf>
+
+## ACID (ATOMICITY, CONSISTENCY, ISOLATION, DURABILITY) PROPERTIES OF DATABASE TRANSACTIONS
+
+- is a set of properties of database transactions intended to guarantee data validity despite errors, power failures and other issues
+- in the context of databases, a sequence of operations that satisfies the ACID properties (which can be perceived as a single logical operation on data) is called a transaction
+- eg. transfer of funds from one bank account to another is a transaction, it's single operation from the perspective of a database even if it includes at least two operations on data (debiting one account and crediting another one)
+
+## ATOMICITY
+
+Atomicity guarantees that each transaction is treated as a single unit, which either succeeds completely or fails completely. If any of the statements constituting a transaction fails to complete, the entire transaction fails and the database is left unchanged. A guarantee of atomicity prevents updates to the database from occurying only partially, which can cause greater problems than rejecting the whole series outright.
+
+## CONSISTENCY
+
+Consistency refers to the maintaining integrity of all constraints and rules imposed on the database. If there is a transaction which influences a table which has constraints, cascades or triggers on it's field, this transaction will only succeed if ALL these constraints are fulfilled, if even one of them is not fulfilled, the whole transaction will fail and roll back.
+
+Consistency principle also has to be maintained when it comes to declarative constraints.
+
+Consistency is mainained by holding to declarative constraints set up during schema definiton.
+
+Examples: `NOT NULL`, `UNIQUE`, `CHECK()`
+
+## ISOLATION
+
+Transactions are isolated from each other, meaning that one transaction cannot be affected by the incomplete processing of another transaction. Isolations are related to concurrent processing of transactions. Transactions can be processed concurently only if one transaction have no impact on the second one. Otherwise, transactions have to happen sequentially.
+
+## OPTIMISTIC TRANSACTION SCHEMA
+
+- assumes that the same transaction will not read or write to the same place twice
+- if that happens, both transactions will be aborted and state will be rolled back
+
+## PESSIMISTIC TRANSACTION SCHEMA
+
+- if transaction is assumed to read or write twice, transactions have to run sequentially
+
+## DURABILITY
+
+- durability guarantees that once a transaction has been commited, it will remain commited even in the case of a system failure (power outage of crash). This usually means that completed transactions (or their effects) are recorded in the non-volatile memory.
+
+## REFERENTIAL INTEGRITY
+
+Referential integrity is a property of data stating that all its referenes are valid. They are only valid if there are no orphaned records. Orphaned records are records which reference records in the second table which don't exist. If this condition holds, the database didn't maintain referential integrity.
+
+<https://www.red-gate.com/simple-talk/databases/theory-and-design/constraints-and-declarative-referential-integrity/>
+
+## REFERENTIAL ACTIONS
+
+- referential actions determine what happens to referenced records when you delete or update the table which is referencing other tables
+
+`ON DELETE`
+`ON DEMAND`
+
+## POSSIBLE OPTIONS
+
+`CASCADE` - will change the values in the referencing table to the new value in the referenced table. This method allows you to set up a single table as the trusted source for the value of a data element. This way the database engine can propagate changes automatically.
+
+`SET NULL`- will change values in the referencing table to `NULL`
+
+`SET DEFAULT` - will change values in the referencing table to `DEFAULT` value of that column, provided that this `DEFAULT` value was defined during schema creation.
+
+`NO ACTION` - nothing changes. If no other referential action is defined, all columns are implicitly set as `NO ACTION`.
+
+## DEFERRABLE CONSTRAINTS
+
+Deferrable constraints allows you to switch off constraints temporarily during a session. When the session closes, constraints are switched back on.
 
 ## Syntax
 
@@ -533,7 +707,7 @@ SELECT(0::BOOLEAN) -- returns FALSE
 
 ## `NULL`
 
-- no value, nothing
+- absent value, nothing
 - not True, not False
 
 ```sql
@@ -648,14 +822,19 @@ Foreign key identifies a record (usually in an another table) that this row is a
 - name of a foreign key varies, usually they are called something like `user_id` or `department_id`
 - foreign keys are referring to concrete primary keys in a different table
 - foreign keys will change when a relationship changes (eg. an employee changes a department)
+- there is no rule to prevent several columns from referencing the same target column. For example, we might have a table of flight crews with pilot and copilot columns that both reference a table of certified pilots
 
 ## FOREIGN KEY IN POSTGRESQL
 
 - PostgreSQL only allows an entry of a record with a foreign key, if this entry is referencing an existing record in the second table. In order words, it's not possible to enter a new record if this new record is referencing a record which doesn't exist in the second table.
 
+## CIRCULAR REFERENCE
+
+- a circular reference is a relationship in which one table references a second table, which in turn references the first table. "You cannot get a job unitl you have experience, and you cannot get experience until you have a job."
+
 ## GENERAL STRUCTURE OF A TABLE CREATION QUERY IN POSTGRESQL
 
-```postgresql
+```
 CREATE TABLE table_name (
   column_name TYPE column_constraint,
   table_constraint table_constraint
@@ -675,7 +854,7 @@ CREATE TABLE datacamp_courses(
 
 ## INSERTING RECORDS
 
-```postgresql
+```sql
 INSERT INTO datacamp_courses(course_name, course_instructor, topic)
 VALUES('Deep Leaning in Python', 'Dan Becker', 'Python');
 
@@ -1680,20 +1859,34 @@ ADD UNIQUE (name, department);
 
 ## CHECK VALIDATION
 
-- before table was created
+- `CHECK` constraint tests the row of a single column (or multiple columns if specified) against logical expression, which SQL calls a search condition, and rejects rows whose search condition returns `FALSE`. However, the constaint accepts rows when the search condition returns `TRUE` or `UNKNOWN`. This is not the same rule as the `WHERE` clause, which rejects rows that test `UNKNOWN`.
+- syntax if table wasn't created yet
+- while it optional, it's a really good idea to use a contraint name. Without it, most SQL implementations will create a huge, ugly, unreadable random string for the name, since they need to have one in the schema tables
 
 ```sql
 CREATE TABLE products (
   price INTEGER CHECK (price > 0)
 );
 ```
-- after table was created
+- syntax after table was already created
 - it's only possible to add this check constraint if existing records in the table already pass the constraint
 - it's not possible to use subqueries within `CHECK` constraints statements
 
 ```sql
 ALTER TABLE products
 ADD CHECK (price > 0);
+```
+
+```sql
+CREATE TABLE ratings (
+  CHECK (ratings BETWEEN 1 AND 10)
+)
+```
+
+```sql
+CREATE TABLE sex_codes (
+  CHECK (sex_code IN (0, 1, 2, 9))
+)
 ```
 
 ```sql
@@ -1882,7 +2075,7 @@ WHERE username = 'Emil30'
 
 ## DOWNSIDES OF INDICES
 
-- creating indices increases storage space and this can be very costly on large databases stored on cloud servers (or even locally, as it will require more harddrives, machines and DevOps engineers)
+- creating indices increases storage space and this can be very costly on large databases stored on cloud servers (or even locally, as it will require more hard drives, machines and DevOps engineers)
 - indices slow down `INSERT/UPDATE/DELETE` operations because indices have to be updated after every single one of these operations
 - users may not use an index alltogether
 
@@ -2667,6 +2860,30 @@ SET search_path TO test, public;
 CREATE ROLE role_name WITH LOGIN PASSWORD 'password';
 ```
 
+## CURSOR
+
+Cursor is a database functionality which takes a result set, assigns it into a variable and allows you to process the result set row by row. While the unit of processing in SQL is typically a set of rows, in the cursor 'paradigm' the unit of processing is a single row. This way data can processed in similar fashion like in procedural programming (eg. through loops).
+
+Normally cursors should be avoided due to performance penalty as compared to regular SQL operations.
+
+## WHEN USING CURSOR HAS MERIT?
+
+- calculating a running total
+- executing stored procedures in certain situations
+- processing batches of records to reduce the impact of locks on tables
+
+## FOUR STEPS OF USING A CURSOR
+
+1. `DECLARE`
+2. `OPEN`
+3. `FETCH`
+4. `CLOSE`
+
+
+## ANSI (AMERICAN NATIONAL STANDARDS INSTITUTE)
+
+ANSI is a body governing the SQL standard.
+
 ## SQL FLAVORS
 
 Standard keywords are the same for all SQL flavors. Only additional keywords on top of the standard set of keywords, make SQL flavors unique.
@@ -2695,6 +2912,10 @@ TOP 2;
 
 <https://www.pgadmin.org/docs/pgadmin4/6.18/keyboard_shortcuts.html>
 
+## SQL FIDDLE
+
+<http://www.sqlfiddle.com/#!17>
+
 ## SQL SCHEMA DESIGNERS
 
 - configuration file-like diagraming
@@ -2721,6 +2942,8 @@ In my `C:\Program Files\PostgreSQL\14\data\postgresql.conf` file I found `listen
 ## LEARNING
 
 Basic: Datacamp, Introduction to SQL
+
+<https://www.datacamp.com/tutorial/beginners-introduction-postgresql>
 
 Intermediate: Udemy, SQL & Database Design A-Z
 <https://www.udemy.com/course/sqldatabases/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-YaWKvZjwH58FdJLO_nQI4g&utm_medium=udemyads&utm_source=aff-campaign>
@@ -2758,3 +2981,8 @@ PostgresSQL Online
 - `UNION`
 - `INTERSECT`
 - `EXCEPT`
+
+## TOPICS TO STUDY
+
+- SELF JOIN
+- SELF-REFERENCES (PRIMARY AND FOREIGN KEY IN THE SAME TABLE)
