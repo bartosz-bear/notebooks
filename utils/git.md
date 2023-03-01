@@ -534,3 +534,14 @@ Go to the repo directory
 
 `git branch -d -r origin/create_and_populate`
 
+## HOW TO SEARCH FOR DELETED FILES IN REPO'S COMMIT HISTORY?
+
+`git log --diff-filter=D --summary`
+
+Or
+
+` git log --diff-filter=D --summary | grep delete`
+
+## HOW TO SEARCH FOR A SPECIFIC FILE IN THE REPO'S COMMIT HISTORY?
+
+`git log --all --full-history -- '**/numeric_data_types.png'`
