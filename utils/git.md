@@ -545,3 +545,76 @@ Or
 ## HOW TO SEARCH FOR A SPECIFIC FILE IN THE REPO'S COMMIT HISTORY?
 
 `git log --all --full-history -- '**/numeric_data_types.png'`
+
+## HOW TO SEE CHANGES IN THE FILE BETWEEN TWO COMMITS OF THE SAME BRANCH?
+
+`git diff HEAD^..HEAD`
+
+## WHAT IS GIT INTERNAL EDITOR?
+
+vi
+
+<https://www.redhat.com/sysadmin/introduction-vi-editor>
+
+<https://groups.google.com/g/git-users/c/4vzpPsriRaw?pli=1>
+
+## HOW TO REBASE
+
+`git fetch` -- on main branch
+`git checkout feature`
+`git rebase main` -- on feature branch
+
+## WHAT IS REBASE?
+
+- `rebase` solves the same problem as `merge`, they incorporate changes from one branch to another
+- `rebase` should be used on a feature branch, not on the main branch
+- `rebase` should be used on a private branch, not the public one (one which other developers use also)
+- `rebase` results in a linear history (easier to navigate repo history with commands like `git log` or `git bisect`)
+- `rebase` is a type of clean-up
+- when calling `rebase` you have two options for the new base: `main` branch or previous commit in `feature` branch
+
+## GOLDEN RULE OF REBASING
+
+- NEVER USE IT ON PUBLIC BRANCHES (checkout to feature and then rebase)
+
+Rebasing `main` branch will create a conflict, because your `main` and other people's main will have a different history. Yours will include the `feature` history while theirs won't.
+
+So, before you run git rebase, always ask yourself, “Is anyone else looking at this branch?” If the answer is yes, take your hands off the keyboard and start thinking about a non-destructive way to make your changes (e.g., the `git revert` command).
+
+## REBASING DURING A PULL REQUEST PROCESS
+
+If you use pull requests as part of your code review process, you need to avoid using `git rebase` after creating the pull request. As soon as you make the pull request, other developers will be looking at your commits, which means that it's a public branch.
+
+For this reason, it's usually a good idea to clean up your code with an interactive rebase before submitting your pull request.
+
+## WHEN IS REBASE USEFUL?
+
+`rebase` is useful in a `forked commit history` - which is a situation where in the time you worked on your feature branch someone else commited and merged their work to the `remote/main` branch
+
+![](../assets/images/git/forked_commit_history.svg)
+
+`rebase` will disattach the `feature` history from the 'old `main`' and attach the whole `feature` history to the most recent `main`
+
+![](../assets/images/git/rebasing_feature_branch_to_main.svg)
+
+## INTERACTIVE REBASING VS AUTOMATIC REBASING
+
+- interactive rebasing allows you to re-write history of the branch with more control, for example some minor commits can be merged into a bigger one (this is typically done before merging the feature branch to the main branch)
+
+## REBASING INTO A REMOTE BRANCH OTHER THAN MAIN
+
+- this can happen when you collaborate with another developer on a feature and you both want to incorporate your changes to remote feature branch
+- when you rebase a remote feature branch you take your fellow developer's work (fetch from remote), and then rebase your own work at the top of the remote's branch in the same way as it was main branch, this is like saying: “add my changes to what John has already done.”
+
+BEFORE REBASE
+
+![](../assets/images/git/before_rebase_remote_feature_branch.svg)
+
+AFTER REBASE
+
+![](../assets/images/git/after_rebase_remote_feature_branch.svg)
+
+
+## MERGING VS REBASING
+
+<https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
