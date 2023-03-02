@@ -1,12 +1,5 @@
 # PostgreSQL
 
-## SQL LESSONS FROM SENIOR SQL DEVELOPER
-
-- by definition a table must have at least one key
-- a key is defined as a subset of columns in the table that is unique for every row
-- DEFAULT clause is underused. The default option can be a literal value of the relevant data type or something provided by the system, such as the current timestamp , current date
-- it's a good way to make the database do a lot of work for you that you would otherwise have to code into the applications program. The most common tricks are to use a zero in numeric columns, a string to encode a missing value `('{{unknown}}')` or a true default 'same address' in character columns, and the system timestamp to mark transactions
-
 ## SUBSETS OF SQL
 
 `DDL` - data definition language, is a syntax for creating, modyfing and deleting database objects such as tables, indices, and users. `DDL` statements are similar to computer programming languages for defining data structures, especially database schemas. Common examples are: `CREATE`, `ALTER` and `DROP`
@@ -763,6 +756,13 @@ SELECT
   date
 ```
 
+## AGE()
+
+```sql
+SELECT AGE('2021-02-28 20:15:21.298284+01', '2021-03-10 10:39:11.943206+01')
+-- RETURNS 0 years 0 mons -9 days -14 hours -23 mins -50.644922 secs
+```
+
 ## INTERVALS
 
 ```sql
@@ -780,6 +780,31 @@ SELECT ('NOV-20-1980 1:23 AM EST'::TIMESTAMP WITH TIME ZONE)
 - 
 SELECT ('NOV-10-1980 5:43 AM PST'::TIMESTAMP WITH ZIME ZONE)
 ```
+
+## `EXTRACT`
+
+- extracting specific parts of `TIMESTAMP`
+- `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECONDS`, `MILISECONDS`
+
+```sql
+SELECT
+  EXTRACT(YEAR FROM NOW()) AS year,
+  EXTRACT(MONTH FROM NOW()) AS month,
+  EXTRACT(DAY FROM NOW()) AS day;
+```
+
+## MORE ADVANCED `EXTRACT` OPTIONS
+
+`WEEK` - extracts the week of the year
+`DOW` - day of the week in the calendar year
+`DOY` - day of the calendar year
+`EPOCH` - Returns the UNIX timestamp. Calculated from 01-01-1970.
+`QUARTER` - quarter
+`TIMEZONE` - timezone information
+`TIMEZONE_HOUR` - returns the timezone difference in hours
+`TIMEZONE_MINUTE` - returns the timezone difference in minutes
+`WEEK`
+
 
 ## TYPE CONVERSION
 
@@ -2056,7 +2081,22 @@ TUPLE/ITEM
 
 ![](./images/postgresql/heap_block_tuple.png)
 
-## PERFORMANCE
+## PERFORMANCE - HOW PERFORMANCE OF SQL CAN BE IMPROVED?
+
+1. Use faster storage. Instead of HDD, use SDD drives.
+2. Processors. Use better and more processors.
+3. Memory. Add more RAM, so more operations can be done in the RAM space, instead of in hard drives.
+4. Network. In case you have plenty of traffic, analyse your traffic and improve load-balancing.
+5. Use latest version of RDBMS software.
+6. Tweaking configuration files.
+7. Restructuring database schema for better performance.
+8. Use Automatic Performance Improvement Tool. These tools suggest perfomance improvements based on automatic tests and analysis of your queries.
+9. Dedicate particular machines to database only.
+10. Reduce or eliminate unclosed connections.
+11. Improve queries.
+12. Replace sequential scan queries with index queries.
+
+## FULL TABLE SCAN VS INDEX SCAN
 
 - FULL TABLE SCAN - every time Postgresql loads records from hard drive to RAM, it has a relatively high performance cost
 - items in an index structure are stored ordered (numerical order for numbers, alphabetical order for strings)
@@ -2936,6 +2976,77 @@ END $$;
 
 SELECT * FROM fn_test_cursor();
 ```
+
+## TRIGGER
+
+- trigger is a piece of code executed automatically in response to a specific event occured on table in a database
+- trigger is always associated with a specific table. If the table is deleted, the trigger will also be deleted
+- trigger is invoked either before or after one of the following instructions to the table (`INSERT`, `DELETE`, `UPDATE`)
+
+```sql
+CREATE TRIGGER trigger_name [BEFORE|AFTER] event
+ON table_name [FOR EACH ROW|FOR EACH STATEMENT]
+BEGIN
+-- trigger logic
+END;
+```
+
+## ROW LEVEL TRIGGER
+
+- a row level trigger executes each time a row is affected by query statement
+- eg. if the `UDPATE` statement affects 10 rows, the row level trigger would execute 10 times, each time per row
+
+## STATEMENT LEVEL TRIGGER
+
+- a statement level trigger is called once regardless of how many rows are affected by the query
+- trigger will be executed once even if no rows were affected
+
+## COMMON USAGE OF TRIGGERS
+
+- LOGGING TABLES - some tables have sensitive data such as customer email, employee salary, etc that you want to log all the changes. If salary changes in the main 'salaries' table, a trigger will be triggered and 'salaries_changes logging table will also be updated
+
+```sql
+CREATE TRIGGER before_update_salary
+BEFORE UPDATE ON employees
+FOR EACH ROW
+BEGIN
+  IF NEW.salary <> OLD.salary THEN
+    INSERT INTO salary_changes (employee_id, old_salary, new_salary)
+    VALUES (NEW.employee, OLD.salary, NEW.salary);
+  END IF;
+END;
+```
+
+## WILDCARDS
+
+## GET ALL RECORDS WHICH CONTAIN A SPECIFIC STRING AND ANY NUMBER OF ADDITIONAL CHARACTERS AFTER
+
+```sql
+SELECT * FROM example_table WHERE example_column LIKE 'Mel%'; -- Melissa, Melli
+```
+
+## GET ALL RECORDS WHICH CONTAIN A SPECIFC STRING AND ONE MORE ADDITIONAL CHARACTER AFTER
+
+```sql
+SELECT * FROM example_table WHERE example_colum LIKE 'Mel_'; -- Melo, Mela
+```
+
+## GET ALL RECORDS WHICH CONTAIN A SPECIFIC STRING AND TWO MORE ADDITIONAL CHARACTERS AFTER
+
+```sql
+SELECT * FROM example_table WHERE example_column LIKE 'Mel__'; -- Melon, Melan
+```
+
+## GET ALL RECORDS WHICH CONTAIN A STRING AND STRING AND NUMBER OF CHARACTERS AFTER OR BEFORE THE STRING
+
+```sql
+SELECT * FROM example_table WHERE example_column LIKE '%Mel%'; -- Melissa, Emelio, Mel
+```
+
+## SQL LESSONS FROM SENIOR SQL DEVELOPER
+
+- `DEFAULT` clause is underused. The default option can be a literal value of the relevant data type or something provided by the system, such as the current timestamp , current date
+- it's a good way to make the database do a lot of work for you that you would otherwise have to code into the applications program. The most common tricks are to use a zero in numeric columns, a string to encode a missing value `('{{unknown}}')` or a true default 'same address' in character columns, and the system timestamp to mark transactions
 
 ## ANSI (AMERICAN NATIONAL STANDARDS INSTITUTE)
 
