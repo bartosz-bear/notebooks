@@ -618,3 +618,15 @@ AFTER REBASE
 ## MERGING VS REBASING
 
 <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
+
+## REFLOGS - REFERENCE LOGS
+
+- git keeps track of updates to the tip of branches using a mechanism called reference logs or 'reflogs'
+- many git commands accept a parameter for specyfying a reference or 'ref' which is a pointer to a commit
+- reflogs track when git refs were updated in the local repository
+
+`git reflog show HEAD` -- it shows `HEAD` by default so this argument can be skipped
+
+- this command shows a history of executed commands like (`commit`, `checkout`, `merge`, `rebase`) starting from a specific commit (in this case starting from `HEAD`)
+
+![](../assets/images/git/reflog_show_head.png)
