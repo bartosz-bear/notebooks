@@ -15,11 +15,11 @@ GRANT ALL ON db1.* TO 'jeffrey'@'localhost'
 
 ## `NULL` AND NULLABLE COLUMNS
 
-- `NULL` is a marker indicating a missing value
+- `NULL` is a marker indicating absent value
 - if you do not provide a `DEFAULT` clause and the column is NULL-able, the sytem will provide `NULL` value by default
 - if all that fails you get a an error message about missing data
 - the most important columns constraint is `NOT NULL`, which forbids to using `NULL`s in a column. Use this constraint automatically, then remove it only if you have a good reason. It will help you to avoid the complications of `NULL` when you make queries against the data
-- the `NULL` is a special value in SQL that belongs to all data types. SQL is the only language which has such a creature. If you understand how it works, you will have a good grasp of SQL. In Relational Theory, the `NULL` has no data type, but in SQL, we have to allocate storage for a column that a data type. This means we can write `CAST (NULL as <datatype>)` in our code.
+- the `NULL` is a special value in SQL that belongs to all data types. SQL is the only language which has such a creature. If you understand how it works, you will have a good grasp of SQL. In Relational Theory, the `NULL` has no data type, but in SQL, we have to allocate storage for a column of a data type. This means we can write `CAST (NULL as <datatype>)` in our code.
 - `NULL` is the smallest value in the sorting order 
 
 ## `NULL` IS NOT THE SAME AS ZERO
@@ -40,8 +40,9 @@ GRANT ALL ON db1.* TO 'jeffrey'@'localhost'
 
 ## LOGICAL OPERANDS AND `NULL`
 
+- using logical operands with `NULL` will result in an empty set, therefore you can't do name = `NULL`
 - logical operands like '=' or '!=' can't used to check for `NULL`, instead `IS NULL`, `IS NOT NULL` and `EXISTS`
-- using these operands with `NULL` will result in an empty set
+
 
 ## `IS NULL()` AND `IS NOT NULL()`
 
@@ -146,6 +147,8 @@ Transactions are isolated from each other, meaning that one transaction cannot b
 
 Referential integrity is a property of data stating that all its referenes are valid. They are only valid if there are no orphaned records. Orphaned records are records which reference records in the second table which don't exist. If this condition holds, the database didn't maintain referential integrity.
 
+- when we use `REFERENCES` on the foreign key we apply referential integrity
+
 <https://www.red-gate.com/simple-talk/databases/theory-and-design/constraints-and-declarative-referential-integrity/>
 
 ## REFERENTIAL ACTIONS
@@ -169,7 +172,7 @@ Referential integrity is a property of data stating that all its referenes are v
 
 Deferrable constraints allows you to switch off constraints temporarily during a session. When the session closes, constraints are switched back on.
 
-## Syntax
+## SYNTAX
 
 Keywords are not case-sensitive in SQL, but data is.
 
@@ -195,6 +198,8 @@ SELECT * FROM patrons;
 4. `GROUP BY` - groups rows by a unique set of values
 5. `HAVING` - filters the set of groups
 
+TABLE -> JOINED VIRTUAL TABLE -> FILTERED TABLE -> GROUPED BY TABLE -> FILTERED GROUPED BY TABLE
+
 ## IDENTIFIERS
 
 Identifier is a name of a particular part of a database (table name, field name).
@@ -209,11 +214,6 @@ FROM employees;
 ```
 
 `name` is a name of a field in a table, while `first_name` will be a name of the field in the result set
-
-## DATA DEFINITION LANGUAGE (DDL)
-
-- DDL is a set of SQL commands used to create, modify, and delete database structures not data
-- examples: `CREATE`, `ALTER`, `DROP`
 
 ## CREATING A DATABASE
 
@@ -272,7 +272,7 @@ DROP TABLE photos;
 
 ## CHANGING A NAME OF A COLUMN
 
-```postgresql
+```sql
 ALTER TABLE comments
 RENAME COLUMN contents TO body;
 ```
@@ -300,7 +300,7 @@ VALUES
 
 - when you want to insert an item into a database and get the details about the insert coming directly from the database use `RETURNING` keyword
 
-```postgresql
+```sql
 INSERT INTO users (username, bio) VALUES ($1, $2) RETURNING *;
 ```
 
@@ -313,6 +313,8 @@ FROM employees;
 
 ## SELECTING A DISTINCT COMBINATION OF TWO FIELDS
 
+- `DISTINCT` is the same operation as `UNIQUE`, `DISTINCT` is used inside `SELECT` statement while `UNIQUE` is a column constraint
+
 ```sql
 SELECT DISTINCT dept_id, year_hired
 FROM employees;
@@ -320,11 +322,9 @@ FROM employees;
 
 ## VIEWS
 
-View is a virtual table that is the result of a saved SQL `SELECT` statement
-
-Result set is not stored in the database. Views (saved queries) are stored.
-
-Views automatically update in response to updates in the underlying data.
+- View is a virtual table that is the result of a saved SQL `SELECT` statement
+- Result set is not stored in the database. Views (saved queries) are stored.
+- Views automatically update in response to updates in the underlying data.
 
 ```sql
 CREATE VIEW employee_hire_years AS
@@ -332,9 +332,9 @@ SELECT id, name, year_hired
 FROM employees;
 ```
 
-While a view is created, we can query is as it was a normal table.
+Once a view has been created, we can query is as it was a normal table.
 
-```
+```sql
 SELECT id, name
 FROM employee_hire_years;
 ```
@@ -376,6 +376,7 @@ SELECT |/area AS density FROM cities;
 - LOWER() - gives a lower case string
 - LENGTH() - gives number of characters in a string
 - UPPER() - gives and upper case string
+
 
 ## CONCATANATING STRINGS
 
@@ -420,6 +421,8 @@ FROM people;
 
 ## COUNT(*) TOTAL NUMBER OF RECORDS IN A TABLE
 
+- includes `NULL` values to the count
+
 ```sql
 SELECT COUNT(*) AS total_records
 FROM people;
@@ -444,11 +447,9 @@ FROM tutorial.us_housing_units
 WHERE month = 1
 ```
 
-Order of filtering:
-
 - FIRST: `FROM cities`
-- SECOND: `WHERE area > 4000`
-- THIRD: `SELECT name`
+- SECOND: `WHERE area > 4000` -- filtering rows
+- THIRD: `SELECT name` -- filtering columns
 
 ## WHERE COMPARISON OPERATORS
 
@@ -555,8 +556,8 @@ WHERE name = 'Tokyo';
 - it's important to know query order for debugging and aliasing purposes
 
 1. TABLE SELECTION (`FROM people`)
-2. FIELDS SELECTION (`SELECT name`)
-3. SUBSELECTION OF A RESULT SET (`LIMIT 10`)
+2. COLUMNS SELECTION (`SELECT name`)
+3. ROWS SELECTION (`LIMIT 10`)
 
 ## ALIAS DECLARATION AND REFERENCING
 
@@ -605,7 +606,6 @@ Table names and field names should be named using small letters only and undersc
 
 ## DATA TYPES
 
-
 Data types are SQL implementation based (eg. different in PostreSQL and MySQL).
 
 <https://www.postgresql.org/docs/current/datatype.html>
@@ -642,14 +642,12 @@ Data types are SQL implementation based (eg. different in PostreSQL and MySQL).
 
 ## FLOATING POINT MATH NUMERIC TYPES
 
-- use to store numbers with a decimal where decimal is not that important, like kilograms of trash in a landfill, or number of liters in a lake
+- used to store numbers with a decimal where decimal is not that important, like kilograms of trash in a landfill, or number of liters in a lake
 - floating point math numeric types are much more efficient when it comes to computations
 
 ## `REAL`
 
 - full precision is not guaranteed, only about 6 digits of precision is guaranteed
-
-## `DOUBLE PRECISION`
 
 ## `FLOAT`
 
@@ -806,6 +804,10 @@ SELECT
 `WEEK`
 
 
+```sql
+SELECT AGE('NOV-20-1980 1:23 AM EST'::TIMESTAMP WITH TIME ZONE, 'NOV-10-1980 5:43 AM PST'::TIMESTAMP WITH ZIME ZONE)
+```
+
 ## TYPE CONVERSION
 
 Converting a float into an integer
@@ -820,29 +822,25 @@ SELECT (2.0::INTEGER);
 SELECT (60000::SMALLINT); -- smallint accepts integer up to range 32767, therefore this will raise error
 ```
 
-## Collation
+## COLLATION
 
-Collation specifies how data is sorted and compared in a database. Collation provides the sorting rules, case and accent sensitivity properties for the data in the database.
+Collation specifies how data is sorted and compared in a database. Collation provides the sorting rules, case and accent sensitivity properties for the data in the database. Theses rules are provided by the chosen locale.
 
 For example, when you run a query using the `ORDER BY` clause, collation determines whether or not uppercase letters and lowercase letters are treated the same.
 
-## SERIAL
-
-`SERIAL` in PostgresSQL lets you create an auto-increment column. By default, it creates values of type integer. It is a good practice to use auto-increments for primary keys.
-
 ## PRIMARY KEY
 
-Primary key uniquely identifies each record in a particular table.
+Primary key uniquely identifies each row in a particular table.
 
 - each row in every table has one primary key
-- not other row in the same table can have the same primary key
+- no other row in the same table can have the same primary key
 - 99% of the time primary key is called `id`
-- either an integer or a UUID
+- either an integer or a UUID (Universally Unique Identifier)
 - will never change
 
 ## FOREIGN KEY
 
-Foreign key identifies a record (usually in an another table) that this row is associated with. Foreign key in table A is a primary key in table B.
+Foreign key identifies a record (usually in an another table) that a particular row with a foreign key has a relationship with. Foreign key in table A is a primary key in table B.
 
 - in one-to-many relationship, the 'many' side of the relationship gets the foreign key column
 - rows only have a foreign key if they 'belong' to another record in a different table
@@ -859,66 +857,6 @@ Foreign key identifies a record (usually in an another table) that this row is a
 ## CIRCULAR REFERENCE
 
 - a circular reference is a relationship in which one table references a second table, which in turn references the first table. "You cannot get a job unitl you have experience, and you cannot get experience until you have a job."
-
-## GENERAL STRUCTURE OF A TABLE CREATION QUERY IN POSTGRESQL
-
-```
-CREATE TABLE table_name (
-  column_name TYPE column_constraint,
-  table_constraint table_constraint
-)
-```
-
-## EXAMPLE
-
-```postgresql
-CREATE TABLE datacamp_courses(
- course_id SERIAL PRIMARY KEY,
- course_name VARCHAR (50) UNIQUE NOT NULL,
- course_instructor VARCHAR (100) NOT NULL,
- topic VARCHAR (20) NOT NULL
-);
-```
-
-## INSERTING RECORDS
-
-```sql
-INSERT INTO datacamp_courses(course_name, course_instructor, topic)
-VALUES('Deep Leaning in Python', 'Dan Becker', 'Python');
-
-INSERT INTO datacamp_courses(course_name, course_instructor, topic)
-VALUES('Joining Data in PostreSQL', 'Chester Ismay', 'SQL');
-```
-
-## QUERING DATA
-
-```postgresql
-SELECT * FROM datacamp_courses;
-```
-
-```postgresql
-SELECT course_name, topic from datacamp_courses;
-```
-
-## UPDATING RECORDS
-
-```postgresql
-UPDATE table_name SET column_name = 'Joining Data in SQL'
-WHERE another_column_name = 'Chester Ismay'
-```
-
-## DELETING RECORDS
-
-```postgresql
-DELETE from datacamp_courses
-WHERE course_name = 'Deep Learning in Python';
-```
-
-## `\dt` - SHOW TABLES COMMAND LINE
-
-```
-\dt
-```
 
 # DATABASE RELATIONSHIPS
 
@@ -965,9 +903,32 @@ In one-to-many relationship, the 'many' side of the relationship gets the foreig
 - many-to-many relationship allows you to relate each row in one table to many rows in another table, and vice versa
 - eg. an employee can have many skills, and a particular skill can be associated with one or more employees
 
-Many-to-many relationship is created using a JUNCTURE TABLE. `EmployySkill` is a junction table that contains `EmployeeID` and `SkillID` as foreign key columns, which allow formation of many-to-many relationship between `Employee` and `SkillDescription` tables.
+Many-to-many relationship is created using a `JUNCTURE` table. `EmployySkill` is a junction table that contains `EmployeeID` and `SkillID` as foreign key columns, which allow formation of many-to-many relationship between `Employee` and `SkillDescription` tables.
 
 Indivindually, the `Employee` and `EmployeeSkill` have a one-to-many realtionship and `SkillDescription` and `EmployeeSkill` also have one-to-many relationship. But, they form form many-to-many relationshipo using a juncture table `EmployeeSkill`.
+
+```sql
+CREATE TABLE product (
+  product_id SERIAL PRIMARY KEY, -- implicit pk
+  product TEXT NOT NULL,
+  price NUMERIC NOT NULL DEFAULT 0
+);
+
+CREATE TABLE bill (
+  bill_id SERIAL PRIMARY KEY,
+  bill TEXT NOT NULL,
+  billdate DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE bill_product (
+  bill_id INTEGER REFERENCES bill (bill_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  product_id INTEGER REFERENCES product (product_id) ON UPDATE CASCADE,
+  amount NUMERIC NOT NULL DEFAULT 1,
+  CONSTRAINT bill_product_pkey PRIMARY KEY (bill_id, product_id) -- explicit pk, composite key
+)
+
+);
+```
 
 ![](./images/postgresql/many-to-many.png)
 
@@ -975,6 +936,10 @@ Indivindually, the `Employee` and `EmployeeSkill` have a one-to-many realtionshi
 ![](./images/postgresql/many-to-many2.png)
 
 <https://www.tutorialsteacher.com/sqlserver/tables-relations>
+
+## COMPOSITE KEY
+
+Key which constists of multiple key columns (from other table)
 
 ## SELF-REFERENCING RELATIONSHIP
 
@@ -1191,8 +1156,6 @@ JOIN photos ON photos.id = comments.photo_id
 WHERE comments.user_id = photos.user_id;
 ```
 
-
-
 ## THREE-WAY `JOINS`
 
 ```sql
@@ -1373,6 +1336,8 @@ ORDER BY price
 LIMIT 20
 OFFSET 20;
 ```
+
+## RANK
 
 ## `UNION`, `INTERSECT` AND `EXCEPT`
 
@@ -1994,7 +1959,7 @@ Disclaimer: 'reaction' here refers to a reaction type on a social media post (li
 - it's a situation where a column in one table refers to more than one table, but the reference is not enforced using foreign and private keys
 - in this case, the task of figuring out to which referenced tables, the base table is referring to is outside of SQL (mearning is deciphered by server or client)
 - IMPORTANT: foreign key can't be used in polymorphic association
-- polymorphic association results in data consistency (and for that reason is not recommended)
+- polymorphic association results in data inconsistency (and for that reason is not recommended)
 
 ## RATIONALE FOR CHOOSIGN DIFFERENT DESIGNS
 
@@ -3047,6 +3012,89 @@ SELECT * FROM example_table WHERE example_column LIKE '%Mel%'; -- Melissa, Emeli
 
 - `DEFAULT` clause is underused. The default option can be a literal value of the relevant data type or something provided by the system, such as the current timestamp , current date
 - it's a good way to make the database do a lot of work for you that you would otherwise have to code into the applications program. The most common tricks are to use a zero in numeric columns, a string to encode a missing value `('{{unknown}}')` or a true default 'same address' in character columns, and the system timestamp to mark transactions
+## `VACUUM`
+
+- `VACUUM` reclaims storage occupied by dead tuples
+
+## PARTITION
+
+Partitioning referst to splitting what is logically one large table into smaller physical pieces.
+
+Partitioning can provide several benefits:
+- query performance can be improved dramatically in certain situations, particularly when most of the heavily accessed rows of the table are in a single partition or a small number of partitions. Partitioning effectively substitutes for the upper tree levels of indexes, making it more likely that the heavily-used parts of the indexes fit in memory
+- when queries or updates access a large percentage of a single partition, performance can be improved by a sequential scan of that partition of that partition instead of using an index, which would require random-access reads scattered across the whole table
+- bulk loads and deletes can be accomplished by adding or removing partitions, if the usage pattern is accounted for in the partitioning design. Dropping an individual partition using `DROP TABLE` or doing `ALTER TABLE DETACH PARTITION` is far faster than a bulk operation. These commands also entirely avoid the `VACUUM` overhead caused by a bulk `DELETE`
+- seldom used data can be migrated to cheaper or slower storage media
+
+These benefits will be normally worthwhile only when a table would be very large. Rule of thump is that the size of the table should exceed the physical memory of the database server.
+
+## MEMORY CONSIDERATIONS
+
+Reading from memory will always be more performant than doing to disk, so far all database technologies you would want to use as much RAM memory as possible.
+
+## TABLESPACE
+
+- tablespaces give database administrator ability to control how and where SQL is saving database files
+- this can be very useful for performance optimization, if there is heavily used query on a particular table, this table can be moved to a faster, more expensive machine, and the rest of tables can remain on the slowler, cheaper machine
+
+## CASTS
+
+- casts specify how to perform a conversion between data types
+
+## CATALOG
+
+- catalogs are the place where Postgres stores schema metadata, such as information about tables and columns
+
+Postgres System > Catalog > Schema > Table > Columns & Rows
+
+## PUBLICATIONS
+
+- publications are the mechanism Postrgres uses to make tables available for replication
+- these are different from schemas
+- publications can be used to connect to two separate databases
+
+## SUBSCRIPTION
+
+- subscription defines the connection to another database and set of publications to which it wants to subscribe
+- subscriber database behaves in the same way as any other PostgreSQL instance and can be used as a publisher for other databases by defining its own publications
+
+## AGGREGATES
+
+- users can defined their own aggregate functions, these functions will be stored in 'Aggregates' folder
+
+## COLLATIONS
+
+- collations are useful when a database stores data in a foreign langugage
+- we can set collations for different languages, which will include special sorting rules for foreign characters, accents, etc
+
+```sql
+COLLATE 'fr_FR' -- this defines a french locale
+```
+
+```sql
+COLLATE "C"; -- turns off collate
+```
+
+## STORED PROCEDURES
+
+- stored procedures are kind of functions holders for user-defined functions and triggers, written in the `pspgsql` procedural language
+- this allows user to create functions with complex logic and SQL inside the procedure and easily reuse within the RDBMS
+- PostgreSQL supports two procedural languages: `pspgsql` and `C`
+- stored procedures can be reused by the same user, different users in the same database, or even between different `PostgreSQL` instances
+
+## SEQUENCES
+
+- sequences are user-defined schema-bound object that generates a sequence of integers based on a particular specification
+- similar to Python's `range`
+
+## DOMAIN
+
+- domain is a user-defined data type (eg. having additional constraints) that is based on built-in underlying type
+- domain may be attached to a schema but it doesn't have to
+
+## OPERATORS
+
+- PostgreSQL supports operator overloading
 
 ## ANSI (AMERICAN NATIONAL STANDARDS INSTITUTE)
 
@@ -3073,6 +3121,13 @@ SELECT id, name
 FROM employees
 TOP 2;
 ```
+
+## `\dt` - SHOW TABLES COMMAND LINE
+
+```sql
+\dt
+```
+
 
 ## KEYBOARD SHORTCUTS
 
