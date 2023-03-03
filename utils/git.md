@@ -1,5 +1,9 @@
 # GIT AND GITHUB
 
+## MAIN COMPONENTS OF GIT REPOSITORY
+
+![](../assets/images/git/main_components_of_git_repo.svg)
+
 ## CREATE A NEW BRANCH
 
 `git branch fib-implementation`
@@ -328,6 +332,24 @@ https://www.atlassian.com/git/tutorials/saving-changes/git-stash
 
 `git config —global core.editor "'c:/program files/sublime text 3/sublimetext.exe' -w"`
 
+## HOW TO MAKE VS CODE THE EDITOR FOR GIT COMMITS?
+
+* this script will set up VS Code as default editor for all programs (not only git) for a particular operating system user
+
+- open Powershell as administrator
+- `$Env:VISUAL = "code --wait"`
+- `$Env:EDITOR = "$VISUAL"`
+
+* this script will set up VS Code as default editor just for git
+
+`git config --global core.editor "code --wait"`
+
+* test if the command works
+
+`git commit --amend`
+
+<https://stackoverflow.com/questions/2596805/how-do-i-make-git-use-the-editor-of-my-choice-for-editing-commit-messages>
+
 ## ALIASES
 
 - shortcuts for frequency used git commands a common use case for git aliases is shortening the commit command
@@ -619,11 +641,7 @@ AFTER REBASE
 
 <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
 
-## HOW TO MAKE VS CODE THE EDITOR FOR GIT COMMITS?
 
-- open Powershell as administrator
-- `$Env:VISUAL = "code --wait"`
-- `$Env:EDITOR = "$VISUAL"`
 
 ## REFLOGS - REFERENCE LOGS
 
@@ -631,7 +649,7 @@ AFTER REBASE
 - many git commands accept a parameter for specyfying a reference or 'ref' which is a pointer to a commit
 - reflogs track when git refs were updated in the local repository
 
-`git reflog show HEAD` -- it shows `HEAD` by default so this argument can be skipped
+`git reflog show HEAD` -- it shows `HEAD` by default so this argument can be skipped, `show` is also used by default, therefore the same command can be run with `git reflog`
 
 - this command shows a history of executed commands like (`commit`, `checkout`, `merge`, `rebase`) starting from a specific commit (in this case starting from `HEAD`)
 
@@ -646,3 +664,56 @@ AFTER REBASE
 ## REFLOG A DIFFERENT BRANCH
 
 `git reflog show otherbranch 9a4491f`
+
+## REFLOG A STASH
+
+- stash first and get the WIP index
+- then run the 
+
+`git reflog stash 'HEAD{3}'`
+
+## REFERENCE POINTERS FROM REFLOG
+
+Once you run `reflog show` you will see a list of reference pointers (for different actions)
+
+`HEAD@{1}` or `stash@{0}` is an example of a reference pointer
+
+You can take these pointers and `diff` them to see the changes which happened between these two states.
+
+`git diff 'stash@{0}' 'HEAD@{1}'`
+
+`git diff c20152b c20152b`
+
+## TIMED REFLOGS
+
+- every reflog has a timestamp attached to it, you can leverage this with timed reflogs
+
+`git diff 'main{0}' 'main@{1.day.2.hours.ago}'`
+
+## EXPIRED REFLOGS
+
+- `reflog` expiration date are set to 90 days
+- after 90 days reflogs will be expire, if you want to expire a reflog manually use
+
+`git reflog expire`
+
+- if you want to see a list of expired reflogs with actually expiring anything, use
+
+`git reflog expire --dry-run`
+
+## DELETING REFLOGS
+
+`git reflog delete c20152b`
+
+## `git reset`, `git revert` and `git checkout`
+
+| Command      | Scope        | Common use cases                                                     |
+|--------------|--------------|----------------------------------------------------------------------|
+| git reset    | Commit-level | Discard commits in a private branch or throw away uncommited changes |
+| git reset    | File-level   | Unstage a file                                                       |
+| git checkout | Commit-level | Switch between branches or inspect old snapshots                     |
+| git checkout | File-level   | Discard changes in the working directory                             |
+| git revert   | Commit-level | Undo commits in a public branch                                      |
+| git revert   | File-level   | (N/A)                                                                |
+
+<https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting>
