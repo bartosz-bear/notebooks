@@ -619,6 +619,12 @@ AFTER REBASE
 
 <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
 
+## HOW TO MAKE VS CODE THE EDITOR FOR GIT COMMITS?
+
+- open Powershell as administrator
+- `$Env:VISUAL = "code --wait"`
+- `$Env:EDITOR = "$VISUAL"`
+
 ## REFLOGS - REFERENCE LOGS
 
 - git keeps track of updates to the tip of branches using a mechanism called reference logs or 'reflogs'
@@ -630,3 +636,13 @@ AFTER REBASE
 - this command shows a history of executed commands like (`commit`, `checkout`, `merge`, `rebase`) starting from a specific commit (in this case starting from `HEAD`)
 
 ![](../assets/images/git/reflog_show_head.png)
+
+- in addition to `HEAD`, other branches, tags, remotes and stashes can be referenced as well
+
+## REFLOG EVERYTHING (EVEN CHECKOUTS, COMMANDS, ETC)
+
+`git reflog show --all`
+
+## REFLOG A DIFFERENT BRANCH
+
+`git reflog show otherbranch 9a4491f`
