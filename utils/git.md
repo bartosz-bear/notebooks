@@ -717,3 +717,4 @@ You can take these pointers and `diff` them to see the changes which happened be
 | git revert   | File-level   | (N/A)                                                                |
 
 <https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting>
+
