@@ -760,3 +760,13 @@ or
 `git merge --ff-only origin/main`
 
 <https://www.atlassian.com/git/tutorials/using-branches/git-merge>
+
+## HOW TO CREATE A NEW BRANCH WHEN YOU HAVE SOME UNSTAGED FILES YOU WANT TO INCLUDE IN THE NEW BRANCH?
+
+`git switch -c branch_name`
+
+## HOW TO RETURN TO THE PREVIOUS COMMIT AND DISCARD THE UNSTAGED CHANGES (WORKING TREE)?
+
+`git log main` - get the previous commit index
+
+`git reset f2062a8` - return to that commit and discard unchanged changes
