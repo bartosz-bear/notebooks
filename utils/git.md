@@ -718,3 +718,45 @@ You can take these pointers and `diff` them to see the changes which happened be
 
 <https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting>
 
+## WHAT TO DO IF WHEN SOMEONE ELSE PUSHED A NEW COMMIT TO REMOTE REPOTE AND I WOULD LIKE TO PUSH MY COMMITS TO THE REMOTE REPO?
+
+If you try to push to a remote repo which has some new commits, you will get this message
+
+```
+Switched to branch 'main'
+Your branch and 'origin/main' have diverged,
+and have 2 and 1 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+```
+
+1. Commit your changes locally
+
+`git commit -m 'message'`
+
+2. Fetch the remote repo
+
+`git fetch`
+
+3. Merge or rebase the local and remote repo
+
+`git rebase origin/repo`
+
+or
+
+`git merge origin/repo`
+
+4. Push the local repo to remote
+
+`git push`
+
+<https://stackoverflow.com/questions/2452226/master-branch-and-origin-master-have-diverged-how-to-undiverge-branches>
+
+## WHAT IS MERGE FAST-FORWARD?
+
+- merge fast-forward is simply integrating new commits from the remote repo to a local repo
+- fast-forward can only be done if you have no new commits in your local repo, but there are new commits in the remote repo (which happened in between time when you last fetched from the remote repo and now)
+- in fact, there is no real merging happening in this case, you can just say that your local repo is replaced by the remote repo
+
+`git merge --ff-only origin/main`
+
+<https://www.atlassian.com/git/tutorials/using-branches/git-merge>
