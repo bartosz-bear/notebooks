@@ -2,11 +2,6 @@
 
 - asyncio - implementation of concurrent programming paradigm in Python
 
-## COROUTINE
-
-- coroutine is a specialized generator function
-- coroutines can be scheduled concurrently but they are not inherently concurrent
-- couroutine is function that can suspend its execution before reaching return, and it can indirectly pass control to another coroutine for some time
 
 ## ASYNC IO
 
@@ -111,6 +106,55 @@ Two
 countasync.py executed in 1.01 seconds.
 ```
 
+## COROUTINE
+
+- coroutines are preferred way of writing asyncio applications
+- coroutine is a specialized generator function
+- coroutines can be scheduled concurrently but they are not inherently concurrent
+- couroutine is a function that can suspend its execution before reaching return, and it can indirectly pass control to another coroutine for some time
+
+## COROUTINES - PRACTICALS
+
+- simply calling a coroutine will not schedule it to be executed
+
+```python
+import asyncio
+
+async def main():
+  print('hello')
+  await asyncio.sleep(1)
+  print('world')
+
+main() 
+# <coroutine object main at>
+```
+
+- in order to schedule a coroutine for execution you have to add either run a Runner and add the coroutine or use `await coroutine()` inside of another coroutine which was already added to the runner
+
+```python
+import asyncio
+import time
+
+async def say_after(delay, what):
+  await asyncio.sleep(delay)
+  print(what)
+
+async def main():
+  print(f"started at {time.strftime('%X')}")
+
+  await say_after(1, 'hello')
+  await say_after(2, 'world')
+
+  print(f"finished at {time.strftime('%X')}")
+
+# OUTPUT
+#started at 17:13:52
+#hello
+#world
+#finished at 17:13:55
+```
+
+
 ## SYNCHRONOUS AND ASYNCHRONOUS SLEEP
 
 - synchronous, blocking `time.sleep(10)`
@@ -194,13 +238,9 @@ def fun(x):
     yield from stuff()
 ```
 
-## ASYNC IO DESIGN PATTERNS
+## RUNNERS
 
-## CHAINING COROUTINES
-
-
-
-
+- runners are high-level API wrapper around event loops with the aim to simplify async code for common wide-spread scenarios
 
 ## `asyncio.run()` 
 
@@ -229,7 +269,7 @@ with asyncio.Runner() as runner:
     runner.run(main())
 ```
 
-## Methods of `asyncio.Runner()`
+## METHOD OF `asyncio.Runner()`
 
 `runner.run(coro, *, context=None)` - runs the `coro` in the embedded loop, returns the coroutine's result or raise an exception, an optional keyword-only `context` argument allows specyfing a custom `contextvars.Context` for the `coro` to run in. The function cannot be called if another asyncio event loop is running in the same thread.
 
@@ -271,6 +311,11 @@ async def main():
 asyncio.run(main())
 ```
 
+## HANDLING KEYBOARD EXCEPTIONS
+
+- CTRL+C will cancel running task, asyncio will raise `asyncio.CancelledError` and later it will also raise `KeyboardInterrupt`
+- keyboard cancellations are executed using special implementation of `signal.SIGINT`, which is a signal from keyboard to the runner
+
 ## FUTURE
 
 - `Future` is a container the result of asynchronous operation (eg. coroutine), similar to JavaScript's Promise
@@ -309,6 +354,7 @@ Exceptions Handling:
 
 <https://docs.python.org/3/library/asyncio-task.html?highlight=asyncio%20gather#asyncio.TaskGroup>
 
+
 ## THREAD-SAFE
 
 Thread-safe means:
@@ -320,13 +366,13 @@ Thread-safe means:
 
 ## RESEARCH
 
+<https://docs.python.org/3/library/asyncio.html>
+
 <https://superfastpython.com/python-asyncio/>
 
 <https://realpython.com/python-concurrency/>
 
 <https://realpython.com/async-io-python/>
-
-<https://docs.python.org/3/library/asyncio-task.html?highlight=asyncio%20gather#asyncio.TaskGroup>
 
 <https://docs.python.org/3/library/asyncio-future.html#asyncio.Future>
 

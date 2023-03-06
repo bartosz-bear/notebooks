@@ -23,3 +23,7 @@
 ## MARKDOWN TABLE GENERATOR
 
 <https://www.tablesgenerator.com/markdown_tables>
+
+## BOOTSTRAP
+
+https://getbootstrap.com/docs/4.0/content/tables/

@@ -770,3 +770,9 @@ or
 `git log main` - get the previous commit index
 
 `git reset f2062a8` - return to that commit and discard unchanged changes
+
+## SHOULD I INCLUDE .gitignore FILE IN THE REMOTE REPO?
+
+Usually, yes. If there are some private files which you want to ignore but you want to include them in the publicly viewable .gitignore file, add them to `repo_name/.git/info/exclude` file
+
+https://stackoverflow.com/questions/5765645/should-you-commit-gitignore-into-the-git-repos
