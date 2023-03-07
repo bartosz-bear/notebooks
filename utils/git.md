@@ -446,9 +446,19 @@ Tags are used to tag a specific point in repository's history. Eg. it's a common
 
 <https://git-scm.com/book/en/v2/Git-Basics-Tagging>
 
+## ADDING A TAG
+
+First commit your work. A tag will be assigned to the latest commit.
+
+`git tag -a -m "describing the tag" v1.1`
+
 ## LISTING TAGS
 
 `git tag`
+
+## DELETE A TAG
+
+`git tag -d tag_name`
 
 ## WHAT DOES CARET `^` CHARACTER MEANS IN GIT?
 
@@ -776,3 +786,9 @@ or
 Usually, yes. If there are some private files which you want to ignore but you want to include them in the publicly viewable .gitignore file, add them to `repo_name/.git/info/exclude` file
 
 https://stackoverflow.com/questions/5765645/should-you-commit-gitignore-into-the-git-repos
+
+## HOW DO YOU SAVE WORK IN PROGRESS WITHOUT COMMITING WORK AND TO KEEP UNTRACKED CHANGES IN THE CURRENT BRANCH?
+
+`git stash store "$(git stash create)"`
+
+https://stackoverflow.com/questions/6315459/git-command-to-save-a-stash-without-modifying-working-tree

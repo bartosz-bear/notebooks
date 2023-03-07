@@ -354,6 +354,24 @@ Exceptions Handling:
 
 <https://docs.python.org/3/library/asyncio-task.html?highlight=asyncio%20gather#asyncio.TaskGroup>
 
+## POLICIES
+
+An event loop policy is a global object used to get and set the current event loop, as well as create new event loops. The default policy can be replaced with built-in alternatives to use different event loop implementations, or substituted by custome policy that can overwrite these behaviors.
+
+The policy object gets and sets a separate event loop per context. This is per-thread by default, thought custom policies could define context differently.
+
+Custom event loop policies can control the behavior of `get_event_loop()`, `set_event_loop` and `new_event_loop()`.
+
+## DEBUGGING
+
+`asyncio.get_event_loop(): DeprecationWarning: There is no current event loop`
+
+<https://stackoverflow.com/questions/73361664/asyncio-get-event-loop-deprecationwarning-there-is-no-current-event-loop>
+
+`aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host org:80 ssl:default [getaddrinfo failed]`
+
+<https://stackoverflow.com/questions/63347818/aiohttp-client-exceptions-clientconnectorerror-cannot-connect-to-host-stackover>
+
 
 ## THREAD-SAFE
 
