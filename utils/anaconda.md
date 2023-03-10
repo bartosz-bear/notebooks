@@ -83,3 +83,7 @@ Inside of this file add the path to your project root folder.
 ## HOW DO YOU REMOVE A LIBRARY FROM THE CURRENTLY ACTIVATE ENVIRONMENT?
 
 `conda remove library`
+
+## NOARCH
+
+if the library is called *.noarch.rpm that should mean that this rpm can be installed on any architecture. The contents (files) installed by that rpm are bash script, text files, documentation, or any other kind of files that don't depend on the architecture; so never compiled binaries.
