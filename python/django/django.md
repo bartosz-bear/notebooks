@@ -116,3 +116,8 @@ URLconf maps URL patterns to views.
 ## RESEARCH
 
 <https://www.toptal.com/django/django-top-10-mistakes>
+
+## HOW TO DEPLOY YOUR DJANGO APP TO PYTHONANYWHERE?
+
+1. Make sure you are on `prod` branch
+2. Update `requirements.txt` file by running

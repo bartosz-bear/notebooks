@@ -125,3 +125,11 @@ $Profile
 C:\Users\User1\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 
 ```
+
+## HOW TO SHOW A LIST OF ENVIRONMENT VARIABLES?
+
+`dir env:`
+
+## HOW TO SET UP ENVIRONMENT VARIABLE?
+
+`$env:BAPI_DJANGO_ENV = 'test'`
