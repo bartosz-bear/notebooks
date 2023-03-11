@@ -121,3 +121,7 @@ URLconf maps URL patterns to views.
 
 1. Make sure you are on `prod` branch
 2. Update `requirements.txt` file by running
+
+## HOW TO DEPLOY DJANGO ON AZURE VM WITH NGINX?
+
+<https://www.guguweb.com/2019/11/13/django-nginx-deploy-your-django-project-on-a-production-server/>

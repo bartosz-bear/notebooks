@@ -87,3 +87,17 @@ Inside of this file add the path to your project root folder.
 ## NOARCH
 
 if the library is called *.noarch.rpm that should mean that this rpm can be installed on any architecture. The contents (files) installed by that rpm are bash script, text files, documentation, or any other kind of files that don't depend on the architecture; so never compiled binaries.
+
+## BETTER WAY TO GENERATE REQUIREMENTS.TXT FILE?
+
+"I would use conda-lock. It recently graduated from incubator and is the only fully-reproducible solution. It captures stable URLs for the packages rather than depending on (mutable) channel metadata."
+
+https://conda.github.io/conda-lock/
+
+<https://stackoverflow.com/questions/75688225/should-i-include-libraries-build-numbers-in-requirements-txt-file-created-with?noredirect=1#comment133550869_75688225>
+
+## MAMBA - C++ REPLACEMENT FOR CONDA
+
+<https://mamba.readthedocs.io/en/latest/installation.html>
+
+<https://pythonspeed.com/articles/faster-conda-install/>
