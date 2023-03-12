@@ -44,7 +44,7 @@ Prompt will open so you can paste your text. After you are done, press CTRL+D
 
 ## HOW TO SET ENVIRONMENT VARIABLE?
 
-`export VAR_NAME = "var value"`
+`export BAPI_DJANGO_ENV='prod'`
 
 ## FOLDER STRUCTURE
 
@@ -74,3 +74,106 @@ Prompt will open so you can paste your text. After you are done, press CTRL+D
 `apt update` - update system's repository
 
 `apt install sudo`
+
+## DEFAULT EDITOR AS ENVIRONMENT VARIABLE
+
+`$EDITOR`BAPI_DJANGO_ENV
+
+## HOW TO ADD AN ENVRIONMENT VARIABLE PERMANENTLY ON THE USER LEVEL?
+
+`sudo nano ~/.profile`
+
+Add the following line at the end of the file:
+
+`export ENV_VARIABLE='value'`
+
+## RENAME A FOLDER
+
+`mv old_folder_name new_folder_name`
+
+## SHOW HIDDEN FILES
+
+`ls -a`
+
+## HOW TO REMOVE A LIBRARY/PACKAGE FROM LINUX?
+
+`sudo apt remove uwsgi`
+
+## HOW REQUEST A URL/ SEND HTTP GET REQUEST?
+
+`curl "https://www.google.com/"`
+
+## WHAT DIFFERENT COLORS MEAN IN `ls` COMMAND?
+
+Blue: Directory
+Green: Executable or recognized data file
+Cyan (Sky Blue): Symbolic link file
+Yellow with black background: Device
+Magenta (Pink): Graphic image file
+Red: Archive file
+Red with black background: Broken link
+
+
+## CHECK IF A FILE EXISTS
+
+`ls -al /run/gunicorn.sock`
+
+## HOW TO SHOW ALL ENVIRONMENT VARIABLES?
+
+`env`
+
+## HOW TO SET AN ENVIRONMENT VARIABLE ON CONDA ACTIVATE?
+
+`cd $CONDA_PREFIX` - go to your conda env folder
+
+`mkdir - p .etc/conda/activate.d` - create a new folder
+
+`touch ./etc/conda/activate.d/env_vars.sh` - create a new shell script
+
+Go to `./etc/conda/activate.d/`
+
+`sudo nano env_vars.sh`
+
+Add the following:
+
+```sh
+#!/bin/sh
+
+export MY_KEY='secret-key-value'
+export MY_FILE=/path/to/my/file/
+```
+
+<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux>
+
+## SYMBOLIC LINKS
+
+<https://en.wikipedia.org/wiki/Symbolic_link>
+
+## `journalctl` IS USING `less` READER
+
+
+
+## AUTO-COMPLETION FOR BASH
+
+<https://www.hypexr.org/bash_tutorial.php#completion>
+
+## RESEARCH
+
+## CONFIGURATION FILES ON UNIX
+
+Most of the configuration files in the Red Hat Linux system are in the /etc directory unless otherwise specified.
+
+Users who are new to Linux (rightly) feel frustrated that each configuration file looks like a new challenge to figure out. In Linux each programmer is free to choose the configuration file format he or she prefers. Format options range from the /etc/shells file, which contains a list of possible shells separated by a newline, to Apache's complex /etc/httpd.conf file.
+
+<https://developer.ibm.com/articles/l-config/>
+
+## STUDY OR IMPROVE
+
+- add autocompletion to bash
+- learn about symbolic links
+- learn more about unix (processes, deamons, configurations, file structure, kernel)
+- learn more about types of configuration files
+
+## HOW TO CHECK WHICH GROUPS A USER BELONG TO?
+
+`groups user` - bapi sudo
