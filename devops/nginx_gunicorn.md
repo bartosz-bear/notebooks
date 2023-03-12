@@ -12,9 +12,11 @@
 
 `sudo less -F /var/log/nginx/error.log`
 
+## `sites-available`-`sites-enabled` VS `conf.d` DISCUSSION
+
+<https://serverfault.com/questions/527630/difference-in-sites-available-vs-sites-enabled-vs-conf-d-directories-nginx>
+
 ## GUNICORN
-
-
 
 ## RESTART GUNICORN
 
@@ -27,8 +29,6 @@
 ## CHECK SOCKET STATUS
 
 `sudo systemctl status gunicorn.socket`
-
-## CHECK GUNICORN APPLICATION LOGS
 
 ## START UNICORN AND BIND TO A SPECIFIC HOST
 
@@ -60,7 +60,18 @@ Go to your project folder
 
 `sudo journalctl -e -u gunicorn`
 
+`sudo less -f +G /home/bapi/bapi/logs/gunicorn.log`
 
-sudo systemctl restart gunicorn
-sudo systemctl daemon-reload
-sudo journalctl -e -u gunicorn
+## HOW TO SET ENVIRONMENT VARIABLE IN GUNICORN CONFIGURATION FILE?
+
+<https://stackoverflow.com/questions/25076295/gunicorn-environment-variable-setting>
+
+## GUNICORN DOCS
+
+<https://docs.gunicorn.org/en/stable/index.html>
+
+## HOW TO DEPLOY DJANGO AN AZURE VM WITH NGINX AND GUNICORN?
+
+<https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04>
+
+<https://stackoverflow.com/questions/24488891/gunicorn-errors-haltserver-haltserver-worker-failed-to-boot-3-django/55623889#55623889>

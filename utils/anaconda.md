@@ -18,6 +18,29 @@
 
 `conda list library`
 
+## HOW TO SET AN ENVIRONMENT VARIABLE ON CONDA ACTIVATE?
+
+`cd $CONDA_PREFIX` - go to your conda env folder
+
+`mkdir - p .etc/conda/activate.d` - create a new folder
+
+`touch ./etc/conda/activate.d/env_vars.sh` - create a new shell script
+
+Go to `./etc/conda/activate.d/`
+
+`sudo nano env_vars.sh`
+
+Add the following:
+
+```sh
+#!/bin/sh
+
+export MY_KEY='secret-key-value'
+export MY_FILE=/path/to/my/file/
+```
+
+<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux>
+
 ## GOOD ANACONDA GUIDE
 
 <https://towardsdatascience.com/introduction-to-conda-virtual-environments-eaea4ac84e28>

@@ -113,7 +113,6 @@ Magenta (Pink): Graphic image file
 Red: Archive file
 Red with black background: Broken link
 
-
 ## CHECK IF A FILE EXISTS
 
 `ls -al /run/gunicorn.sock`
@@ -122,36 +121,19 @@ Red with black background: Broken link
 
 `env`
 
-## HOW TO SET AN ENVIRONMENT VARIABLE ON CONDA ACTIVATE?
-
-`cd $CONDA_PREFIX` - go to your conda env folder
-
-`mkdir - p .etc/conda/activate.d` - create a new folder
-
-`touch ./etc/conda/activate.d/env_vars.sh` - create a new shell script
-
-Go to `./etc/conda/activate.d/`
-
-`sudo nano env_vars.sh`
-
-Add the following:
-
-```sh
-#!/bin/sh
-
-export MY_KEY='secret-key-value'
-export MY_FILE=/path/to/my/file/
-```
-
-<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux>
-
 ## SYMBOLIC LINKS
 
 <https://en.wikipedia.org/wiki/Symbolic_link>
 
 ## `journalctl` IS USING `less` READER
 
+## HOW TO EXIT `less`?
 
+Ctrl+C
+
+If that doesn't work then 
+
+Ctrl + Z
 
 ## AUTO-COMPLETION FOR BASH
 
@@ -177,3 +159,15 @@ Users who are new to Linux (rightly) feel frustrated that each configuration fil
 ## HOW TO CHECK WHICH GROUPS A USER BELONG TO?
 
 `groups user` - bapi sudo
+
+## WHAT TO DO WHEN CTRL+C DOESN'T KILL THE PROCESS?
+
+<https://superuser.com/questions/243460/what-to-do-when-ctrl-c-cant-kill-a-process>
+
+## HOW TO SCROLL UP AND DOWN IN THE TERMINAL?
+
+<https://www.linuxjournal.com/content/scrolling-up-and-down-linux-terminal>
+
+## BASIC COMMANDS
+
+<https://www.hostinger.com/tutorials/ssh/basic-ssh-commands>
