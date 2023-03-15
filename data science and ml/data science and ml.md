@@ -796,6 +796,10 @@ CREATING A DUPLICATE COLUMN
 
 sal.insert(1,'DuplicateOfEmployeeName',sal['EmployeeName'])
 
+REMOVING DUPLICATES FROM A DATAFRAME
+
+`df[df.duplicated(keep=False)]`
+
 CHANGE COLUMN NAME IN A DATAFRAME
 
 df.rename(columns={'old_column_name':'new_column_name'})
