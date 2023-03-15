@@ -8,6 +8,10 @@
 
 `conda list`
 
+## CREATE A NEW ENVIRONMENT
+
+`conda create -n data_analyst python=3.11`
+
 ## HOW TO INSTALL A LIBRARY
 
 `conda install -c conda-forge library_name`

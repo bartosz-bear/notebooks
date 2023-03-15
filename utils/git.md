@@ -4,6 +4,10 @@
 
 ![](../assets/images/git/main_components_of_git_repo.svg)
 
+## CREATE A NEW REPOSITORY
+
+`git init`
+
 ## CREATE A NEW BRANCH
 
 `git branch fib-implementation`
