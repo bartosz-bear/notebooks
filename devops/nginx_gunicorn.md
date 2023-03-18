@@ -75,3 +75,7 @@ Go to your project folder
 <https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04>
 
 <https://stackoverflow.com/questions/24488891/gunicorn-errors-haltserver-haltserver-worker-failed-to-boot-3-django/55623889#55623889>
+
+## RESTART SERVER AFTER CODE CHANGE
+
+`sudo systemctl restart gunicorn`108.142.247.13:80

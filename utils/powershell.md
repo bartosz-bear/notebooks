@@ -133,3 +133,20 @@ C:\Users\User1\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 ## HOW TO SET UP ENVIRONMENT VARIABLE?
 
 `$env:BAPI_DJANGO_ENV = 'test'`
+
+## HOW TO SHOW A SPECIFIC ENVIRONMENT VARIABLE?
+
+`$env:VARIABLE`
+
+## HOW TO SET ENVIRONMENT VARIABLE ON CONDA ACTIVATE?
+
+`conda activate my_env`
+`conda env config vars set "VARIABLE=variable_value`
+
+## HOW TO REMOVE ENVIRONMENT VARIABLE FROM CONDA ACTIVATE?
+
+`conda env config vars unset VARIABLE`
+
+## HOW TO GO TO A SPECIFIC FOLDER USING ENVIRONMENT VARIABLE AND CD?
+
+`cd $Env:VARIABLE`
