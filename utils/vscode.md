@@ -13,3 +13,29 @@ Then type the following command:
 > python: select interpreter
 
 <https://stackoverflow.com/questions/47602151/how-to-change-interpreter-in-visual-studio-code>
+
+## SHORT CUT TO DUPLICATE A LINE DOWN BELOW
+
+Shift+Alt+Down Arrow
+
+## SHORT-CUT TO PRETTY-FORMAT JSON FILE
+
+Alt+Shift+F
+
+## HOW TO TOGGLE TERMINAL
+
+Ctrl + J
+
+## HOW TO SWITCH FORWARD AND BACKWARD BETWEEN OPEN WINDOWS?
+
+- works for all windows in Windows not only VS Code windows
+
+Atl+Tab - forwards
+Atl+Shift+Tab - backwards
+
+## HOW TO SWITCH BETWEEN OPEN FILE EDITORS?
+
+- also works for Internet Browser tabs
+
+Ctrl+Tab - forwards
+Ctrl+Shift+Tab - backwards
