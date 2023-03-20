@@ -12,6 +12,8 @@
 - when creating a spider, remember to remove `https://` part from the url,
 `scrapy genspider my_spider www.tinydeal.com.hk`
 - if you export your items as JSON, for example with `-o items.json`, by default, Scrapy will as well write `\uXXXX` escape sequences in JSON strings of the different items. It's the same as how Python 2.7 represent non-ASCII characters, and that's 100% valid JSON output, and is actually the default for Python's json module (referred to as ensure_ascii).
+- `body` object of `response` object is in binary format, `text` object is whatever encoding the website is using, unless `FEED_EXPORT_ENCODING = 'utf-8'` is added to scrapy's `settings.py` file
+- `ipython` shell doesn't work when running `inspect_response` to debut in a shell because `asyncio` doesn't support nested asyncio loops which is required to run `inspect_response` and `ipython` together
 
 ## WHAT CAN BE SCRAPED FROM THE WEB?
 
@@ -32,13 +34,23 @@
 
 5 types of spiders are available in Scrapy
 
-1. scrapy.Spider
+1. scrapy.Spider (basic template)
 2. CrawlSpider
 3. XMLFeedSpider
 4. CSVFeedSpider
 5. SitemapSpider
 
 Spiders see websites without JavaScript
+
+## BASIC TEMPLATE
+
+`scrapy.Spider`
+
+- requires `name`, `allowed_domains`, `start_requests` property or method and at least one `parse` method
+
+## CRAWL SPIDER
+
+- Crawl Spider is suitable when there are are lot of links fo follow or in case you want to go through subdirectories
 
 ## PIPELINES
 
@@ -389,6 +401,12 @@ Syntactic sugar for the same selector is:
 
 `//div[@class='intro']/descendent::node()`
 
+## REMOVE ALL LEADING AND TRAILING SPACE
+
+`normalize-space()`
+
+`normalize-space((//time)[1]/text())`
+
 ## PREDICATE
 
 - predicate is a condition
@@ -440,6 +458,150 @@ class SpecialOffersSpider(scrapy.Spider):
            yield scrapy.Request(url=next_page, callback=self.parse)
 ```
 
+## SPOOFING REQUEST HEADERS
+
+1. Update `USER_AGENT` in `settings.py` file. Congiguration level settings, so it applies to all requests sent by scrapy.
+2. Update `DEFAULT_REQUEST_HEADERS` in `settings.py`. Also configuration level update. Doesn't offer any difference to option 1 besides some time savings if you want to update multiple request headers.
+2. Update `request.header.user-agent` in the `Request` class. This aption allows dynamic update.
+
+## OPTION 1 - UPDATE `USER_AGENT` CONSTANT
+
+1. Go to browser dev tools
+2. Open 'Network' tab
+3. Pick any 'html' file from 'Name' column
+4. In 'Headers' section, find 'Request Headers' subsection
+5. Copy 'user-agent' string value
+6. Go to your projects' `settings.py`
+7. Update `USER_AGENT` variable with the browser's user agent string, eg. 
+`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36`
+
+## OPTION 2 - UPDATE `DEFAULT_REQUEST_HEADERS`
+
+- follow steps defined in option 1 but update `DEFAULT_REQUEST_HEADERS` instead of `USER_AGENT`
+
+```python
+DEFAULT_REQUEST_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+}
+```
+
+## OPTION 3 - UPDATE 
+
+```python
+class SpecialOffersSpider(scrapy.Spider):
+    name = "special_offers"
+    allowed_domains = ["web.archive.org"]
+    #start_urls = ["https://web.archive.org/web/20190225123327/https://www.tinydeal.com/specials.html"]
+
+    def start_requests(self):
+        yield scrapy.Request(url='https://web.archive.org/web/20190225123327/https://www.tinydeal.com/specials.html',
+                             callback=self.parse,
+                             headers={
+                                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+                             })
+
+    def parse(self, response):
+
+        products = response.xpath(
+            '//div[@class="r_b_c"]/ul[@class="productlisting-ul"]/div[@class="p_box_wrapper"]/li[@class="productListing-even"]')
+
+        products = products[:2]
+
+        for product in products:
+            name = product.xpath('.//a[@class="p_box_title"]/text()').get()
+            link = product.xpath('.//a[@class="p_box_title"]/@href').get()
+            special_price = product.xpath(
+                './/div[@class="p_box_price"]/span[@class="productSpecialPrice fl"]/text()').get()
+            normal_price = product.xpath(
+                './/div[@class="p_box_price"]/span[@class="normalprice fl"]/text()').get()
+
+            yield {'name': name,
+                   'link': link,
+                   'special_price': special_price,
+                   'normal_price': normal_price,
+                   'User-Agent': response.request.headers['User-Agent']}
+
+        next_page = response.xpath("//a[@class='nextPage']/@href").get()
+
+        if next_page:
+            yield scrapy.Request(url=next_page, callback=self.parse, headers={
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+            })
+```
+
+## DEBUGGING
+
+## `parse` COMMAND
+
+`scrapy parse --spider=my_spider -c parse_item -d 2 <item_url>`
+
+`scrapy parse --spider=countries -c parse_country --meta='{"country_name":"China"}'  https://www.worldometers.info/world-population/china-population/`
+
+- 'c' argument is a callback method
+- 'd' argument is depth
+
+<https://docs.scrapy.org/en/latest/topics/debug.html>
+
+## DEBUGGIN IN VS CODE
+
+Add a file called `runner.py` in the project folder.
+
+Add this code to the file:
+
+```python
+import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from worldometers.spiders.countries import CountriesSpider
+
+process = CrawlerProcess(settings=get_project_settings())
+process.crawl(CountriesSpider)
+process.start()
+```
+
+Select a line to stop debugger by placing a red dot on the line.
+
+Click F5 to start debugging.
+
+## OTHER DEBUGGING OPTIONS
+
+<https://docs.scrapy.org/en/latest/topics/debug.html>
+
+## DEPTH
+
+- depth is the number of consecutive requests (on new url) which spider is going to crawl
+
+## RULES
+
+- order of rules matter
+
+How this works:
+
+1. Use `LinkExtractor` from Rule 1 to request each page which is an item of `restrict_xpaths` list
+2. On each succesful request from the list, parse it and yield it
+3. After each item from the list was requested and parsed, execute Rule 2
+4. Rule 2 extracts 'NextPage' link from the page and requests that page
+5. Then Rule 1 is executed again, this time on the requested 'NextPage'
+6. Looping over Rule 1 and Rule 2 will continue until there are no more 'NextPage' urls, which is the last page of the pagination.
+
+```python
+class BooksSpider(CrawlSpider):
+    name = 'books'
+    allowed_domains = ['books.toscrape.com']
+    start_urls = ['http://books.toscrape.com']
+
+    rules = (
+        Rule(LinkExtractor(restrict_xpaths="//article[@class='product_pod']/div/a"), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_xpaths="//li[@class='next']/a"))
+    )
+
+    def parse_item(self, response):
+        yield {
+            'title': response.xpath("//div[@class='col-sm-6 product_main']/h1/text()").get(),
+            'price': response.xpath("(//div[@class='col-sm-6 product_main']/p)[1]/text()").get()
+        }
+```
+
 ## HOW TO SAVE SCRAPED DATA TO A FILE FROM CONSOLE?
 
 `scrapy crawl my_spider -o my_file.json`
@@ -474,3 +636,11 @@ class SpecialOffersSpider(scrapy.Spider):
 ## HOW SCRAPY TREATS UNICODE CHARACTERS AND ENCODING TO JSON
 
 <https://stackoverflow.com/questions/44128899/inappropriate-encoding-of-response-of-scrapy>
+
+## `RuntimeError: This event loop is already running` ISSUE
+
+<https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerror-this-event-loop-is-already-running-3f26f67e762e>
+
+## STACKOVERFLOW POWER USERS
+
+<https://stackoverflow.com/users/2572383/paul-trmbrth>

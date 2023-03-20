@@ -39,3 +39,12 @@ Atl+Shift+Tab - backwards
 
 Ctrl+Tab - forwards
 Ctrl+Shift+Tab - backwards
+
+## HOW DO YOU SELECT A FULL STRING WHEN CURSOR IS BETWEEN CHARACTERS?
+
+`Shift + Alt + Right Arrow` - select a single word
+`Shift + Alt + Right Arrow` x2 - select a full string or all arguments to a function
+
+## COMMENT AND UNCOMMENT MULTIPLE LINES
+
+Ctrl + /
