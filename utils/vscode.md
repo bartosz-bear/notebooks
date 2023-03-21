@@ -48,3 +48,7 @@ Ctrl+Shift+Tab - backwards
 ## COMMENT AND UNCOMMENT MULTIPLE LINES
 
 Ctrl + /
+
+## HOW TO DELETE A LINE OF TEXT
+
+Shift + Delete

@@ -462,6 +462,20 @@ class SpecialOffersSpider(scrapy.Spider):
            yield scrapy.Request(url=next_page, callback=self.parse)
 ```
 
+## FEEDS
+
+```python
+# settings.py 
+
+FEEDS = {
+    'data.json': {'format': 'json'}
+}
+```
+
+Feeds are settings which describe how scrapy will save the scraping results to local files.
+
+<https://scrapeops.io/python-scrapy-playbook/scrapy-save-json-files/>
+
 ## SPOOFING REQUEST HEADERS
 
 1. Update `USER_AGENT` in `settings.py` file. Congiguration level settings, so it applies to all requests sent by scrapy.
@@ -566,6 +580,10 @@ def BlogSpider(scrapy.Spider)
         ...
 ```
 
+## FETCH COMMAND - FETCH HTML AND SAVE IT TO A HARD DRIVE OR INSPECT IN THE CONSOLE
+
+`scrapy fetch http:/myblog.com > blog.html`
+
 ## `parse` COMMAND
 
 - `parse` command allows you to debug a specific spider, specific callback method for a specific url
@@ -579,6 +597,12 @@ def BlogSpider(scrapy.Spider)
 - 'd' argument is depth
 
 <https://docs.scrapy.org/en/latest/topics/debug.html>
+
+## POST-MORTEM DEBUGGING
+
+- debugging an execution which has already closed, like analysing log files, calls stack of the crash and analysis of memory dump
+
+`scrapy crawl blog -d blog_items.jl --pdb`
 
 ## DEBUGGING IN VS CODE
 
@@ -652,6 +676,10 @@ class BooksSpider(CrawlSpider):
 2. `$x('//p[@id='my_p']')`
 
 ## USEFUL TOOLS
+
+## HTTP 1.1 SPECIFICATIONS - HTTP CODES, ETC
+
+<https://www.rfc-editor.org/rfc/rfc2616>
 
 ## TINKERING WITH XPATH ANC CSS
 
