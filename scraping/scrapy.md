@@ -52,6 +52,10 @@ Spiders see websites without JavaScript
 
 - Crawl Spider is suitable when there are are lot of links fo follow or in case you want to go through subdirectories
 
+## CREATE A CRAWL SPIDER FROM COMMAND
+
+`scrapy genspider -t crawl name_of_spider url.com`
+
 ## PIPELINES
 
 - cleaning the data
@@ -531,7 +535,41 @@ class SpecialOffersSpider(scrapy.Spider):
 
 ## DEBUGGING
 
+Simplest method of debugging is just `prinat(variable)` inside the callback method.
+
+## DEBUGGING FROM SCRAPY SHELL - `scrapy shell url`
+
+- this command will recognize a specific spider and a callback method associated with the passed url
+- spider will send a request and stop at the begining of the callback method giving you request context, so you can test your callback method processing from the shell
+- scrapy will suggest what objects are currently available like (`crawler`, `response`, `spider`, etc)
+
+![](../assets/images/scrapy/scrapy_shell_command.png)
+
+You can test these commands in the shell by:
+
+`response.xpath('//div[@class='input']).get()`
+
+## OPENING A SCRAPY SHELL AT A SPECIFIC LINE OF CALLBACK METHOD EXECUTION - `scrapy.shell.inspect_response`
+
+- place `inspect_response()` function inside your callback method and run the spider from the shell
+
+```python
+from scrapy.shell import inspect_response
+ 
+def BlogSpider(scrapy.Spider)
+    ...
+    def parse(self, response):
+        if len(response.css('div.post-header > h2 ::text')) > EXPECTED:
+            # generate the items
+        else:
+            inspect_response(response, self)
+        ...
+```
+
 ## `parse` COMMAND
+
+- `parse` command allows you to debug a specific spider, specific callback method for a specific url
+- it's useful when you want to isolate from the full workflow
 
 `scrapy parse --spider=my_spider -c parse_item -d 2 <item_url>`
 
@@ -542,7 +580,7 @@ class SpecialOffersSpider(scrapy.Spider):
 
 <https://docs.scrapy.org/en/latest/topics/debug.html>
 
-## DEBUGGIN IN VS CODE
+## DEBUGGING IN VS CODE
 
 Add a file called `runner.py` in the project folder.
 
@@ -566,6 +604,8 @@ Click F5 to start debugging.
 ## OTHER DEBUGGING OPTIONS
 
 <https://docs.scrapy.org/en/latest/topics/debug.html>
+
+<https://www.zyte.com/blog/scrapy-tips-from-the-pros-may-2016-edition/>
 
 ## DEPTH
 
@@ -641,6 +681,11 @@ class BooksSpider(CrawlSpider):
 
 <https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerror-this-event-loop-is-already-running-3f26f67e762e>
 
+## PASSING META DATA IN YOUR SPIDER
+
+<https://www.attilatoth.dev/posts/scrapy-meta/>
+
 ## STACKOVERFLOW POWER USERS
 
 <https://stackoverflow.com/users/2572383/paul-trmbrth>
+<https://stackoverflow.com/users/149872/elias-dorneles>
