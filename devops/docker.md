@@ -113,3 +113,7 @@ In case you run into the mentioned error, run the following commands.
 ## HOW TO RUN JUPYTER NOTEBOOKS/LABS ON DOCKER?
 
 <https://towardsdatascience.com/how-to-run-jupyter-notebook-on-docker-7c9748ed209f>
+
+## HOW TO CONTANERIZE CONDA ENVIRONMENT AND PUSH IT TO DOCKERHUB?
+
+<https://towardsdatascience.com/converting-conda-pip-environments-into-docker-images-d02aa22e872c>

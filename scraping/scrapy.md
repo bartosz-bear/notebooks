@@ -717,3 +717,4 @@ class BooksSpider(CrawlSpider):
 
 <https://stackoverflow.com/users/2572383/paul-trmbrth>
 <https://stackoverflow.com/users/149872/elias-dorneles>
+<https://stackoverflow.com/users/939364/gallaecio>

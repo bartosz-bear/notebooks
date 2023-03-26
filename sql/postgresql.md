@@ -822,6 +822,10 @@ SELECT (2.0::INTEGER);
 SELECT (60000::SMALLINT); -- smallint accepts integer up to range 32767, therefore this will raise error
 ```
 
+## `::regclass`
+
+`::regclass` IS AN ALIASS FOR AN OBJECT IDENTIFIER WHICH ARE USED INTERNALLY BY POSTGRESQL as a primary key for several data dictionary tables. It can be used as a translator when querying the dictionary tables in postgres.
+
 ## COLLATION
 
 Collation specifies how data is sorted and compared in a database. Collation provides the sorting rules, case and accent sensitivity properties for the data in the database. Theses rules are provided by the chosen locale.
@@ -1165,6 +1169,64 @@ JOIN photos ON photos.id = comments.photo_id
 JOIN users ON users.id = comments.user_id AND users.id = photos.user_id
 ```
 
+```sql
+SELECT
+  cli.first_name,
+  cli.last_name,
+  c.name,
+  SUM(o_i.price) as total_amount
+FROM categories AS c
+JOIN products AS p
+  ON c.id = p.category_id
+JOIN order_items AS o_i
+  ON p.id = o_i.product_id
+JOIN orders AS o
+  ON o.id = o_i.order_id
+JOIN clients cli
+  ON cli.id = o.client_id
+GROUP BY 1, 2, 3
+```
+
+## SELF-JOIN
+
+- both sides of `JOIN` reference the same table
+
+```sql
+SELECT
+    band_member.nickname as member,
+    leader.nickname as leader
+FROM band_members as band_member
+JOIN band_members as leader
+ON band_member.band_leader_id = leader.id;
+```
+
+## `NON-EQUI JOIN`
+
+Observe that the JOIN condition is a bit non-standard: it's a comparison instead of an equality. Such JOINs are called non-equi JOINs.
+
+```sql
+SELECT c1.rank, c1.suit,c2.rank,c2.suit
+FROM playing_cards c1 
+JOIN playing_cards c2 ON c1.id < c2.id  -- NON-EQUI JOIN HERE
+ORDER BY c1.rank;
+```
+
+<https://learnsql.com/blog/illustrated-guide-sql-non-equi-join/>
+
+## USING `JOIN` KEYWORD FOR JOINS IS NOT MANDATORY
+
+```sql
+JOINS WITHOUT `JOIN` KEYWORD
+
+SELECT product.producer, product.model
+FROM product, provider_offer, provider
+WHERE provider_offer.product_id = product.id
+  AND provider_offer.provider_id = provider.id
+  AND product_category = 'bike'
+  AND provider.country = 'USA';
+```
+
+
 ## GROUPING AND AGGREGATE FUNCTIONS
 
 ## GROUPING USING `GROUP BY`
@@ -1201,6 +1263,30 @@ SELECT contents
 FROM comments
 GROUP BY user_id;
 ```
+
+## COMMON ERRORS
+
+`ERROR: column "o.name" must appear in the GROUP BY clause or be used in an aggregate function`
+
+## GROUP BY EXAMPLES
+
+```sql
+SELECT company, sum(revenue - production_cost) AS gross_profit_sum
+FROM games
+GROUP BY company
+ORDER BY gross_profit_sum DESC;
+```
+
+```sql
+SELECT company,
+	   count(company) as number_of_games,
+       sum(revenue) as revenue_sum 
+FROM games
+WHERE rating > 6 and (revenue - production_cost) > 0 and production_year BETWEEN 2000 AND 2009
+GROUP BY company
+HAVING sum(revenue) > 4000000;
+```
+
 
 ## AGGREGATE FUNCTIONS
 
@@ -1348,7 +1434,7 @@ OFFSET 20;
 ## `UNION`
 
 - `UNION` joins result sets of two queries together
-- if results of two queries which are in `UNION` have duplicate records, this record will be included only once
+- if results of two queries which are in `UNION` have duplicate records, duplicates are removed and the record is included only once
 - parentheses around queries are not mandatory but recommended
 - we are only allowed to use `UNION` if result sets of queries are the same of the same structure (same field names, and the same data types)
 
@@ -1713,6 +1799,93 @@ Example 3
 SELECT (SELECT MAX(price) FROM phones) AS max_price,
        (SELECT MIN(price) FROM phones) AS min_price,
        (SELECT AVG(price) FROM phones) AS avg_price;
+```
+
+## MORE SUBQUERY EXAMPLES
+
+```sql
+SELECT name
+FROM orchestras
+WHERE year > (
+	SELECT year
+  	FROM orchestras
+  	WHERE name = 'Chamber Orchestra'
+) AND rating > 7.5;
+
+SELECT name
+FROM orchestras
+WHERE city_origin = ANY(
+	SELECT city
+  	FROM concerts
+  	WHERE year = 2013
+);
+```
+
+```sql
+SELECT avg(count.count)
+FROM (
+  SELECT o.name, count(m.id)
+  FROM members AS m
+  JOIN orchestras AS o ON m.orchestra_id = o.id
+  GROUP BY o.name
+) count;
+```
+
+```sql
+SELECT o.name, count(m.id)
+FROM members as m
+JOIN orchestras as o ON m.orchestra_id = o.id
+GROUP BY o.name
+HAVING count(m.id) > (
+  SELECT avg(count.count)
+  FROM (
+  	SELECT o.name, count(m.id)
+  	FROM members AS m
+  	JOIN orchestras AS o ON m.orchestra_id = o.id
+  	GROUP BY o.name
+) count);
+```
+
+## MORE EXAMPLES OF CORRELATED SUBQUERIES
+
+```sql
+SELECT m.name, m.wage, m.experience
+FROM members m
+JOIN orchestras o ON m.orchestra_id = o.id
+WHERE m.wage = (
+  SELECT max(m2.wage)
+  FROM members m2
+  JOIN orchestras o2 ON m2.orchestra_id = o2.id
+  GROUP BY o2.name
+  HAVING o.name = o2.name
+  );
+```
+
+```sql
+SELECT m1.name as member, o1.name as orchestra
+FROM members m1
+JOIN orchestras o1 ON m1.orchestra_id = o1.id
+WHERE m1.experience = (
+  SELECT max(m2.experience)
+  FROM members m2
+  JOIN orchestras o2 ON m2.orchestra_id = o2.id
+  GROUP BY o2.name
+  HAVING o1.name = o2.name
+  );
+```
+
+```sql
+SELECT m1.name
+FROM members m1
+JOIN orchestras o1 ON m1.orchestra_id = o1.id
+WHERE m1.wage > (
+  SELECT avg(m2.wage)--, m2.position
+      FROM members m2
+      JOIN orchestras o2 ON m2.orchestra_id = o2.id
+      WHERE m2.position = 'violin'
+      GROUP BY o2.name
+  	  HAVING o1.name = o2.name
+  );
 ```
 
 ## SELECTING `DISTINCT` VALUES
@@ -3087,6 +3260,211 @@ COLLATE "C"; -- turns off collate
 - sequences are user-defined schema-bound object that generates a sequence of integers based on a particular specification
 - similar to Python's `range`
 
+## SELECT ALL AVAILABLE SEQUENCES
+
+```sql
+SELECT
+    relname sequence_name
+FROM 
+    pg_class 
+WHERE 
+    relkind = 'S';
+```
+
+## INSERT INTO A TABLE FROM SEQUENCE
+
+```sql
+INSERT INTO
+	order_details(order_id, item_id, item_text, price)
+VALUES
+	(100, nextval('order_item_id'), 'DVD, 100),
+	(100, nextval('order_item_id'), 'Android, 550),
+	(100, nextval('order_item_id'), 'Spea', 250);
+```
+
+## SEQUENCE WHICH REPEATS
+
+```sql
+CREATE SEQUENCE mysequence
+	MINVALUE 1
+	MAXVALUE 5
+	INCREMENT 1
+	START 1
+	CYCLE;
+```
+
+## SEQUENCE WHICH BELONGS TO A SPECIFIC COLUMN IN A TABLE
+
+```sql
+CREATE SEQUENCE mysequence
+	MINVALUE 1
+	MAXVALUE 5
+	INCREMENT 1
+	START 1
+	CYCLE;
+	OWNED BY table_name.column_name
+```
+
+## WINDOW FUNCTIONS
+
+- window function is very similar to `GROUP BY` clause; the difference is that `GROUP BY` always aggregates grouped rows into one using aggregate functions, while window function calculates the same aggregate result but inputs the results in seperate rows
+- therefore `GROUP BY` will reduce number of rows to a number equal to number of unique values (based on the chosen column to be used to group by), while window function results in the same number of rows as the original input set
+- `OVER()` keyword is necessary in all window functions, other keyword are compulsory (`ORDER BY`, `PARITION BY`, `RANK()` etc)
+
+## EXAMPLES OF WINDOW FUNCTIONS
+
+```sql
+SELECT 
+	  order_id,
+    product_id,
+    quantity,
+    MAX(quantity) OVER() as max_quantity
+FROM order_items;
+```
+
+```sql
+SELECT
+	  product_id,
+    unit_price,
+    avg(unit_price) over() as average_unit_price
+FROM products
+WHERE discontinued = 'f';
+```
+
+```sql
+SELECT
+	  order_id,
+    total_amount,
+    ROUND(100 * total_amount / sum(total_amount) OVER(), 2) as total_sales_participation
+FROM orders;
+```
+
+```sql
+SELECT
+	  ROW_NUMBER() OVER (ORDER BY last_order_date DESC) AS place,
+	  customer_id,
+    full_name,
+    last_order_date
+FROM customers
+WHERE last_order_date IS NOT NULL;
+```
+
+```sql
+SELECT
+	  DENSE_RANK() OVER (ORDER BY total_amount DESC, order_date) as rank,
+    order_id,
+    total_amount
+FROM orders;
+```
+
+## WINDOW FUNCTION AND CTE TOGETHER
+
+```sql
+WITH customers_with_ranking as (
+SELECT
+  DENSE_RANK() OVER(ORDER BY total_amount DESC, order_date) AS rank,
+  order_id,
+  total_amount
+FROM orders
+)
+
+SELECT
+	  rank,
+    order_id,
+    total_amount
+FROM customers_with_ranking
+WHERE rank <= 3;
+```
+
+```sql
+WITH ranking as (
+SELECT
+	  order_date,
+    order_id,
+    total_amount,
+    RANK() OVER(PARTITION BY order_date ORDER BY total_amount DESC) as rank
+FROM orders
+)
+
+SELECT order_date, order_id, total_amount
+FROM ranking
+WHERE rank = 1;
+```
+
+## `NTILE()`
+
+```sql
+SELECT
+	  product_id,
+    product_name,
+    category_name,
+    unit_price,
+    NTILE(5) OVER(ORDER BY unit_price) as price_group
+FROM products as p
+JOIN categories as c ON p.category_id = c.category_id;
+```
+
+## RUNNING TOTAL
+
+```sql
+SELECT
+	  order_id,
+	  total_amount,
+    SUM(total_amount) OVER (ORDER BY order_date) as running_total 
+FROM orders;
+```
+
+## MAX IN A RANGE
+
+```sql
+SELECT
+	order_id,
+    customer_id,
+    total_amount,
+    max(total_amount) over(partition by customer_id) as max_customer_order
+FROM orders;
+```
+
+## OTHER WINDOW FUNCTION EXAMPLES
+
+```sql
+SELECT 
+	  customer_id,
+    full_name,
+    email,
+    country,
+    channel_name,
+    count(customer_id) over(partition by channel_name) as customers_from_channel
+FROM customers c
+JOIN channels ch ON c.channel_id = ch.id;
+
+```
+
+```sql
+SELECT
+	  p.product_id,
+	  p.product_name,
+    c.category_name,
+    p.unit_price,
+    avg(p.unit_price) over(partition by c.category_name) as average_category_price,
+    avg(p.unit_price) over(partition by c.category_name) < p.unit_price as price_above_average
+FROM products as p
+JOIN categories as c ON p.category_id = c.category_id;
+```
+
+```sql
+
+SELECT
+	  oi.order_id,
+    oi.product_id,
+    p.product_name,
+    (oi.quantity * oi.unit_price) * (1 - oi.discount) as income_from_product,
+    sum(oi.quantity) over (partition by oi.product_id) as total_sold_quantity
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON p.product_id = oi.product_id;
+```
+
 ## DOMAIN
 
 - domain is a user-defined data type (eg. having additional constraints) that is based on built-in underlying type
@@ -3198,6 +3576,10 @@ Diagrams
 PostgresSQL Online
 
 <https://www.pg-sql.com>
+
+## TOP SQL INTERVIEW QUESTIONS FROM TOP TAL
+
+<https://www.toptal.com/sql/interview-questions>
 
 ## TOPICS TO REPEAT AND DO MORE EXERCISES
 

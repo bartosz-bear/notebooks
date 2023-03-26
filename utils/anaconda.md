@@ -128,3 +128,7 @@ https://conda.github.io/conda-lock/
 <https://mamba.readthedocs.io/en/latest/installation.html>
 
 <https://pythonspeed.com/articles/faster-conda-install/>
+
+## HOW TO CONTANERIZE CONDA ENVIRONMENT AND PUSH IT TO DOCKERHUB?
+
+<https://towardsdatascience.com/converting-conda-pip-environments-into-docker-images-d02aa22e872c>

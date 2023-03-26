@@ -53,6 +53,10 @@ You can execute shell commands in the same manner as you would if you were physi
 
 ## WHERE IS MY PUBLIC-PRIVATE KEY PAIR STORES ON WINDOWS?
 
+## ASSIGN PROPER PERMISSION
+
+`chmod 600 ~/.ssh/id_rsa`
+
 ## ED25519 SSH KEYS
 
 `C:\Users\User\.ssh`
