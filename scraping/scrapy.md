@@ -666,6 +666,13 @@ class BooksSpider(CrawlSpider):
         }
 ```
 
+## HOW TO OPEN A SCRAPED RESPONSE IN A BROWSER?
+
+```python
+from scrapy.utils.response import open_in_browser
+open_in_browser(response)
+```
+
 ## HOW TO SAVE SCRAPED DATA TO A FILE FROM CONSOLE?
 
 `scrapy crawl my_spider -o my_file.json`
@@ -674,6 +681,7 @@ class BooksSpider(CrawlSpider):
 
 1. Go to console
 2. `$x('//p[@id='my_p']')`
+
 
 ## USEFUL TOOLS
 

@@ -60,3 +60,6 @@ ser.dt.year
 ser.dt.month.to_list()
 ```
 
+## MASTERING PANDAS FOR FINANCE
+
+<https://github.com/PacktPublishing/Mastering-Pandas-for-Finance>
