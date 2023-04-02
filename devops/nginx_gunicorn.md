@@ -14,6 +14,14 @@
 
 ## `sites-available`-`sites-enabled` VS `conf.d` DISCUSSION
 
+## TEST IF CONFIGURATION SETTINGS FOR NGINX ARE FINE
+
+`sudo nginx -t`
+
+## RESTART NGINX
+
+`sudo systemctl restart nginx`
+
 <https://serverfault.com/questions/527630/difference-in-sites-available-vs-sites-enabled-vs-conf-d-directories-nginx>
 
 ## GUNICORN
@@ -79,3 +87,43 @@ Go to your project folder
 ## RESTART SERVER AFTER CODE CHANGE
 
 `sudo systemctl restart gunicorn`108.142.247.13:80
+
+## DEBUGGING DJANGO ISSUES ON NGINX-UNICORN
+
+`sudo less -F +G /var/log/nginx/error.log`
+`sudo less -f +G /home/bapi/bapi/logs/gunicorn.log`
+`sudo less -f +G /var/log/django.log`
+
+<https://mattsegal.dev/file-logging-django.html>
+
+## LOGGING IN DJANGO
+
+```python
+# views.py
+# Import logging from Python's standard library
+import logging
+
+# Create a logger for this file
+logger = logging.getLogger(__file__)
+
+def some_view(request):
+    """
+    Example view showing all the ways you can log messages.
+    """
+    logger.debug("This logs a debug message.")
+    logger.info("This logs an info message.")
+    logger.warn("This logs a warning message.")
+    logger.error("This logs an error message.")
+    try:
+        raise Exception("This is a handled exception")
+    except Exception:
+        logger.exception("This logs an exception.")
+
+    raise Exception("This is an unhandled exception")
+    return HttpResponse("this worked")
+```
+
+<https://mattsegal.dev/file-logging-django.html>
+<https://mattsegal.dev/django-gunicorn-nginx-logging.html>
+<https://docs.djangoproject.com/en/2.2/topics/logging/#examples>
+<https://docs.python.org/3/library/logging.html#module-logging>

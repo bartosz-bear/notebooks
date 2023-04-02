@@ -132,3 +132,11 @@ https://conda.github.io/conda-lock/
 ## HOW TO CONTANERIZE CONDA ENVIRONMENT AND PUSH IT TO DOCKERHUB?
 
 <https://towardsdatascience.com/converting-conda-pip-environments-into-docker-images-d02aa22e872c>
+
+## HOW TO CLONE AN ENV/CREATE A COPY OF AN ENV WITH A NEW NAME?
+
+`conda env list`
+
+`conda deactivate`
+
+`conda create --name new_env --clone original_env`

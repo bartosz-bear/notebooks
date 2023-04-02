@@ -10,6 +10,8 @@
 
 `~/.bashrc`
 
+<https://www.digitalocean.com/community/tutorials/bashrc-file-in-linux>
+
 ## ADD A NEW DIRECTORY TO PATH
 
 `export PATH=~/anaconda3/bin:$PATH`
@@ -26,7 +28,7 @@
 
 ## HOW DO YOU REMOVE NON-EMPTY DIRECTORY?
 
-`rmdir -r foldername`
+`sudo rm -r foldername`
 
 ## HOW TO SHOW YOUR CURRENT PATH?
 
@@ -90,6 +92,12 @@ Add the following line at the end of the file:
 ## RENAME A FOLDER
 
 `mv old_folder_name new_folder_name`
+
+## HOW TO GIVE OWNERSHIP/PERMISSIONS TO A SPECIFIC FOLDER TO A SPECIFIC USER?
+
+- from root, run the following command
+
+`sudo chown -R myuser:myuser /home/myuser/myfolder` 
 
 ## SHOW HIDDEN FILES
 

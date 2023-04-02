@@ -555,7 +555,7 @@ Go to the repo directory
 
 - add code
 
-`git push -set-upstream origin new_branch`
+`git push --set-upstream origin new_branch`
 
 ## HOW TO CHECK IF YOUR LOCAL REPO IS UP TO DATE WITH THE REMOTE REPO?
 
@@ -796,3 +796,35 @@ https://stackoverflow.com/questions/5765645/should-you-commit-gitignore-into-the
 `git stash store "$(git stash create)"`
 
 https://stackoverflow.com/questions/6315459/git-command-to-save-a-stash-without-modifying-working-tree
+
+## FILE PERMISSIONS ON LINUX
+
+- file permissions changes to files can affect Windows users
+- it's possible to turn off tracking these permissions
+
+Check if `fileMode` tracking is on:
+
+`git config --get --local core.fileMode`
+
+If it says true, and you want to turn them off:
+
+`git config --local core.fileMode false`
+
+<https://medium.com/@tahteche/how-git-treats-changes-in-file-permissions-f71874ca239d>
+
+## GET RID OF ALL CHANGES SINCE LAST COMMIT, AND GO BACK TO THE LAST COMMIT
+
+`git reset HEAD --hard`
+
+`git clean -fd`
+
+## HOW TO FORK YOUR OWN REPO?
+
+`git clone https://github.com/userName/old_repo new_repo`
+`cd new_repo`
+`git remote set-url origin https://github.com/userName/new_repo`
+`git remote add upstream https://github.com/userName/old_repo`
+`git push origin main`
+`git push --all`
+
+<https://stackoverflow.com/questions/10963878/how-do-you-fork-your-own-repository-on-github>
