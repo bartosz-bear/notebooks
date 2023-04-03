@@ -828,3 +828,7 @@ If it says true, and you want to turn them off:
 `git push --all`
 
 <https://stackoverflow.com/questions/10963878/how-do-you-fork-your-own-repository-on-github>
+
+## RESET YOUR HEAD TO ORIGIN/MAIN COMMIT?
+
+`git reset --hard origin/main`

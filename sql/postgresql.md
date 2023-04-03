@@ -190,6 +190,23 @@ SELECT name, card_number FROM patrons;
 SELECT * FROM patrons;
 ```
 
+## HOW DO YOU CHANGE ALTER COLUMN CONSTRAINT?
+
+```sql
+ALTER TABLE clients DROP CONSTRAINT clients_set_split_check;
+```
+
+```sql
+ALTER TABLE clients ADD CONSTRAINT clients_set_split_check CHECK (set_split IN ('TEST', 'TRAIN'));
+```
+
+## HOW DO YOU ADD `NOT NULL` CONSTRAINT ON A COLUMN?
+
+```sql
+ALTER TABLE transfers
+ALTER COLUMN account_id SET NOT NULL;
+```
+
 ## KEYWORDS ORDER
 
 1. `FROM` - specifies a starting table to work with
@@ -2234,6 +2251,30 @@ TUPLE/ITEM
 11. Improve queries.
 12. Replace sequential scan queries with index queries.
 
+## HOW TO IMPROVE INSERT PERFORMANCE BY FACTOR OF 10?
+
+- save the file as CSV and upload it using native Postgres `copy_from` function
+
+```python
+def insert_values_multi(table_name, table_data):
+    
+    conn_string = "postgresql+psycopg2://" + config('DB_USER') + ':' + config('DB_PASSWORD') + '@' + config('DB_HOST') + ':' + config('DB_PORT') + '/' + config('DB_NAME')
+
+    engine = create_engine(conn_string)
+
+    table_data.to_sql(table_name, engine, if_exists='replace', index=False)
+
+    conn = engine.raw_connection()
+    cur = conn.cursor()
+    output = io.StringIO()
+    table_data.to_csv(output, sep='\t', header=False, index=False)
+    output.seek(0)
+    cur.copy_from(output, table_name, null='')
+    conn.commit()
+    cur.close()
+    conn.close()
+```
+
 ## FULL TABLE SCAN VS INDEX SCAN
 
 - FULL TABLE SCAN - every time Postgresql loads records from hard drive to RAM, it has a relatively high performance cost
@@ -3464,6 +3505,10 @@ FROM orders o
 JOIN order_items oi ON o.order_id = oi.order_id
 JOIN products p ON p.product_id = oi.product_id;
 ```
+
+## HOW DO YOU DELETE ALL DATA FROM A TABLE, BUT LEAVE TABLE SCHEMA INTACT?
+
+`TRUNCATE TABLE table_name`
 
 ## DOMAIN
 
