@@ -3510,6 +3510,12 @@ JOIN products p ON p.product_id = oi.product_id;
 
 `TRUNCATE TABLE table_name`
 
+## PYTHON AND SQL
+
+## HOW TO READ SQL FILES AND EXECUTE THEM FROM PYTHON
+
+<https://www.somethingaboutdata.com/something-about-python/python-read-sql-data>
+
 ## DOMAIN
 
 - domain is a user-defined data type (eg. having additional constraints) that is based on built-in underlying type
@@ -3547,10 +3553,12 @@ TOP 2;
 
 ## `\dt` - SHOW TABLES COMMAND LINE
 
-```sql
+```
 \dt
 ```
+## GOOD PSQL GUIDE
 
+<https://www.postgresguide.com/utilities/psql/>
 
 ## KEYBOARD SHORTCUTS
 

@@ -125,3 +125,44 @@ URLconf maps URL patterns to views.
 ## HOW TO DEPLOY DJANGO ON AZURE VM WITH NGINX?
 
 <https://www.guguweb.com/2019/11/13/django-nginx-deploy-your-django-project-on-a-production-server/>
+
+## HOW TO RENAME DJANGO APP?
+
+<https://stackoverflow.com/questions/8408046/how-to-change-the-name-of-a-django-app>
+
+## DJANGO CSRF PROTECTION GUIDE
+
+<https://www.stackhawk.com/blog/django-csrf-protection-guide/>
+
+## LOGGING IN DJANGO
+
+```python
+# views.py
+# Import logging from Python's standard library
+import logging
+
+# Create a logger for this file
+logger = logging.getLogger(__file__)
+
+def some_view(request):
+    """
+    Example view showing all the ways you can log messages.
+    """
+    logger.debug("This logs a debug message.")
+    logger.info("This logs an info message.")
+    logger.warn("This logs a warning message.")
+    logger.error("This logs an error message.")
+    try:
+        raise Exception("This is a handled exception")
+    except Exception:
+        logger.exception("This logs an exception.")
+
+    raise Exception("This is an unhandled exception")
+    return HttpResponse("this worked")
+```
+
+<https://mattsegal.dev/file-logging-django.html>
+<https://mattsegal.dev/django-gunicorn-nginx-logging.html>
+<https://docs.djangoproject.com/en/2.2/topics/logging/#examples>
+<https://docs.python.org/3/library/logging.html#module-logging>
+

@@ -44,6 +44,14 @@ Prompt will open so you can paste your text. After you are done, press CTRL+D
 
 `ls -alh`
 
+## SHOW FILES BY LAST MODIFIED DATE
+
+`ls -halt`
+
+## FIND A FILE
+
+`locate scrapyd.conf`
+
 ## HOW TO SET ENVIRONMENT VARIABLE?
 
 `export BAPI_DJANGO_ENV='prod'`
@@ -128,6 +136,42 @@ Red with black background: Broken link
 ## HOW TO SHOW ALL ENVIRONMENT VARIABLES?
 
 `env`
+
+## HOW TO ADD A NEW FOLDER TO `PATH` ENV VARIABLE?
+
+`export PATH=$PATH:home/user/folder`
+
+## HOW DO YOU CREATE SHORTCUTS TO MOVE FOLDERS FAST?
+
+`cd /home/user/`
+`sudo nano .bashrc`
+
+Add aliases or functions:
+
+```bash
+alias dp='cd /home/user/user/django_project'
+sdl() {
+  cd /home/user/logs/imdb/spider
+  ls -halt
+}
+```
+
+Reload bash
+`source .bashrc`
+
+Check if the aliases or functions work
+
+`type dp`
+`type sdl`
+
+Run
+
+`dp`
+`sdl`
+
+## HOW TO GO BACK TO THE PREVIOUS DIRECTORY?
+
+`cd -`
 
 ## SYMBOLIC LINKS
 

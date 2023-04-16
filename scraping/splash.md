@@ -112,7 +112,18 @@ function main(splash, args)
 end
 ```
 
+## HOW DO YOU START SPLASH DOCKER ON UBUNTU?
+
+`sudo docker run -it -p 8050:8050 --rm scrapinghub/splash`
 
 ## BASIC LUA TUTORIAL
 
 <https://tylerneylon.com/a/learn-lua/>
+
+## SCRAPY-SPLASH INTEGRATION
+
+<https://github.com/scrapy-plugins/scrapy-splash>
+
+## HOW TO USE SCRAPY-SPLASH?
+
+<https://scrapeops.io/python-scrapy-playbook/scrapy-splash/>

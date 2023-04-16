@@ -682,6 +682,9 @@ open_in_browser(response)
 1. Go to console
 2. `$x('//p[@id='my_p']')`
 
+## INTEGRATING DJANGO AND SCRAPY USING SCRAPYD
+
+<https://scrapeops.io/python-scrapy-playbook/extensions/scrapy-scrapyd-guide/>
 
 ## USEFUL TOOLS
 

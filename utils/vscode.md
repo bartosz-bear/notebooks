@@ -52,3 +52,10 @@ Ctrl + /
 ## HOW TO DELETE A LINE OF TEXT
 
 Shift + Delete
+
+## HOW DO YOU INCREASE INDENT IN VS CODE EXPLORER?
+
+Settings: Tree: Indent
+Specify in pixels
+
+<https://stackoverflow.com/questions/56897655/how-to-increase-the-indent-width-in-the-vscode-explorer>
