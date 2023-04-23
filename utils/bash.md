@@ -179,6 +179,103 @@ Run
 
 ## `journalctl` IS USING `less` READER
 
+## STDIN, STDOUT, STDERR
+
+`<` - reads from a file
+
+`>1` or `>` - redirecting `stdout`, example: `./run.sh >1 text.txt`
+`>2` - redirecting `stderr`, example `./run.sh >2 errors.txt`
+
+`>>` - append to a file, example `echo 'Adding this string to a file' >> my_file.txt`
+
+## `cat <<EOF`
+
+`cat <<EOF` is very useful when working with multi-line text in Bash, eg. when assigning multi-line string to a shell variable, file or a pipe.
+
+## REDIRECTING BOTH `STDOUT` AND `STDERR`
+
+`./error.sh 1> capture.txt 2> error.txt`
+
+## REDIRECTING `STDOUT` AND `STDERR` TO THE SAME FILE
+
+`./error.sh > capture.txt 2>&1`
+
+## DETECTING REDIRECTION WITHIN A SCRIPT
+
+```bash
+#!/bin/bash
+
+if [ -t 0]; then
+
+  echo stdin coming from keyboard
+
+else
+
+  echo stdin coming from a pipe or a file
+
+fi
+```
+
+The `-t` (terminal) option returns true (0) if the file associated with the file descriptor terminates in the terminal window. We’ve used the file descriptor `0` as the argument to the test, which represents `stdin`.
+
+`chmod +x input.sh`
+
+ANOTHER EXAMPLE:
+
+```bash
+#!/bin/bash
+
+if [ -t 1]; then
+
+  echo stdout is going to the terminal window
+
+else
+
+  echo stdout is being redirected or piped
+
+fi
+```
+
+The only significant change to this script is in the test in the square brackets. We’re using the digit `1` to represent the file descriptor for `stdout`.
+
+Good intro
+<https://www.howtogeek.com/435903/what-are-stdin-stdout-and-stderr-on-linux/>
+
+## EOF - End of file
+
+`EOF` - is a condition in a computer operating system where no more data can be read from a data source (a file or a stream)
+
+`EOF` - absence of a character, something that cannot appear in a file
+
+## EOT - End of transmission
+
+`EOT` is a transmission control character. It's intended use is to indicate the conclusion of a transmission that may have included one or more texts and any associated message headings.
+
+It's most common use today is to cause a Unix terminal driver to signal end of file and thus exit programs that are awaiting input.
+
+IN ASCII and Unicode, the character is encoded at U+0004 <control-0004>. It can be referred to as Ctrl+D ^D in caret notation.
+
+
+
+## SPECIAL PARAMETERS, $0, $#, $@, $?, $$
+
+Glossary
+<https://dannyda.com/2020/12/22/what-are-0-etc-in-linux-bash-shell-script-what-do-they-mean-what-are-n-etc/>
+
+## `/dev/null`
+
+`/dev/null` is used to avoid to having the script wait for input. `< /dev/null` is used to instantly send `EOF` to the program so that it doesn't wait for input.
+
+`/dev/null`, the null device is a special file that discards all data written to it, but reports that the write operation succeeded
+
+## `cat`
+
+`cat` is a standard UNIX utility that read files sequentially, writing them to stdout
+
+`cat` has two primary uses:
+- to print out a single file, `cat file.txt`
+- to concatenate two or more files and either print out the results or redirect it into a different file `cat file1.txt file2.txt > new_file.txt`
+
 ## HOW TO EXIT `less`?
 
 Ctrl+C
@@ -223,3 +320,7 @@ Users who are new to Linux (rightly) feel frustrated that each configuration fil
 ## BASIC COMMANDS
 
 <https://www.hostinger.com/tutorials/ssh/basic-ssh-commands>
+
+## STACKOVERFLOW USERS
+
+<https://stackoverflow.com/users/1983854/fedorqui>
