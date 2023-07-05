@@ -719,6 +719,18 @@ You can take these pointers and `diff` them to see the changes which happened be
 
 `git reflog delete c20152b`
 
+## GIT REVERT -`git revert`
+
+`git revert HEAD` - revert to a first commit before HEAD
+`git revert dd61ab32` - revert to a specific commit
+
+- choose a commit from the past and create a copy of this commit at the HEAD
+- the idea is to IGNORE (UNDO) the current commit without deleting it (history is not rewritten)
+
+![](../assets/images/git/revert.svg)
+
+<https://www.atlassian.com/git/tutorials/undoing-changes/git-revert>
+
 ## `git reset`, `git revert` and `git checkout`
 
 | Command      | Scope        | Common use cases                                                     |
