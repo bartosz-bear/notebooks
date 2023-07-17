@@ -19,13 +19,54 @@ Lucence - open source library designed for collecting, indexing and searching in
 - the purpose of an inverted index is to allow fast full-text searches, at a cost of increased processing when a document is added to the database
 - it is the most popular data structure used in document retrieval systems, used on a large scale for example in search engines
 
-## QUERIES
-
-<https://logz.io/blog/elasticsearch-queries/>
-
 ## SEARCH
 
 - it's possible to search by single words as well as fragments of text, wildcards and logical operators
+
+<https://www.elastic.co/guide/en/elasticsearch/reference/current/search-your-data.html>
+
+
+## QUERY
+
+<https://logz.io/blog/elasticsearch-queries/>
+
+## QUERY EXAMPLES
+
+```json
+query = {
+    "query": {
+        "match": {
+            "gc_transaction": "be7a70ca1d7a1ca3"
+        }
+    }
+}
+```
+
+```json
+query = {
+    "query": {
+        "bool": {
+            "must": [{
+                "term": {"best.country_code": "US"},
+            },
+            {
+                "range": {
+                    "dist_to_border": {"gte":0,
+                                "lte":100}
+                }
+            }]
+        }
+    }
+}
+```
+
+## RUNTIME MAPPINGS
+
+
+
+## QUERY DSL
+
+<https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html>
 
 ## RESEARCH
 

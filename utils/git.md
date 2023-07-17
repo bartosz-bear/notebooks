@@ -117,9 +117,13 @@ Git merge will combine multiple sequences of commits into one unified history.
 
 repository, local repository, remote repository, branch, current branch, receiving branch, target branch, commit, common base commit, merge commit, main tip, feature tip, HEAD, file
 
-## HOW TO DELETE A BRANCH?
+## HOW TO DELETE A LOCAL BRANCH?
 
 `git branch -d`
+
+## HOW TO DELETE A REMOTE BRANCH?
+
+`git push -d origin develop/remote_branch`
 
 ## WHAT IS A MAIN TIP?
 
@@ -755,23 +759,27 @@ and have 2 and 1 different commits each, respectively.
   (use "git pull" to merge the remote branch into yours)
 ```
 
-1. Commit your changes locally
+1. Commit changed to your branch locally.
 
 `git commit -m 'message'`
 
-2. Fetch the remote repo
+2. Checkout to main
 
-`git fetch`
+`git checkout main`
 
-3. Merge or rebase the local and remote repo
+2. Pull the remote repo (fetch + merge)
 
-`git rebase origin/repo`
+`git pull`
 
-or
+3. Checkout back to local branch
 
-`git merge origin/repo`
+`git checkout develop/my_branch`
 
-4. Push the local repo to remote
+4. Merge the main to local repo
+
+`git merge main`
+
+5. Push the local repo to remote
 
 `git push`
 
