@@ -852,3 +852,176 @@ If it says true, and you want to turn them off:
 ## RESET YOUR HEAD TO ORIGIN/MAIN COMMIT?
 
 `git reset --hard origin/main`
+
+## SEARCH FOR A STRING IN THE WHOLE REPO
+
+- go to the main repo folder
+
+`git grep "my_string"`
+
+## HOW DO YOU COPY A SINGLE FILE FROM A WORKING DIRECTORY OF ONE BRANCH INTO ANOTHER BRANCH?
+
+1. Stage a file to be moved to a different branch
+
+`git add folder/file_to_be_moved.py`
+
+2. Stash that file
+
+`git stash`
+
+3. Move to the target branch
+
+`git checkout target_branch`
+
+4. Unstash the file
+
+`git stash pop`
+
+5. Add and commit the file in the target branch (if needed)
+
+`git add file_to_b_moves.py`
+`git merge -m 'comment'`
+
+6. Move back to the source repo
+
+`git checkout source_repo`
+
+<https://linuxhint.com/move-changed-files-to-another-branch-for-check-in/#:~:text=Additionally%2C%20if%20a%20user%20wants,%E2%80%9Cgit%20stash%20pop%E2%80%9D%20command.>
+
+## HOW DO YOU COMPARE/SEE CHANGES DIFF BETWEEN A FILE IN THE WORKING DIRECTORY AND LAST COMMIT?
+
+`git diff HEAD folder/my_file.py`
+
+`git diff HEAD^^ folder/my_file.py` - compare with 2 commits back
+
+## CLEAN YOUR LOCAL REPO TO DOWNLOAD NEW BRANCHES
+
+`git remote prune origin`
+
+<https://stackoverflow.com/questions/36082788/what-is-git-pruning>
+
+## HOW DO YOU COPY A FILE OR A FOLDER FROM A DIFFERENT BRANCH TO ONE CURRENTLY DEVELOPED?
+
+`git checkout importer_branch`
+
+`git checkout exporer_branch file_name.py` or
+
+`git checkout exporter_branch folder_a/folder_b`
+
+## HOW DO YOU REMOVE A STASH FROM STASH LIST?
+
+`git stash drop` - removes the top stash from the list
+`git stash drop stash@{1}` - remove a stash by name
+
+## HOW DO YOU RETURN THE COMMIT HASH OF A SPECIFIC BRANCH NAME?
+
+`git rev-parse main`
+
+`git rev-parse my_branch`
+
+## WHAT ARE 'REFS'?
+
+Ref is an indirect way of referring to a commit. You can think of it as a user-friendly alias for a commit hash.
+
+Refs are stored as normal text files in the '.git/refs' directory which simply store a commit hash number inside the file. This commit is hash is the location of the top of the branch.
+
+## HOW DO YOU READ THE COMMIT HASH FROM A FILE?
+
+`cat .git/refs/heads/main`
+
+## GARBAGE COLLECTION
+
+`git gc`
+
+This command removes unnecesary objects and compresses regs into a single file for more efficient performance. This command is performed periodically byt git, but it can be run on demand too.
+
+This command moves all of the individual branch and tag files in the 'refs' folder into a single file called 'packed-refs' located in the top of the '.git' directory.
+
+This command will also empty the '.git.refs' folder.
+
+## WHAT IS A SYMBOLIC REF?
+
+Symbolic ref is a reference to another ref instead of a commit hash.
+
+Example:
+
+'cat .git/HEAD'
+
+## DETACHED 'HEAD' STATE
+
+It's a situation when HEAD does not point to a branch, but instead points to a specific commit or the remote repository.
+
+## REFSPECS
+
+'refspecs' give you complete control over how various git commands transfer branches between repositories. They let you rename and delete branches from your local repository, fetch/push to branches with different names, and configure 'git push' and 'git fetch' to work with only the branches that you want.
+
+refspec maps a branch in the local repository to a branch in a remote repository
+
+This makes it possible to manage remote branches using local git commands and to configure some advanced 'git push' and 'git fetch' behaviors.
+
+`[+] <src> : <dst>`
+
+`<src>` is the source branch in the local repository
+
+`<dst>` is the destination branch in the remote repository
+
+`[+]` optional plus sign is forcing the remote repository to perform a non-fast forward update
+
+refspecs can be used with the `git push` command to give a different name to the remote branch
+
+`git push origin main:refs/heads/qa-main` - this command pushes the main branch to the origin remote repo as an ordinary push but it uses 'qa-main' as the name of the branch in the 'origin' repo
+
+## USING REFSPECS TO DELETE REMOTE BRANCHES
+
+You can delete a remote branch by pushing a refspec that has an empty parameter
+
+`git push origin :some-feature`
+
+Another way:
+
+`git push origin --delete some-feature`
+
+## RELATIVE REFS
+
+`git show HEAD~2` - show the grandparent of HEAD
+
+`git show HEAD^1` - show the first parent of a merge commit
+
+`git show HEAD^2` - show the second parent of a merge commit
+
+`git show HEAD^2^1`
+
+![](../assets/images/git/relative_refs.svg)
+
+## MERGE COMMIT
+
+merge commit is a type of commit created when a user merges two or more branches in the repository. It brings changes/modifications from one branch into another git branch. It is used to merge changes from different branches into one git branch.
+
+## REFLOG
+
+`git reflog`
+
+reflog is git's safety net. It records almost every change you make in the repository, regardless of whether you committed a snapshot or not. You can think of it as a chronological history of everything you've done in your local repo.
+
+You can use reflog to reference a state of repo which otherwise would be lost. Use 'git checkout HEAD@{n}' to go back in history.
+
+`git checkout HEAD@{4}` - this puts you in a DETACHED HEAD state, from here you can create a new branch and continue working on your feature
+
+<https://www.atlassian.com/git/tutorials/refs-and-the-reflog>
+
+## GIT INTERNAL LIMITATION - NAMING BRANCHES
+
+<https://medium.com/@fengyu214/git-push-refs-heads-my-subbranch-exists-cannot-create-9cec619e0b13>
+
+## HOW DO YOU REMOVE SOMEONE ELSE'S COMMITS FROM A REMOTE BRANCH?
+
+1. First prepare your own local branch to the state you want the remote branch to be.
+
+2. Push force the branch
+
+`git checkout my_branch`
+`git push --force`
+
+<https://hackernoon.com/how-to-delete-commits-from-remote-in-git>
+
+<https://stackoverflow.com/questions/3293531/how-to-permanently-remove-few-commits-from-remote-branch>

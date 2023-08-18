@@ -91,3 +91,15 @@ counties.round({'URBAN_RATIO': 2, 'UNEMP_95': 2, 'UNEMP_96': 2})
 ## MASTERING PANDAS FOR FINANCE
 
 <https://github.com/PacktPublishing/Mastering-Pandas-for-Finance>
+
+## GROUPBY OBJECT IN PANDAS
+
+- good explanation how GroupBy objects work and how to think about them
+
+<https://www.dataquest.io/blog/grouping-data-a-step-by-step-tutorial-to-groupby-in-pandas/>
+
+## HOW DO YOU CONVERT DATAFRAME TO A DICTIONARY?
+
+`df.to_dict('records')`
+
+<https://stackoverflow.com/questions/29815129/pandas-dataframe-to-list-of-dictionaries>
