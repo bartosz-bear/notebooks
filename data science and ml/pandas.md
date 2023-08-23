@@ -518,6 +518,40 @@ ser.dt.month.to_list()
 
 `df.dtypes`
 
+## CREATING A DATAFRAME FROM A DICTIONARY. DICTIONARY OF COLUMN NAMES (KEYS) AND PD.SERIES (VALUES)
+
+- all series have to be of the length
+
+```python
+names = ['Olga', 'Andrew', 'Brian', 'Telulah', 'Nicole', 'Tilda']
+ages = [29, 21, 45, 23, 39, 46]
+married = [False, True, True, True, False, True]
+
+df = pd.DataFrame({'names': names, 'ages': ages, 'married': married})
+```
+
+## ALTERNATIVE WAYS TO CREATE A DATAFRAME
+
+## CREATING A DATAFRAME FROM A DICTIONARY OF TUPLES
+
+```python
+tuple_names = tuple(names)
+tuple_ages = tuple(ages)
+tuple_married = tuple(married)
+
+tdf = pd.DataFrame({'names': tuple_names, 'ages': tuple_ages, 'married': tuple_married})
+```
+
+## CREATING A DATAFRAME FROM A DICTIONARY OF PD SERIES
+
+```python
+series_names = pd.Series(names)
+series_ages = pd.Series(ages)
+series_married = pd.Series(married)
+
+sdf = pd.DataFrame({'names': series_names, 'ages': series_ages, 'married': series_married})
+```
+
 ## HOW TO IMPROVE INSERT PERFORMANCE BY FACTOR OF 10?
 
 - save the file as CSV and upload it using native Postgres `copy_from` function
