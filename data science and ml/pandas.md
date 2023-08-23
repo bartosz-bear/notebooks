@@ -1,10 +1,457 @@
+## NUMPY INTRO
+
+- provides multidimensional array object and a number of functions for fast operations on arrays
+- the core numpy object is 'ndarray' object (n-dimensional arrays of homogenous data types) with many operations performed in compiled C code
+- all items in an array has to be of the same type
+- numpy has a fixed size at creation, unlike Python lists, changing the size of ndarray will create a new array and delete old array
+- very fast computations
+
+## IMPLICIT UPCASTING
+
+- increasing precision (eg. from integer to float)
+
+```python
+arr1 = np.array([1,2.0,3])
+#> array([1., 2., 3.])
+```
+
 ## PANDAS
+
+## SERIES
+
+- SERIES is a one-dimensional labeled array of any data type (both same and mixed data types)
+
+## DIFFERENCE BETWEEN PARAMETERS AND ARGUMENTS
+
+```python
+students = ['John', 'Adam', 'Jen']
+pd.Series(data=students) #> data is a parameter, students is an argument
+```
+
+## CHECKING IF TWO SERIES ARE THE SAME
+
+```python
+first_series.equals(second_series)
+```
+
+## INDEXING SERIES
+
+- if indices are not provided explicitly, numeric index starting from 0 will be created
+
+## dtype OBJECT
+
+'dtype('O')
+
+- it's a pointer to memory
+
+## STRINGS ARE SAVED AS 'O' OBJECTS BY DEFAULT
+
+- strings are saved as pointers in memory because they vary in size, therefore can't be stored in a predefined memory slots like numbers
+
+`pd.Series(['a', 'b'])` # dtype: object
+
+- in order to save string as strings, cast them to string using dtype parameter
+
+`pd.Series(['a', 'b'], dtype='string')`
+
+## DEFAULT INDEX IN SERIES
+
+`RangeIndex` object is a default `Series` index
+
+-  it's immutable
+
+`RangeIndex(start=0, stop=2, step=1)`
+`<class 'pandas.core.indexes.range.RangeIndex'>`
+
+## CREATING RANGEINDEX
+
+`i = pd.RangeIndex(start=2, stop=10, step=2)`
+`list(i) # returns [2,4,6,8]`
+
+## NAME OF A SERIES WILL BE USED AS A COLUMN NAME IN DATAFRAME
+
+```python
+names = ['Joe', 'Jan', 'Tom']`
+names_series = pd.Series(names)
+names_series.name = 'Most popular names'
+```
+
+## IT'S ALSO POSSIBLE TO ADD NAME TO AN INDEX
+
+`names_series.index.name = "My index name"`
+
+## HOW DO YOU CREATE A SERIES FROM RANGE-LIST
+
+`pd.Series(range(50))`
+
+## HOW DO YOU CONFIGURE NUMBER OF DISPLAYED ROWS WHEN PRINTING A SERIES OR DATAFRAME
+
+`pd.options.display.min_rows = 40`
+
+## INDEXING USING SERIES INDEX (KEYS)
+
+`alphabet[:'letter_k']` # this will display all items BEFORE and INCLUDING item with index 'letter_k'
+
+`alphabet['letter_f':'letter_k']`
+
+## ADDING PREFIX AND SUFFIX TO INDEX
+
+`my_series.add_prefix('label_')` will output 'label_0', 'label_1'
+`my_series.add_suffix('_post')` will output '0_post', '1_post'
+
+## BOOLEAN MASKS
+
+- can be used to select a subset of items from a series (eg. every second item or every third item)
+- works with [] and .loc
+- boolean mask needs to be the same length as the series
+
+`pd.Series(['a', 'b', 'c']).loc([True, False, True])`
+
+`pd.Series(['a', 'b', 'c', 'd', 'e', 'f'])[[True if x%3==0 else False for x in range(6)]]`
+- this one will return a ndarray of 'a' and 'd'
+
+## .loc - INTEGER LOC - INDEXING BY POSITION
+
+- you can only pass integers as arguments
+
+![](/assets/images/pandas/loc_iloc_diff.png)
+
+## DIFFERENCE BETWEEN .loc .iloc [] square bracket and .get()
+
+![](/assets/images/pandas/selection_by_label.png)
+
+![](/assets/images/pandas/selection_by_position.png)
+
+- .loc can be used with indexes labels, eg. `my_series.loc['label_f:'label_k']`
+- .iloc can be used with integer (order) indexes, eg. `my_series.iloc[3:5]`
+- square bracket can be used with both labeled indexes and integer indexes, and pandas will decide whether to use .loc or .iloc to perform an underlying search
+
+<https://stackoverflow.com/questions/31593201/how-are-iloc-and-loc-different>
+
+## Series.get()
+
+- .get() can be used with integer index, label index
+- .get() returns `None` if the index doesn't exist
+- it's also possible to return a different value through default parameter
+
+`my_series.get('some_index', default='No index, sorry')`
+
+![](/assets/images/pandas/chimera.webp)
+
+## INDEXING WITH CALLABLES (LAMBDAS AND REGULAR FUNCTIONS GENERATING A BOOLEAN MASKS)
+
+`my_series.loc[lambda x: [True for i in range(x.size)]]`
+`my_series.loc[lambda x: [True for i in range(len(my_series))]]`
+
+```python
+def every_fifth(x):
+    return [True if i%5==0 else False for i in range(x.size)]
+
+my_series.loc(every_fifth) ## will show every fifth element of the series
+my_series.iloc(every_fith)
+```
+
+## pd.read_csv()
+
+- this function can be used to read .csv files from a hard drive or from internet (pass url)
+- data is converted to a DataFrame by default
+
+`pd.read_csv('https://andybek.com/pandas-drinks', usecols=['Country', 'Wine Servings')`
+
+## HOW TO MAKE ONE THE COLUMNS TO BE AN INDEX OF A SERIES
+
+`pd.read_csv('https://andybek.com/pandas-drinks', usecols=['Country', 'Wine Servings'], index_col='Country')`
+
+## HOW DO YOU RETURN A SERIES IN CASE THE DATA HAS ONLY ONE COLUMN
+
+- set `squeeze` parameter to `True`
+
+`pd.read_csv('https://andybek.com/pandas-drinks', usecols=['Country', 'Wine Servings'], index_col='Country', squeeze=True)`
+
+## HOW DO YOU CHECK IF A SERIES CONTAINS ALL UNIQUE VALUES?
+
+`my_series.is_unique`
+
+## HOW DO YOU CHECK THE COUNT OF UNIQUE VALUES?
+
+`my_series.nunique`
+
+- `NA` values are not counted unless 'dropna' attribute is set to `False`
+
+`my_series.nunique(dropna=False)`
+
+## HOW DO YOU CHECK IF VALUES ARE INCREASING/DECREASING IN A SERIES?
+
+`pd.Series([1,2,3]).is_monotonic_increasing` # prints `True`
+`pd.Series([3,2,1]).is_monotonic_decreasing` # prints `True`
+
+## DIFFERENCE BETWEEN count() and SIZE
+
+`count()` counts only non-NA/null values
+`size` counts all values, inclusing non-NA/nulls
+
+## CHECK IF A SERIES HAS ANY NANs VALUES
+
+`my_series.hasnans`
+
+## HOW DO YOU CREATE A BOOLEAN MASK BASED ON NULL OR NULL VALUES?
+
+`my_series.isnull()`
+
+## HOW DO YOU FILTER FOR `NAN` VALUES ONLY IN A SERIES?
+
+`my_series[my_series.isnull()]` - using Boolean Mask inside the square brackets selection here
+
+## HOW DO YOU COUNT THE NUMBER OF NAN/NULL VALUES IN A SERIES?
+
+`my_series.isnull().sum()`
+
+## SUMMARY OF ELEMENTS COUNTING
+
+`all = my_series.size`
+`non_nulls = my_series.count()`
+`nulls_only = my_series.isnull().sum()`
+`all == non_nulls + nulls_only`
+
+## `isnull()` AND `isna()` ARE THE SAME
+
+- these two area aliases for each other, and they both return a Boolean Mask
+
+## USING NUMPY UNIVERSAL FUNCTIONS FOR SERIES FILTERING
+
+- there is a good cooperabililty between pandas and numpy
+
+`my_series(np.isnan)` - returns a list `NaN` only
+
+## `notnull()` ON SERIES
+
+- `notnull()` is the opposite of `isnull()`
+- it returns a bollean mask, where non-null values are marked as `True` and null values as `False`
+
+This boolean mask can be used to filter items:
+
+`my_series.loc[my_series.notnull()]`
+
+## `notna()` ON SERIES
+
+`notna() is simply an alias for notnull()`
+
+## HOW DO YOU GET RID OF `NA`s?
+
+`my_series.dropna()` # this will create a copy
+`my_series.dropna(inplace=True)` # this will modify the original series
+
+## MODE `.mode()`
+
+- returns the most frequent value from the series
+
+`my_series.mode()`
+
+## HOW DO YOU FILL `NA`s WITH A CERTAIN VALUE?
+
+`my_series.fillna('fill_value')`
 
 ## SHOW COUNTS FOR EACH UNIQUE VALUE IN A SERIES
 
 ```python
 Series.value_counts()
 ```
+
+## SHOW VALUE COUNTS IN FREQUENCIES
+
+`my_series.value_counts(normalize=True)`
+
+## USING idxmax() and idxmin() TO FIND THE MAX OR MIN VALUE IN A SERIOUS AND RETURN IT'S INDEX
+
+`my_series.idmax()` == `my_series[my_series == my_series.max()].index[0]`
+
+- important: if there are several rows with the same min or max value, only one value will be returned (according to alpabetical order)
+
+## SORTING VALUES WITH .sort_values()
+
+`my_series.sort_values()`
+`my_series.sort_values(ascending=False)`
+
+## HOW TO FIND N LARGEST OR N SMALLEST ITEMS IN A SERIES?
+
+`my_series.nlargest(10)`
+`my_series.nsmallest(10)`
+
+## SORTING BY INDEX - `sort_index`
+
+`my_series.sort_index()`
+
+## HOW DO YOU ADD A SHORTER SERIES USING fill_values ARGUMENT?
+
+```python
+fifty_plus = pd.Series(data)
+more_drinks = pd.Series({'Albania': 1000, 'Argentina': 2000})
+
+fifty_plus.add(more_drinks, fill_value=0)
+```
+
+- the same principle apply to `pd.Series.add()`, `pd.Series.subract()`, `pd.Series.multiply()`, `pd.Series.divide()` 
+
+```python
+fifty_plus = pd.Series(data)
+more_drinks = pd.Series({'Albania': 2, 'Argentina': 3})
+fifty_plus.multiply(more_drinks, fill_value=1)
+```
+
+## CUMULATIVE OPERATIONS - `cumsum`, `cumprod`
+
+- `cumsum` adds each element to the sum of all previous elements
+
+```python
+ser = pd.Series([1,2,3,4,5])
+ser.cumsum() # will return a Series, [1,3,6,10,15], it adds previous and current object
+```
+
+- `cumprod` multiplies each element to the multiplication of all previous elements
+
+## `cummin` and `cummax`
+
+- `cummin` holds a cumulative minimum, and this minimum is only updated if the function arrives at a even lower number eg. 5 5 5 3 2 2 2 1 1 1 0
+
+- `cummax` does the same, but with local maximum
+
+## diff() IN SERIES
+
+- calculates the difference between each element in the series (when using default), or the difference between elements specified by `periods` argument
+
+```python
+ser = pd.Series([1,1,2,3,5,8])
+ser.diff()
+0    NaN
+1    0.0
+2    1.0
+3    1.0
+4    2.0
+5    3.0
+dtype: float64
+```
+
+```python
+ser = pd.Series([1,1,2,3,5,8])
+ser.diff(periods=3)
+0    NaN
+1    NaN
+2    NaN
+3    2.0
+4    4.0
+5    6.0
+dtype: float64
+```
+
+## SERIES ITERATIONS - Series.items() and Series.iteritems()[DEPRECATED]
+
+- creates a lazy iterable (generator)
+- returns a tuple of an index and value on each iteration
+- `.iteritems()` does the same but it's deprecated
+
+```python
+for i in drinks.items():
+    print(i)
+
+('Afghanistan', nan)
+('Albania', 54.0)
+('Algeria', 14.0)
+('Andorra', 312.0)
+('Angola', 45.0)
+```
+
+## FILTERING INDEX LABELS WITH Series.filter()
+
+- filter can be used on both index and columns
+- `filter()` has three options: `regex`, `like` and `items` 
+
+```python
+my_series.filter(like='stan')
+my_series.filter(regex='^V')
+my_series.filter(items=['Poland', 'Germany'])
+```
+
+## `where()` AND `mask()`
+
+`where()` and `mask()` are very similar. 'where' is used to keep items where the condition is `True`. While 'mask' is used to keep items where the condition is `False`
+
+```python
+drinks.where(lambda x: x > 200).dropna() # keep only items where x > 200
+drinks.mask(lambda x: x > 200).dropna() # keep only items where x is not > 200
+```
+
+## DATA TRANSFORMATION AND UPDATE
+
+- there are three methods which can be used for transformation of a series: `update()`, `apply()` and `map()`
+
+![](/assets/images/pandas/transform.png)
+
+## UPDATING VALUES
+
+`drinks.loc['Canada'] = 15`
+`drinks['Albania'] = 300`
+
+## `.update()` METHOD
+
+`drinks.update(pd.Series(data=[200, 20], index=['Albania', 'Algeria']))`
+
+## `.apply()` METHOD 
+
+- applies a transformation to each element of the Series
+- takes a callable (a function, method or lambda function) as an argument
+
+`drinks.apply(lambda x: x*2)`
+
+`drinks.apply(np.square)`
+
+```python
+def multiply_by_itself(x):
+    return x*x
+
+drinks.apply(multiply_by_itself)
+```
+
+## PASSING ARGUMENTS TO `apply()`
+
+```python
+def multiply_by_self_with_min(x, min_servings):
+    if x < min_servings:
+        return x*x
+    return x
+
+drinks.apply(multiply_by_self_with_min, args=(200,))
+```
+
+## `.map()`
+
+- used for substituting each value in a Series with another value, that maybe be derived from a function, a dictionary or a Series
+
+```python
+# before
+0      cat
+1      dog
+2      NaN
+3   rabbit
+dtype: object
+
+my_series.map({'cat': 'kitten', 'dog': 'puppy'}) # passing a dictionary
+# after
+0   kitten
+1    puppy
+2      NaN
+3      NaN
+dtype: object
+```
+
+```python
+my_series.map('I am a {}'.format)
+0       I am a cat
+1       I am a dog
+2       I am a nan
+3    I am a rabbit
+dtype: object
+```
+
 
 ## INTERSECT OF TWO SERIES
 
@@ -30,7 +477,7 @@ ser.isin(ser2)
 ser.quantile(0.25)
 ```
 
-## REFERNCE VALUES IN A SERIES USING INDEX
+## REFERENCE VALUES IN A SERIES USING INDEX
 
 ```python
 ser = pd.Series(list('abcdefghijklmnopqrstuvwxyz'))
@@ -59,6 +506,17 @@ ser = ser.map(lambda x: parse(x))
 ser.dt.year
 ser.dt.month.to_list()
 ```
+
+# DATAFRAMES
+
+## HOW TO CHECK THE NUMBER OF DIMENSIONS OR SHAPE OD DATA - `ndim` AND `shape`
+
+`ser.ndim`
+`df.ndim`
+
+## HOW TO CHECK DATA TYPE OF EACH OF THE DF'S SERIES'
+
+`df.dtypes`
 
 ## HOW TO IMPROVE INSERT PERFORMANCE BY FACTOR OF 10?
 
@@ -91,3 +549,11 @@ counties.round({'URBAN_RATIO': 2, 'UNEMP_95': 2, 'UNEMP_96': 2})
 ## MASTERING PANDAS FOR FINANCE
 
 <https://github.com/PacktPublishing/Mastering-Pandas-for-Finance>
+
+## 100 PANDAS PUZZLES
+
+<https://ajcr.net/100-pandas-puzzles/>
+
+## 100 NUMPY EXERCISES
+
+<https://github.com/rougier/numpy-100>
