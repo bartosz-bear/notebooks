@@ -552,6 +552,170 @@ series_married = pd.Series(married)
 sdf = pd.DataFrame({'names': series_names, 'ages': series_ages, 'married': series_married})
 ```
 
+## CREATING A DATAFRME FROM DICTIONARIES
+
+```python
+dict_names = dict(enumerate(names))
+dict_ages = {k:v for k,v in enumerate(ages)} # this is equivalent to dict(enumerate(my_list))
+dict_married = {k:v for k,v in enumerate(married)}
+
+df = pd.DataFrame({'names': dict_names, 'ages': dict_ages, 'married': dict_married})
+```
+
+## CREATING A DATAFRAME ROW-WISE - FROM LIST OF DICTS
+
+```python
+rowwise = [{'name': name, 'age': age, 'married': married} for name, age, married in zip(list_names, list_ages, list_married)]
+
+df = pd.DataFrame(rowwise)
+```
+
+## HOW DO YOU SET AND INDEX FROM ONE OF THE COLUMN WHEN READING FROM CSV?
+
+```python
+df = pd.read_csv(url, index_col=['column_name']) # reference the column by name
+df2 = pd.read_csv(url, index_col=[0]) #reference the column by integer index
+```
+
+## CHOOSE A RANDOM ROW FROM THE DATAFRAME
+
+`df.sample()` # random row
+`df.sample(3)` # 3 random rows
+`df.sample(random_state=12)` #pseudo-random row
+`df.sample(frac=0.1)` # randomly choose 10% of available rows
+
+## SAMPLING WITH REPLACEMENT
+
+`my_sample = nutrition.sample(5, replace=True)`
+
+- sampling with replacement means that we can get the same item chosen several times 
+
+BOOTSTRAP SAMPLE = sample with replacement from the original sample, using the same sample size. Eg. let's say we pick a random number from [1,2,3], first sample: 1, second sample:2, third sample 1 again
+
+## SAMPLING WITH WEIGHTS
+
+```python
+
+weights = pd.Series(data=[10,10,10,1,2], index=[7,17,29,5,6]) # this will create a Series where index labels are just random labels, but data digit is determinining the index label weight
+
+weighted_sample = nutrition.sample(n=3, weights=weights)
+```
+
+## HOW DO YOU DISPLAY ALL INDEX LABELS AND ALL COLUMN LABELS>
+
+- axis 0 - rows
+- axis 1 - columns
+
+`df.axes`
+
+## INDICES
+
+## `RangeIndex`
+
+`pd.RangeIndex(start=0, stop=8789, step=1)`
+`df.index = pd.RangeIndex(start=0, stop=8789, step=1)`
+
+- `RangeIndex` is a special case of `Int64Index`
+- both are immutable, sequences of numbers
+- `RangeIndex` is an optimized alternative
+
+
+
+## HOW DO YOU REMOVE A COLUMN FROM A DATAFRAME
+
+`df.drop('column_nam', axis=1, inplace=True)`
+
+## HOW DO YOU USE ONE OF THE COLUMNS AND MAKE IT AN INDEX?
+
+`df.set_index('column_name', inplace=True)`
+
+- if you want to keep the column modify `drop` parameter
+
+`df.set_index('column_name', drop=False)`
+
+- if you want to create a MultiIndex, use `append=True` parameter
+
+`df.set_index('column_name', append=True)`
+
+## HOW DO YOU TURN OFF AND ON UNIQUENESS OF INDEX?
+
+- by default `verify_integrity` is set to `True`, therefore each index value has to be unique, this can be turned off thought
+
+`df.set_index('column_name', verify_integrity=False)`
+
+## DATAFRAME SELECTION - EXAMPLES
+
+`nutrition.iloc[:3, :5]` # choose the first 3 rows and the first 5 columns
+`nutrition.loc[:'Eggplant, raw', :'cholesterol']` # choose all rows before 'Eggplant, raw' label, and all columns before 'cholesterol' column
+`nutrition.loc[['Nuts, pecans', 'Eggplant, raw'], ['calories', 'cholesterol', 'serving_size']]` # pass the names of all index labels and column names you would to extract
+`nutrition.iloc[[1, 5, 6], [5, 8, 9]]` # extract rows with index number 1, 5 and 6, and columns 5, 8 and 9
+`nutrition.loc[0:5, ['sodium', 'choline']]` # combining numeric and label-based indexing
+`nutrition[0:5][['sodium', 'choline']]` #combining using square bracket notation
+`nutr_minimum.loc[:, ['total_fat', 'cholesterol']]` # all rows and two columns
+
+## WHAT ARE `.at()` and `iat()` FOR?
+
+- they do the same job as `loc()` and `iloc()` but ONLY FOR SINGLE values
+- because they are only do this job, they are much faster than `loc()` and `iloc()`
+
+`df.at('index_label', 'column_name')`
+`df.iat(1,1)`
+
+## `get_loc()` SUPPORT METHOD
+
+- `get_loc()` method is used to return the index of a column, this index number can later be used in `iloc()` or `iat()`
+
+```python
+column_loc = df.columns.get_loc('vitamin_k')
+df.iloc(rows_loc, column_loc)
+```
+## HOW DO YOU REPLACE CHARACTERS?
+
+`df.replace('target', 'new_value')`
+
+## REPLACING WITH REGEX
+
+`df.replace('\sg', '', regex=True)`
+
+## TYPE CASTING
+
+`df.astype(int)`
+
+## HOW DO YOU RETURN THE MOST FREQUENT VALUE IN EACH COLUMN OF THE DATAFRAME?
+
+`df.mode()`
+
+## HOW DO YOU RENAME INDEX LABELS AND COLUMN NAMES?
+
+`df.rename(index={'old_index_name': 'new_index_name}, inplace=True)`
+`df.rename(columns={'old_col_name', 'new_col_name'}, inplace=True)`
+`df.rename(mapper={'old_col_name', 'new_col_name'}, axis=1, inplace=True)` # does the same as index and columns, but axis has to be specified instead
+
+## `.dropna()` IN A DATAFRAME
+
+`df.dropna()` # by default, it will drop all rows where there is at least one `NA`
+`df.dropna(how='any', axis=0)` # this is a default option, `any` is default
+`df.dropna(how='all', axis=0)` # drop these rows where all fields are `NA`
+`df.dropna(how='all', axis=1)` # drop all columns where all fields are `NA`
+
+- `how=` parameter is an exclusion criteria, while `thresh=` is an inclusion criteria
+
+## `.dropna(tresh=)` WITH TRESH PARAMETER
+
+- only keep rows with at least `n` `non-NA` values
+
+`df.dropna(thresh=1, axis=0)` # only keep these rows which have at least one `non-NA` value
+`df.dropna(thresh=2, axis=1)` # onnly keep these columns which have at least two `non-NA` values
+
+<https://www.statology.org/pandas-dropna-thresh/>
+
+## `.dropna(subset=)` WITH SUBSET PARAMETER
+
+- the `dropna()` is applied to columns/rows specified in `subset=` parameter
+
+`dropna(how='any', axis=1, subset=['third_column'])` # specify which columns should be checked
+`dropna(how='any', axis=0, subset=[2])` # specifiy which rows should be checked
+
 ## HOW TO IMPROVE INSERT PERFORMANCE BY FACTOR OF 10?
 
 - save the file as CSV and upload it using native Postgres `copy_from` function

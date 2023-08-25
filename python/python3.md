@@ -24,6 +24,38 @@ list2 = ['a', 'b', 'c']
 my_dict = dict(zip(list1, list2)) # prints {0: 'a', 1: 'b', 2: 'c'}
 ```
 
+## HOW DOES `enumerate` WORKS?
+
+- `enumerate()` takes a list as an input and returns an iterable of tuples, where the first item is a an index starting with zero, and the second element is a an element from the list argument
+- in order to see the elements, it has to be converted to a list `list(enumerate(my_list))`
+
+```python
+my_list = ['a', 'b', 'c']
+list(enumerate(my_list))
+# [(0, 'a'), (1, 'b'), (2, 'c')]
+```
+
+## HOW DOES `zip()` WORKS?
+
+- `zip()` takes at least two lists and creates an iterable of tuples, where the first element of the tuple is an item from the first list, and the second element of the tuple is element from the second list
+- `zip()` works with more than two lists
+
+```python
+my_list = ['a', 'b', 'c']
+my_bools = [True, False, True]
+list(zip(my_list, my_bools)
+# [('a', True), ('b', False), ('c', True)]
+```
+
+## HOW DO YOU CREATE A DICTIONARY FROM TWO LISTS USING `zip()`?
+
+```python
+my_list = ['a', 'b', 'c']
+my_bools = [True, False, True]
+my_dict = {k:v for k,v in zip(my_list, my_bools)}
+# {'a': True, 'b': False, 'c': True}
+```
+
 ## DICTIONARY COMPREHENSION
 
 `my_dict = {name:age for name, age in zip(actor_names, actor_ages)}`
