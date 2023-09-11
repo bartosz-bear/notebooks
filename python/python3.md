@@ -63,3 +63,10 @@ my_dict = {k:v for k,v in zip(my_list, my_bools)}
 ## BOOLEAN VALUES ARE ONES AND ZEROS IN PYTHON
 
 `sum([True, False, True])` # will return 2
+
+## HOW DO YOU CHECK IF AN OBJECT IS AN ITERABLE?
+
+```python
+iter([1,2,3])
+<list_iterator at 0x11be4bdf0>
+```

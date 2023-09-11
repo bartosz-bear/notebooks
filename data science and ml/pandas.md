@@ -371,6 +371,22 @@ my_series.filter(regex='^V')
 my_series.filter(items=['Poland', 'Germany'])
 ```
 
+## CHAINING FILTERS
+
+`nutrition.filter(regex='(?i)octopus', axis=0).filter(like='cholesterol', axis=1)` # first filter is filtering rows, and the second one is filtering columns
+
+```python
+nutrition.filter(regex='(?i)octopus', axis=0)\
+         .filter(items=['cholesterol_mg', 'serving_size_g', 'calories'], axis=1)
+```
+
+## COMBINING `filter()` AND `loc()`
+
+```python
+nutrition.filter(regex='(?i)octopus', axis=0)\
+         .loc[:, ['cholesterol_mg', 'serving_size_g', 'calories']]
+```
+
 ## `where()` AND `mask()`
 
 `where()` and `mask()` are very similar. 'where' is used to keep items where the condition is `True`. While 'mask' is used to keep items where the condition is `False`
@@ -716,9 +732,317 @@ df.iloc(rows_loc, column_loc)
 `dropna(how='any', axis=1, subset=['third_column'])` # specify which columns should be checked
 `dropna(how='any', axis=0, subset=[2])` # specifiy which rows should be checked
 
+## SORTING DATAFRAME - `sort_values()`
+
+## SORT ONE COLUMN
+
+`nutrition.sort_values(by=['cholesterol_mg], ascending=False)`
+
+## SORT SEVERAL COLUMNS
+
+`nutrition.sort_values(by=['cholesterol_mg', 'sodium_mg'], ascending=[False, True])`
+
+## `.between()`
+
+- works on `Series`
+- returns a Boolean Mask, which then be used to filter a DataFrame
+
+## COMPARATORS
+
+`lt() gt() le() ge() eq()` - less than, greater than, less or equal, greater or equal, equal
+
+- these comparators work exactly the same as `<`, `>`, etc
+- they will generate a boolean mask
+
+`players[players.market_value.le(50)]`
+
+## BINARY OPERATORS WITH BOOLEANS
+
+```python
+# OR
+True | False # True
+False | False # False
+False | True # True
+True | True # True
+
+# AND
+True & False # False
+False & False # False
+False & True # False
+True & True # True
+
+# XOR (exclusive or)
+True ^ False # True
+False ^ False # False
+True ^ True # False
+False ^ True # True
+
+# COMPLEMENT OPERATOR ~ TILDE OPERATORS ON BITS (IT NEGATES BITS)
+# a = 0011, ~a = 1100
+~False # -1
+~True # -2
+```
+
+```python
+s1 = pd.Series(data=[False, True, True], index=['c', 'b', 'a'])
+s2 = pd.Series(data=[True, False, False], index=['a', 'b', 'c'])
+
+s1 & s2
+
+a     True
+b    False
+c    False
+dtype: bool
+```
+
+## HOW DO YOU INVERT BOOLEAN MASK?
+
+```python
+ser = pd.Series([True, False, True])
+ser
+0     True
+1    False
+2     True
+dtype: bool
+
+~ser
+0    False
+1     True
+2    False
+dtype: bool
+```
+
+## LOGICAL CONDITIONS SHOULD BE SEPARATED USING BRACKETS, EACH CONDITION IN A SEPARATE BRACKETS
+
+```python
+players[(players.position == 'LB') &
+        (players.age <= 25) &
+        (players.market_value >= 10) &
+        ~(players.club.isin(['Tottenham', 'Arsenal']))]
+```
+
+## SELECT COLUMNS WHICH START WITH LETTER 'P'
+
+```python
+p_cols = players.columns.str.startswith('p')
+df.loc[rows_boolean_mask, p_cols]
+```
+
+## FANCY INDEXING WITH `.lookup()` - DEPRECATED
+
+`.lookup()` takes a single value from the first array, and a single value from a second array and use this values pair to search for a specific position in the DataFrame. First value is the row label and second value is a column name.
+
+The following example will return 3 values. First value will be (row_label='Petr Cech', column_name='age'), second value will be (row_label='Mesut Ozil', column_name='market_value')
+
+```python
+names = ['Petr Cech', 'Mesut Ozil', 'Alexis Sanchez']
+attributes = ['age', 'market_value', 'page_views']
+players.set_index('name').lookup(names, attributes)
+```
+
+## SORTING INDEX - `.sort_index()`
+
+`df.sort_index()`
+
+## SORTING COLUMNS
+
+`df.sort_index(axis=1)`
+
+## HOW TO MAKE AN INDEX A REGULAR COLUMN?
+
+`df.reset_index()` # current index will become a new column, and a new, numerical index will be created
+
+## HOW DO YOU REORDER THE ORDER OF INDEX LABELS AND COLUMNS? - `.reorder()`
+
+`df.reorder(index=[2,1,3,0], columns=['age', 'name', 'position',])`
+
+
 ## HOW TO IMPROVE INSERT PERFORMANCE BY FACTOR OF 10?
 
 - save the file as CSV and upload it using native Postgres `copy_from` function
+
+## HOW DO YOU RETURN A MAX AND MIN FOR EACH COLUMN IN A DATAFRAME?
+
+`df.min()`
+`df.max()`
+
+## HOW DO YOU RETURN A MAX OR MIN VALUE FOR A SINGLE COLUMN?
+
+`df.my_column.max()`
+
+## HOW DO YOU RETURN AN INDEX OF THE MIN OR MAX VALUES FROM A SINGLE COLUMN?
+
+`df.my_column.idxmax()`
+
+## HOW TO FIND TOP N OR BOTTOM N IDEAS IN A DATAFRAME (BY AS SPECIFIC COLUMN)?
+
+- this function filter and sorts at once
+- improved performance comparing to filter() + sort_values()
+
+`df.nlargest(10, ['my_column'])`
+`df.nsmallest(10, ['my_column1', 'my_column2'])`
+
+## IDENTIFY DUPLICATES
+
+## IDENTIFY DUPLICATES FROM DATAFRAME BASED ON THE SUBSET OF COLUMNS
+
+`df.duplicated(subset=['club', 'market_value', 'age'])`
+`players[players.duplicated(subset=['club', 'age', 'position', 'market_value'],keep='last')]` # keep parameter defines which duplicates should be kept, 'first', 'last' or False (keep all)
+
+## REMOVING DUPLICATES
+
+`df.drop_duplicates(keep='first')` # keep= parameter defines which duplicate should be kept
+
+## HOW DO YOU REMOVE SINGLE OR MULTIPLE ROWS OR COLUMNS?
+
+`df.drop(labels=[1,2,3], axis=0)` # removing rows with index labels 1, 2, 3
+`df.drop(labels=['market_value', 'age'], axis=1)` # removing columns with names 'age', 'market_value'
+`df.drop(index=[13,14,15])` # removing rows with index values 13,14,15
+`players.drop(columns=['club', 'age', 'position'])` # removing columns 'club', 'age', 'position'
+
+## REMOVING COLUMNS USING `.pop()`
+
+- `pop()` returns a Series with the popped column, also it modifies the original df inplace, and it only works with a single argument (single column)
+
+`df.pop('club')`
+
+## HOW DO YOU RETURN ITEMS WITH `NA` VALUES IN A SERIES?
+
+`ser[ser.isna()]`
+
+## HOW DO YOU COUNT `NA` VALUES IN A DATAFRAME?
+
+`np.count_nonzero(df.isna())`
+
+## HOW DO YOU RETURN ROWS WITH `NA` VALUES IN A DATAFRAME?
+
+`df[df.isna().values]`
+
+- each row will appear as many times as there are `NA` in it, eg. if in one row there there are three `NA` (three different columns with `NA` values), this row will appear three times in this operation
+
+In order to receive unique values, we need to get rid of duplicates
+
+`df[df.isna().values].drop_duplicates()`
+
+## FILLING `NA` VALUES
+
+`df.fillna('replacement value')` - replace all `NA` values with the same replacement value
+```python
+df.fillna({
+    'column1': 100,
+    'column2': 'some string'
+    'column3': players.market_value.mean()
+})
+```
+
+## FORWARD FILL AND BACKWARDS FILL `NA` VALUES
+
+`df.fillna(method='ffill')` - forward fill from a previous row
+`df.fillna(method='ffill', axis=1)` - forward fill from a previous column
+
+Alias for 'ffill' is 'pad'
+
+`df.fillna(method='pad')`
+
+- it can be useful in financial analysis
+- `NA` values are filled using the previous value
+
+`df.fillna(method='bfill')`
+`df.fillna(method='bfill', axis=1)`
+
+Alias for 'bfill' is 'backfill'
+
+`df.fillna(method='backfill')`
+
+## REMOVING ROWS OR COLUMNS WITH `NA` VALUES
+
+- it's possible to get rid of both rows and columns with `NA` values
+
+`df.dropna()` - remove rows with `NA` values
+`df.dropna(axis=1)` - remove columns with `NA` values
+
+## AGGREGATE FUNCTIONS - `.agg()` OR `.aggregate()`
+
+```python
+df.agg('mean')
+df.agg(min)
+df.select_dtypes(int).agg(['min', 'max', 'mean']) # calculate minimum, maximum and mean for each column of the integer type
+```
+
+## SELECT COLUMNS OF A SPECIFIC TYPES ONLY
+
+```python
+df.select_dtypes(int) # integers only
+df.select_dtypes(object) # strings
+df.select_dtypes([int, float]) # numbers: integers and floats
+df.select_dtypes(np.number) # numbers
+```
+
+## APPLYING STRING TRANSFORMATIONS TO A SERIES
+
+- these operations apply to string series only
+
+```python
+ser = df['club']
+ser.str.upper() # make each item an upper case
+ser.str.len() # get length of each item in the series
+```
+
+## SAME-SHAPE TRANSFORMATIONS WITH TRANSFORM `.transform()`
+
+```python
+df['market_value'].transform(lambda x: x * 0.91)
+df['market_value'] * 0.91
+```
+
+```python
+def random_case(x):
+    funcs = [x.str.swapcase, x.str.lower, x.str.title, x.str.upper]
+
+    return random.choice(funcs)
+
+players.select_dtypes(include=object).tranform(random_case)
+```
+
+## `.apply()` FORMS LIKE `.transform()` AND `.agg()`
+
+- `apply()` can perform either way, depending on what is requireds
+- `apply()` can be used across rows and columns
+- operates on the ENTIRE column or row at once
+
+## SELECT COLUMNS USING BOOLEAN MASK
+
+```python
+df.loc[450, [dtype != object for dtype in df.dtypes]]
+```
+
+## `.applymap()` WORKS THE SAME AS `.apply()` BUT IT WORKS ELEMENT-WISE
+
+## VIEW VS COPY AND `SettingWithCopy` WARNING
+
+2-POINT RULE:
+- `pandas` loves to gives us copies, but
+- if we use `loc/iloc` or `at/iat`, we are guarenteed to get a view
+
+## EXAMPLES OF BAD USAGES OF `.loc/.iloc` WHICH WILL TRIGGER `SettingsWithCopy` WARNING
+
+`df.drop_duplicates().iloc[4]` # drop duplicates may return a copy
+`df['value'].loc[3]` # df['value'] may return a copy
+
+## HOW DO YOU ADD A COLUMN TO A DATA FRAME USING `.insert()` METHOD
+
+```python
+players_nicknames = Series(['Johnny', 'Timmy', 'Flo'])
+df.insert(0, 'nickname', players_nickanmes)
+```
+
+`df.insert(order_in_columns, 'column_name', 'data')`
+
+## HOW DO YOU ADD A NEW COLUMN AND RETURN A COPY OF A DATAFRAME INSTEAD OF MODYFYING THE ORIGINAL ONE?
+
+`new_df = df.assign(new_column=[1,2,3], one_more_column=['a, 'b', 'c'])` # original df will not change
+
+# 10X IMPROVEMENT IN PERFORMANCE
 
 ```python
 def insert_values_multi(table_name, table_data):
