@@ -58,6 +58,7 @@ first_series.equals(second_series)
 
 `RangeIndex` object is a default `Series` index
 
+- `RangeIndex` is a series of increasing or decreasing integers (0,1,2,3)
 -  it's immutable
 
 `RangeIndex(start=0, stop=2, step=1)`
@@ -67,6 +68,181 @@ first_series.equals(second_series)
 
 `i = pd.RangeIndex(start=2, stop=10, step=2)`
 `list(i) # returns [2,4,6,8]`
+
+## MULTIINDEX
+
+`pandas.core.indexes.multi.MultiIndex`
+
+multiindex_internals
+
+![](/assets/images/pandas/multiindex_internals.png)
+
+## CREATING A MULTIINDEX
+
+```python
+df.set_index(['date', 'name'], inplace=True)
+```
+
+## CREATING MULTIINDEX WHEN READING FROM A CSV FILE
+
+```python
+pd.read_csv(url, index_col=['date', 'name'])
+```
+
+## ADDING INDEX TO AN EXISTING MULTIINDEX
+
+```python
+df.set_index('column3', append=True)
+```
+
+## INFO ABOUT MULTIINDEX
+
+```python
+df.index.nlevels # number of index levels
+df.index.level2[0] # show unique values of the index level 0
+df.index.leves[2]
+df.index.values # show tuples of values, one value per index
+```
+
+## FETCHING FROM A DATAFRAME WHICH IS USING A MULTIINDEX
+
+```python
+df.loc['2013-02-02', 'GOOGL'].close
+df.loc[('2013-02-02', 'GOOGL'), 'close'] # using a tuple for the index dimension, and a column name as the second dimension
+df.iloc[2,4] # 2 correspondsto 
+df.loc[('2014-01-03', 'AAPL'), 'open':'close']
+df.loc[(slice('2019-01-01', '2019-01-31'), slice(None), 'high'), :] # tuple with 3 values, triple MultiIndex
+```
+
+## INDEXING RANGES AND SLICES IN MULTI-INDEX
+
+```python
+df.loc[(['2015-01-06', '2015-01-07'], ['FB', 'AMZN']), ] #use tuple for the index dimension, and comma to separates index and columns dimension
+df.loc[(['2015-01-06', '2015-01-07'], ['FB', 'AMZN']), ['close', 'volume']]
+```
+
+## SLICING MULTI-INDEX USING SLICE OBJECT
+
+```python
+df.loc[(slice('2015-01-06', '2015-01-07'), 'GOOGL'), 'open':'low']
+```
+
+## `slice(None)`
+
+```python
+tech.loc[(slice(None),['FB', 'AMZN']), :]
+```
+
+## `pd.IndexSlice` OBJECT
+
+```python
+df.loc[pd.IndexSlice[:, ['FB', 'GOOGL']], 'high':'low']
+idx = pd.IndexSlice
+df.loc[idx[:, ['FB', 'GOOGL']], 'high':'low']
+```
+
+## CROSS SECTIONS WITH `xs()`
+
+`.xs()` is usuful when using with MultiIndex, it allows us to specify which level of the MultiIndex we want to filter or slice
+
+```python
+df.xs('FB', level=1, drop_level=False)
+df.xs(('2019-01-02', 'FB'), level=(0,1))
+df.xs(('2019-01-02', 'FB', 'high'), level=(0,1,2)) # triple MultiIndex
+```
+
+## CHANGING ORDER OF INDICES IN A MULTIINDEX WITH `.swaplevel()` METHOD
+
+```python
+df.swaplevel(2,1) # swap second and third indices
+df.swaplevel('volume_type', 'name')
+```
+
+## SORTING INDICES IN MULTIINDEX
+
+- MultiIndex method, not a DataFrame method
+
+```python
+df.index.sortlevel([0,1,2], ascending=[True, False, True])
+```
+
+## CHANGE NAMES OF INDICES IN MULTIINDEX
+
+```python
+df.index.set_names(['Trading Date', 'Volume Category', 'Ticker'], inplace=True)
+```
+
+## CONVERTING MULTIINDEX TO AN INDEX OF TUPLES CONTAINING THE LEVEL VALUES
+
+```python
+df.index.to_flat_index()
+```
+
+## STACKING COLUMNS INTO MULTIINDEX VALUES
+
+- a row becomes a column (similar to pivot)
+
+```python
+df.stack()
+df.stack().unstack()
+```
+
+BEFORE STACK
+
+![](/assets/images/pandas/before_stack.png)
+
+AFTER STACK
+
+![](/assets/images/pandas/after_stack.png)
+
+## CHECKING IF A MULTIINDEX IS SORTED
+
+```python
+df.index.is_monotonic_increasing
+df.index.is_lexsorted() # deprecated
+```
+
+## CHANGING ORDER OF INDICES IN A MULTIINDEX WITH `.reorder_levels()`
+
+```python
+df.reorder_levels(['date', 'volume_type', 'name'])
+df.reorder_levels([0,1,2])
+```
+
+## REMOVING INDEX DIMENSION FROM MULTIINDEX
+
+- removes from index but doesn't restore it into the dataframe
+
+```python
+df.droplevel(1)
+df.dropleve('date')
+df.droplevel(['date', 'volume_type'])
+df.droplevel([0,1])
+```
+
+## REMOVE INDEX AND RESTORE IT INTO THE VALUES DATAFRAME
+
+```python
+df.reset_index(level=1)
+df.reset_index(level=1, drop=True) # remove from the index and discard completely, works like .droplevel()
+df.reset_index(level=['value_type', 'name'])
+df.reset_index(level=[0,1])
+```
+
+## USING `.reset_index()` TO GET BACK FROM MULTINDEX TO A SIMPLE RANGE INDEX
+
+- pass no parameter to the method
+
+```python
+df.reset_index()
+```
+
+## SORTING MULTINDEX
+
+```python
+df.sort_index(inplace=True) # sorts all levels of MultiIndex
+df.sort_index(level=(0,2), ascending=[False, True])
+```
 
 ## NAME OF A SERIES WILL BE USED AS A COLUMN NAME IN DATAFRAME
 
@@ -167,6 +343,8 @@ my_series.iloc(every_fith)
 - set `squeeze` parameter to `True`
 
 `pd.read_csv('https://andybek.com/pandas-drinks', usecols=['Country', 'Wine Servings'], index_col='Country', squeeze=True)`
+
+`df.squeeze()` - converts a one dimensional DataFrame into a Series
 
 ## HOW DO YOU CHECK IF A SERIES CONTAINS ALL UNIQUE VALUES?
 
@@ -1034,6 +1212,7 @@ df.loc[450, [dtype != object for dtype in df.dtypes]]
 ```python
 players_nicknames = Series(['Johnny', 'Timmy', 'Flo'])
 df.insert(0, 'nickname', players_nickanmes)
+df.insert(df.columns.get_loc('Official Time')+1, 'Name of the Inserted Col', other_df['Inserted Col'])
 ```
 
 `df.insert(order_in_columns, 'column_name', 'data')`
@@ -1041,6 +1220,766 @@ df.insert(0, 'nickname', players_nickanmes)
 ## HOW DO YOU ADD A NEW COLUMN AND RETURN A COPY OF A DATAFRAME INSTEAD OF MODYFYING THE ORIGINAL ONE?
 
 `new_df = df.assign(new_column=[1,2,3], one_more_column=['a, 'b', 'c'])` # original df will not change
+
+## ADDING ROWS
+
+- adding rows in `pandas` is a very inefficient process and should be avoided when possible
+- data in `pandas` is organized in columns (np.Arrays, etc)
+
+The old (deprecated) way of adding rows to a DataFrame is to use `.append()`. In the current version, `.concat()` is preferred.
+
+```python
+df_random = df_random.append(pd.Series({'region': 2,
+                  'nationality': 'Poland',
+                  'new_foreign': 0,
+                  'age_cat': 2}, name=14))
+```
+
+## HOW DO YOU ADD DATAFRAMES WITH THE SAME NUMBER AND TYPE OF COLUMNS?
+
+```python
+dfs = [state_df, eng_df, liberal_df, ivies_df, party_df]
+pd.concat(dfs)
+```
+
+## RESETTING INDEX AFTER CONCATENATION OF DATAFRAMES
+
+```python
+pd.concat(dfs).reset_index(drop=True) # create a new fresh, 0-based index and get rid of the old index
+```
+
+## RESET INDEX AUTOMATICALLY ON CONCATENATION OF DATAFRAMES
+
+```python
+pd.concat(dfs, ignore_index=True)
+```
+
+## ENFORCING INDEX UNIQUNESS DURING CONCATENATION
+
+```python
+try:
+    pd.concat([df1, df2], verify_integrity=True)
+except ValueError as e:
+    return e
+```
+
+## CREATING A MULTIINDEX DURING CONCATENATION
+
+```python
+mdf = pd.concat([df1, df2], keys=['key1', 'key2'])
+mdf.loc[('key2', 3)]
+```
+
+## JOIN PARAMETER OF `.concat()`
+
+```python
+df_outer = pd.concat([df1, df2], join='outer') # if one of the DataFrames has less columns, `NA`s will be used
+df_inner = pd.concat([df2, df2], join='inner') # only those columns which exist in both dfs will be concatenated
+```
+
+## `.merge()`
+
+```python
+merged = pd.merge(left=df1, right=df2, left_on='column_from_df1', right_on='column_from_df2')
+merged = pd.merge(df1, df2) # it will merge if there is a common column in both dataframes
+```
+
+## INNER MERGE
+
+- intersection
+- only include items which exist in both dataframes
+
+```python
+merged = pd.merge(df1, df2, how='inner')
+```
+
+![](/assets/images/pandas/inner_join.png)
+
+## OUTER MERGE
+
+- include data from both dataframes even if some items are missing
+- fill with `NAs`
+
+```python
+merged = pd.merge(df1, df2, how='outer')
+```
+
+![](/assets/images/pandas/outer_join.png)
+
+## INNER LEFT JOIN
+
+```python
+pd.merge(df_left, df_right, how='left') # that's a default behavior, equivalent to inner-left
+```
+
+![](/assets/images/pandas/left_join.png)
+
+## INNER RIGHT JOIN
+
+```python
+pd.merge(df_left, df_right, how='right') # inner-right
+```
+
+![](/assets/images/pandas/right_join.png)
+
+## MERGING BY INDEX
+
+```python
+pd.merge(df1, df2, left_index=True, right_index=True)
+```
+
+## MERGING BY INDEX-COLUMN COMBINATION
+
+```python
+pd.merge(df1, df2, left_index=True, right_on='School Name')
+pd.merge(df1, df2, left_on='School Name', right_index=True)
+```
+
+## MERGING WITH DATAFRAME JOIN() METHOD
+
+`merged_df = df1.join(df2)` # equivalent to `pd.merge(df1, df2)`
+`merged_df = df1.join(df2, on='School Name')`
+
+## GROUPBY
+
+## POSSIBLE OPERATIONS ON GROUPBY
+
+- `.agg()` - changes shape of the DataFrame, usually collapses dimenstions (eg. takes a vector as input and returns a scalar)
+- `.filter()` - filters each subframe
+- `.transform()` - applies a function on each row within each subgroup WITHOUT changing the shape of the subframe, eg. take a raw value input (scalar) and calculate z-score for this raw value (returns scalar value too)
+- `.apply()` - the most flexible method which allows you to make anything which is possible with agg, filter or transform methods
+
+## CUSTOMIZE INDEX TO GROUP MAPPINGS
+
+```python
+games.Platform.unique() # array(['X360', 'PS3', 'PS4', 'XOne'], dtype=object)
+
+platform_names = {
+    'PS3': 'PlayStation',
+    'PS4': 'PlayStation',
+    'X360': 'XBox',
+    'XOne': 'XBox'
+}
+
+sales = games.loc[:, ['Platform', 'NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales']]
+
+sales.set_index('Platform').groupby(platform_names).sum()
+```
+
+## HOW DO YOU ACCESS A SINGLE DATAFRAME FROM A DATAFRAME GROUPBY OBJECT?
+
+- convert it from a lazy to eager structure
+- this conversion will create a dictionary where the key are all unique values of column1 and values of the dictionaries are the individual dataframes created by the groupby operation
+
+```python
+eager_groupby = dict(iter(df.groupby('column1')))
+eager_groupby['key1]
+```
+
+## BETTER APPROACH TO GET A SINGLE DATAFRAME
+
+```python
+df.groupby('Product').get_group('PS3)
+```
+
+## MULTIINDEX GROUPINGS
+
+```python
+top_sales = studios.groupby(['Genre', 'Publisher']).sum().sort_values(by='Global_Sales', ascending=False)
+```
+
+## AGGREGATE FUNCTIONS
+
+`studios.groupby('Genre').agg('sum')`
+
+##  CALCULATING MULTIPLE AGGREGATE FUNCTIONS
+
+`studios.groupby(['Genre', 'Publisher']).agg(['sum', 'count', 'mean'])`
+
+## SORTING MULTIINDEX AGGREGATED OBJECTS
+
+`studios.groupby(['Genre', 'Publisher']).agg(['sum', 'count', 'mean']).sort_values(by=('Global_Sales', 'sum'), ascending=False)` ## columns axis has a multiindex, this is why a tuple is needed to sort values
+
+## RENAMING AGGREGATED FRAME
+
+```python
+df.groupby(['Genre', 'Publisher']).agg(['sum', 'count', 'mean'])]\
+                                  .rename({'sum': 'Total Sales', 'count': 'Number of Games'}, axis=1)
+```
+
+- alternative way to rename
+
+```python
+df.groupby(['Genre', 'Publisher']).agg(total_sales=('Global Sales', 'sum'), num_games=('Global Sales', 'count'))
+```
+
+## APPLYING DIFFERENT AGGREGATE FUNCTIONS TO DIFFERENT COLUMNS OF DATA
+
+```python
+df.groupby(['Genre', 'Publisher']).agg(
+    total_global_revenue=('Global Sales', 'sum'), # sum of 'Global Sales' column
+    average_EU_revenue=('EU_Sales', 'mean') # mean of 'EU_Sales' column
+)
+```
+
+- alternative syntax
+
+```python
+df.groupby(['Genre', 'Publisher']).agg(
+    'Global_Sales': 'sum',
+    'EU_Sales': 'mean'
+)
+```
+
+## FILTERING SUBGROUPS WITHIN GROUPEDBY DATAFRAME
+
+- `filter()` is filtering the original DataFrame (before groupby()), not the result of the groupby()
+- `filter()` is using a special type of boolean mask
+
+```python
+games.groupby(['Publisher', 'Genre']).filter(lambda sg: sg['NA_Sales'].sum() > 50) # sg stands for sub-group
+# only show those subgroups where total 'NA_Sales' per each group, divided by a 'Publisher' and 'Genre' is
+# above 50 MUSD
+```
+
+- another syntax
+
+```python
+def more_than_50(df):
+    return df['NA_Sales'].sum() > 50
+
+games.groupby(['Publisher', 'Genre']).filter(more_than_50)
+```
+
+## TRANSFORM ON GROUPBY SUBFRAMES
+
+- calculate z-score on each subframe grouped by 'Genre'
+- transforms doesn't change the shape of the dataframe (which is different, comparing to .agg() function)
+
+```python
+df.set_index(['Name', 'Platform']).groupby('Genre').transform(lambda x:(x - x.mean())/x.std())\
+    .sort_values(by='Global_Sales', ascending=False)
+```
+
+## APPLY ON GROUPBY SUBFRAME
+
+- the most flexible method which can be applied on groupby subframes
+- it can return the same or a different shape, it can also be used to filter values
+
+```python
+ps3.groupby('Genre').apply(lambda sg: 'solid' if sg.EU_Sales.sum() > 50 else 'weak')
+```
+
+```python
+def sales_detail(sf):
+    level = 'solid' if sf.EU_Sales.sum() > 50 else 'weak'
+    variability = 'volatile' if sf.EU_Sales.std()/sf.EU_Sales.mean() > 2 else 'steady'
+    return (level, variability)
+
+ps3.groupby('Genre').apply(sales_detail)
+```
+
+## PIVOTS
+
+- pivot is a way to reorganize a dataframe visually and structurally
+- it's a combination of steps which can be achieved using more standard pandas operations, however pivoting a more convenient, and more concise way of reorganizing data
+
+```python
+df.pivot(index='my_index', columns='my_column', values'scores')
+```
+
+## UNPIVOTING USING MELT METHOD
+
+```python
+pivoted.reset_index().melt(id_vars='School Name', value_name='Score')
+```
+
+## PIVOTING AND AGGREGATING IN ONE STEP - `pivot_table()`
+
+- the default `aggfunc` is `mean`
+
+```python
+pivoted = sat.pivot_table(index='Borough', columns='SAT Section', values='Score', aggfunc='std')
+```
+
+## MARGINS PARAMETER OF PIVOT_TABLE
+
+- calculates `aggfunc` for each row and for each column separately
+
+```python
+df.pivot(index='Borough', columns='SAT Section', values='Score', margins=True, margins_name='Grand Total')
+```
+
+## MULTIINDEX PIVOT TABLE
+
+- multiindex pivot table is created by passing a list of columns or a list of indices
+
+```python
+pivoted = sat.pivot_table(index=['Borough', 'School Name'], columns='SAT Section', values='Score', aggfunc='std')
+```
+
+## APPLYING SEVERAL FUNCTIONS AT ONCE ON PIVOT_TABLE
+
+```python
+sat.pivot_table('Score', 'Borough', 'SAT Section', aggfunc=['min', 'max'])
+```
+
+## DATE AND TIME
+
+## ISOFORMAT() OF PYTHON DATETIME
+
+```python
+my_time = time(12, 12, 5, 122434)
+my_time_iso = my_time.isoformat()
+```
+
+## STRING PARSE TIME `strptime()` METHOD
+
+- method to parse time from a string, and create a time object in Python
+
+```python
+datetime.strptime('2012-02-12', '%Y-%m-%d')
+
+try_this = 'Jan 20 2020 4pm'
+datetime.strptime(try_this, '%b %d %Y %I%p')
+
+```
+
+## PARSING DATETIMES STRINGS WITH `dateutil`
+
+- it has a very forgiving behavior, it ignores stop words like 'at', 'and', as well as special characters like ';'
+
+```python
+from dateutil import parser
+parser.parse('jan 21st 1990') # datetime.datetime(1990, 1, 21, 0, 0)
+parser.parse('22 april 2068 at 4pm and 17minutes 20 seconds') # datetime.datetime(2068, 4, 22, 16, 17, 20)
+```
+
+## STRING FORMAT TIME `strftime()` METHOD
+
+```python
+datetime.strftime(datetime(2020, 2, 2), f'%Y:%-m:%-d') # '2020:Feb:2'
+
+datetime.strftime(datetime(2020, 2, 2, 14, 15, 25, 324985), '%c') # 'Sun Feb  2 14:15:25 2020'
+
+now = datetime.now()
+now.strftime('%x %X')
+```
+
+## STRING FORMATTING AND DATETIME
+
+```python
+now = datetime.now()
+'Current date and time is {:%c}'.format(now)
+```
+
+## USING NUMPY TO PERFORM LARGE SCALE VECTORIZED OPERATIONS ON ARRAYS OF DATATIMES
+
+```python
+a = np.datetime64('2002-03-04') # numpy.datetime64('2002-03-04')
+b = np.datetime64(datetime.now()) # numpy.datetime64('2023-10-09T22:02:59.851845')
+```
+
+## RESCALING DATETIME
+
+- changing the lowest common denominator, the lowest recorded time unit
+
+```python
+my_datetime = datetime.now()
+np.datetime(my_datetime, 'D') # rescaling from microseconds to days 
+np.datetime(my_datetime, 'D') + 10 # adding 10 days to the rescaled datetime
+```
+
+## PERFORMING VECTORIZED OPERATIONS ON ARRAY OF DATETIMES
+
+```python
+my_array = np.array([
+    '2012-10-20',
+    '2005-03-02',
+    '1924-03-03'
+], dtype=np.datetime64)
+# array(['2012-10-20', '2005-03-02', '1924-03-03'], dtype='datetime64[D]')
+my_array - 10
+# array(['2012-10-10', '2005-02-20', '1924-02-22'], dtype='datetime64[D]')
+```
+
+## OFFSETING BUSINESS DAYS
+
+```python
+np.busday_offset(my_array, offsets=10, roll='backward')
+```
+
+## DATETIME STRING FORMAT CODES
+
+<https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes>
+
+<https://strftime.org/>
+
+## PANDAS TIMESTAMP
+
+- timestamp is the fundamental building block of pandas time and date related operations
+
+```python
+dt = pd.Timestamp('7/4/1877') # Timestamp('1877-07-04 00:00:00')
+dt2 = pd.to_datetime('7/4/1877', dayfirst=True) # Timestamp('1877-04-07 00:00:00')
+```
+
+## CONVERT PANDAS STRING COLUMN INTO NP DATETIME
+
+```python
+df.Date = df.Date.astype(np.datetime64)
+```
+
+## MICRO AND NANOSECONDS
+
+- microsecond is 1/millionth of a second
+- nanosecond is 1/billionth of a secon
+
+## DATETIME INDEX
+
+```python
+df.Date = df.Date.astype(np.datetime64)
+df.set_index('Date', inplace=True)
+
+dt_index = pd.to_datetime(['2012-01-01', '2008-07-07']) # DatetimeIndex object
+```
+
+## IMPORTING DATETIME DATA FROM CSV INTO DATETIMEINDEX
+
+```python
+oil = pd.read_csv("/BrentOilPrices.csv", index_col=0, parse_dates=True)
+oil.index # DatetimeIndex object
+```
+
+## SELECTING DATA FROM DATETIME INDEX USING STRINGS
+
+```python
+oil.loc['2000-01-04']
+oil.loc['2000-01-04':'2000-01-14']
+```
+
+## PARTIAL STRING INDEXING
+
+```python
+oil.loc['2000-01'] # selects all date for January 2000
+oil.loc['2000-01':'2000-02'] # selects all dates for Jan and Feb 2000
+oil.loc['2000-07':'2000-08-07']
+```
+
+## CREATING CATEGORICAL COLUMNS FROM DATETIME INDEX ATTRIBUTES
+
+```python
+df['Dayname'] = df.index.dayname()
+df.groupby('Dayname').std()
+```
+
+`df.index.day_of_week`
+`df.index.month`
+`df.index.week`
+
+## CALCULATE MEAN VALUE IN LEAP YEAR FEBRUARYS
+
+```python
+brent[(brent.index.is_leap_year == True) & (brent.index.month == 2)].mean() 
+```
+
+## CREATING DATETIME INDEX MANUALLY
+
+```python
+idx = pd.date_range(start='2012-01-01', end='2013-03-03')
+idx = pd.date_range('Jan 1 2013', '13th of May 2014')
+pd.date_range(start='2012-01-01', periods=10) # day is a default period
+pd.date_range(start='2012-01-01', periods=10, freq='w') # creates 10 new dates with a week gap between each
+pd.date_range(start='2012-01-01', periods=10, freq='2w')
+pd.date_range(end='2012-01', periods=5, freq='m') #creates 5 new dates, each one monthe earlier
+```
+
+## DATE OFFSET
+
+- `DateOffset` is calendar aware
+
+```python
+dt = pd.Timestamp('2020-03-09')
+offset = pd.DateOffset(days=18)
+offset2 = pd.DateOffset(days=25, minutes=10, nanoseconds=2)
+
+new_dt = dt - offset
+new_dt # Timestamp('2020-02-20 00:00:00')
+```
+
+## SETTING OFFSET DATE AS INDEX
+
+```python
+brent.set_index(brent.Date.astype(np.datetime64) + pd.DateOffset(hours=18)).drop(columns='Date')
+```
+
+## TIMEDELTA
+
+- `Timedelta` is not aware of the calendar, it operates on absolute/abstract time
+
+```python
+td = pd.Timedelta(days=3, hours=4)
+```
+
+## DOWNSAMPLING DATETIME INDEX
+
+- downsampling decreases frequency of observations (eg. from daily to monthly)
+- aggregation function needs to be applied to let pandas know what method of downsampling should be used
+
+```python
+brent.resample('M').median()
+```
+
+## USING RESAMPLING METHOD TO FIND OUT MIN OR MAX VALUE IN EACH MONTH
+
+```python
+brent.resample('M').min()
+```
+
+## UPSAMPLE AND INTERPOLATION
+
+```python
+df.resample('8H').interpolate(method='linear')
+```
+
+## CHANGING FREQUENCY USING `asfreq()`
+
+```python
+brent.asfreq('10D', method='ffill') # fill NaNs with the most recent available value
+brent.asfreq('10D', fill_value=brent.values.mean())
+```
+
+## WHAT IS THE DIFFERENCE BETWEEN `resample()` AND `asfreq()`
+
+- `resample()` is like groupby with datetime capabilities, aggregation function has to be applied
+- `asfreq()` is a simple selection method, no agggregate function is required
+
+## ROLLING WINDOWS
+
+```python
+brent.rolling(3).mean() # take 3 observations and calculate the mean for these 3 observations, repeat until there is no more data available in the series
+```
+
+## VECTORIZED STRING OPERATIONS
+
+- fast
+- automatically exclude NaN, NaN are not a problem, they stay NaN
+
+```python
+Brent.Name.str.len()
+Brent.Name.str.startswith('a')
+```
+
+## CASE OPERATIONS ON STRINGS
+
+```python
+boston.Name.str.lower()
+boston.Name.str.upper()
+boston.Name.str.title()
+boston.Name.str.swapcase()
+boston.Name.str.capitalize()
+```
+
+## `find()` and `rfind()`
+
+
+```python
+my_string  = 'My first string'
+my_string.find('f') # prints 4, index of the first 'f' letter
+my_string.find('dupa') # print -1, which means 'not found'
+my_string.find('string') # prints 9, the index when the string 'string' starts
+
+df.Name.str.find('Andy') # returns a series with numbers
+```
+
+- `rfind()` is the same as `find()` but the function is search from right to left, instead of left to right (like in `find()`)
+
+```python
+p = 'pandas numpy numpy pandas'
+p.find('pandas') # prints 0
+p.rfind('pandas') # prints 19
+```
+
+## `isspace()`
+
+```python
+''.isspace() # False
+' '.isspace() # True
+'/t'.isspace() # True
+'/n'.isspace() # True
+'ho ho'.ispace() # False
+```
+
+## `lstrip()`,  `rstrip()` AND GENERIC `strip()`
+
+```python
+left_string = '    this is a pandas course'
+left.string.lstrip() # removes leading whitespace
+a_left_spaced = 'aaaaaathis is also a course'
+a_left.spaced.lstrip('a') # removes leading 'a' and prints 'is also a course'
+right_string = 'this is a pandas course     '
+right_string.rstrip()
+right_string_b = 'this is a pandas coursebbbbbbb'
+right_string_b.rstrip('b') # # removes trailing 'b' and prints 'this is a pandas course'
+that_string = '   hello\n\n\n'
+that_string.strip() # prints 'hello'
+```
+
+EXAMPLE FOR PANDAS
+
+```python
+boston.Name.iloc[0:2].str.strip()
+```
+
+## SPLITTIG `split()`
+
+- no argument will split in a different way that `split(' ')`
+- when no argument is given, it splits on all whitespace characters, including `\n` and `\t`
+
+```python
+s = '  the name is: BOND \t JAMES BOND \n\n' # 
+s.split() # ['the', 'name', 'is:', 'BOND', 'JAMES', 'BOND']
+s.split(' ') # ['', '', 'the', 'name', 'is:', 'BOND', '\t', 'JAMES', 'BOND', '\n\n']
+```
+
+## CONTROLLING THE NUMBER OF SPLITS
+
+```python
+df.Name.str.split(', ', expand=True, n=2) # expand the results to separate columns but do maximum 2 splits
+```
+
+## ASSIGNING MULTIPLE COLUMNS AT THE SAME TIME
+
+```python
+df[['First Name', 'Last Name']] = df.Name.str.split(', ', expand=True)
+```
+
+## USING `str.get()` METHOD TO ACCESS AN INDEXED VALUE
+
+```python
+brent['First Name'] = brent.Name.str.split(', ').str.get(0)
+brent['Last Name'] = brent.Name.str.split(', ').str.get(1)
+```
+
+## CONCATENATING USING `cat()`
+
+```python
+df['Full Name'] = df['First Name'].str.cat(df['Last Name'], sep=' ') 
+```
+
+## VECTORIZED SLICING
+
+```python
+boston.Country.str.slice(start=0, stop=2, step=1)
+```
+
+## BOOLEAN MASKING WITH STRINGS
+
+```python
+boston.loc[boston.Country.str.match('ITA')]
+```
+
+## `str.contains()`
+
+```python
+boston.loc[boston.Name.str.contains('Will')]
+boston[boston.Name.str.contains('Will')] 
+```
+
+## FILTERING ON MULTIPLE ARGUMENTS
+
+```python
+boston[(boston['Ran 2015']==1) & (boston['Ran 2016']==1)].head()
+```
+
+## REPLACE OPERATION ON STRINGS
+
+```python
+boston['M/F'] = boston['M/F'].str.replace('M', 'male').str.replace('F', 'female')
+boston.Country.str.replace('Usa', 'United States', case=False) # case-insensitive replacement
+```
+
+## INDICATOR VALUES OR `get_dummies()` METHOD
+
+```python
+boston['Years Ran'].str.get_dummies(sep=':') # converts a single categorical Series into multiple Boolean columns
+boston['M/F'].str.get_dummies() # will create two new columns, one called 'M' and another called 'F', the column names are equal to unique values from the source column
+```
+
+## REGEX
+
+- regex `compile()` method only made sense in Python 1.0, since Python 2, regex is automatically compiled so this method can be ignored
+- useful to experiment with regex `https://regex101.com/`
+
+## REGEX EMAIL VALIDATOR
+
+- <https://emailregex.com/>
+
+```python
+email_pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+```
+
+## REGEX IN PANDAS STR METHODS
+
+- `str.contains()` - equivalent to `re.match()`
+
+`boston.Name[boston.Name.str.contains(pat=r'[wW]ill', regex=True)]`
+
+- `str.replace()`, - equivalent to `re.replace()`
+
+`boston['Official Time'].str.replace(r"(\d+):(\d+):(\d+)", r"\1 hours, \2 minutes, and \3 seconds")`
+
+- `str.split()`, - equivalent to `re.split()`
+
+`boston.Name.str.split(r'\s')`
+
+with `split()` you don't need to enable `regex=True` parameter, it's enough if you just pass a raw string `r"pattern"`
+
+## PLOTTING IN PANDAS
+
+- pandas is using matplotlib behind the scene, therefore the matplotlib terminology and parameters names are useful to know (eg. figure, axis, pyplot, etc)
+
+## QUICK PLOTTING
+
+- default chart is a line chart
+
+```python
+ser.plot(color=purple)
+df.Price.plot(c=purple)
+pd.concat([ser1, ser2, ser3], axis=1).plot()
+```
+
+## BAR CHART
+
+```python
+ax = boston.Age.value_counts(sort=False).sort_index().plot(kind='barh', figsize=(12, 12));
+```
+
+## PIE CHART
+
+```python
+games.groupby('Platform')['JP_Sales'].sum().plot(kind='pie')
+games.loc[:, ['JP_Sales', 'NA_Sales', 'Platform']]\
+    .groupby('Platform')\
+    .sum()\
+    .plot(kind='pie', subplots=True)
+```
+
+## HISTOGRAM CHART
+
+```python
+ax = drinks.beer_servings.plot(kind='hist', bins=15)
+ax = drinks.beer_servings.plot(kind='hist', bins=15, orientation='horizontal')
+```
+
+## SCATTER PLOT
+
+```python
+scores = pd.concat([math, reading, writing], axis=1)
+scores.columns = ['Math', 'Reading', 'Writing']
+scores.plot(kind='scatter', x='Reading', y='Writing')
+```
 
 # 10X IMPROVEMENT IN PERFORMANCE
 

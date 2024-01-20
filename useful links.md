@@ -1,5 +1,13 @@
 # Main
 
+## Regex Sandbox
+
+<https://regex101.com/>
+
+## Regex Email Validator
+
+<https://emailregex.com/>
+
 ## Markdown
 
 <https://www.markdownguide.org/cheat-sheet>

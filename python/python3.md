@@ -70,3 +70,26 @@ my_dict = {k:v for k,v in zip(my_list, my_bools)}
 iter([1,2,3])
 <list_iterator at 0x11be4bdf0>
 ```
+
+## HOW DO YOU GET A LIST OF KEYS OR VALUES FROM A DICTIONARY?
+
+```python
+list_of_keys = list(my_dict)
+list_of_values = [*my_dict.copy().values()]
+```
+
+## HOW DO YOU SORT A LIST OF OBJECTS BY OBJECT'S ATTRIBUTE?
+
+- sorting in place
+
+```python
+my_list.sort(key=lambda x: x.count)
+```
+
+- to return a new list
+
+```python
+new_llist = sorted(my_list, key=lambda x: x.count)
+```
+
+- more on sorting <https://wiki.python.org/moin/HowTo/Sorting#Sortingbykeys>
