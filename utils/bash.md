@@ -192,6 +192,25 @@ Run
 
 `cat <<EOF` is very useful when working with multi-line text in Bash, eg. when assigning multi-line string to a shell variable, file or a pipe.
 
+In thi case `EOF` can be replaced by any name, eg. `cat <<HERE line 1 line2 line 3 HERE`
+
+```bash
+cat <<EOF
+line 1
+line 2
+line 3
+EOF
+```
+
+Multi-line write to a file:
+
+```bash
+cat <<EOF > print.sh
+echo \$PWD
+echo $PWD
+EOF
+```
+
 ## REDIRECTING BOTH `STDOUT` AND `STDERR`
 
 `./error.sh 1> capture.txt 2> error.txt`

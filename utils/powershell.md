@@ -150,3 +150,10 @@ C:\Users\User1\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 ## HOW TO GO TO A SPECIFIC FOLDER USING ENVIRONMENT VARIABLE AND CD?
 
 `cd $Env:VARIABLE`
+
+## HOW TO ATTACH A NEW DIRECTORY INTO EXISTING PATH?
+
+`$env:Path = ';C:\foo'` # attach at the end
+`$env:Path = 'C:\foo;' + $env:Path` # attach at the begining
+
+<https://stackoverflow.com/questions/714877/setting-windows-powershell-environment-variables>
